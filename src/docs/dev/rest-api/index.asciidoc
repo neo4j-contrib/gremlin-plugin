@@ -54,7 +54,7 @@ include::collaborative-filtering.asciidoc[]
 
 include::chunking-and-offsetting-in-gremlin.asciidoc[]
 
-include::modify-the-graph-while-traversing.asciidoc[]
+include::this-example-shows-how-to-modify-the-graph-while-traversing-it.asciidoc[]
 
 include::flow-algorithms-with-gremlin.asciidoc[]
 

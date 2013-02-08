@@ -409,8 +409,8 @@ public class GremlinPluginFunctionalTest extends AbstractRestFunctionalTestBase
     }
 
     /**
-     * This example shows how to modify the graph while traversing it.
-     * In this case, the Peter node is disconnected from all other nodes.
+     * This example shows how to modify the graph while traversing it. In this
+     * case, the Peter node is disconnected from all other nodes.
      * 
      * @@graph1
      */
