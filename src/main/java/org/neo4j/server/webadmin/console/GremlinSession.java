@@ -34,7 +34,6 @@ import groovy.lang.GroovyRuntimeException;
 import org.codehaus.groovy.tools.shell.IO;
 import org.neo4j.helpers.Pair;
 import org.neo4j.server.database.Database;
-import org.neo4j.server.database.DatabaseBlockedException;
 import org.neo4j.server.logging.Logger;
 
 public class GremlinSession implements ScriptSession
@@ -140,7 +139,7 @@ public class GremlinSession implements ScriptSession
         baos.reset();
     }
 
-    private TransactionalGraph getGremlinWrappedGraph() throws DatabaseBlockedException
+    private TransactionalGraph getGremlinWrappedGraph()
     {
         return new Neo4jGraph( database.graph, false );
     }
