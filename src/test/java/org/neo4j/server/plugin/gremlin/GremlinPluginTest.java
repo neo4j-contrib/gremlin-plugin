@@ -107,7 +107,7 @@ public class GremlinPluginTest
     @Test
     public void testExecuteScriptVertex() throws Exception
     {
-        JSONObject object = (JSONObject) parser.parse( json.format( GremlinPluginTest.executeTestScript( "g.v(1)", null) ) );
+        JSONObject object = (JSONObject) parser.parse( json.assemble( GremlinPluginTest.executeTestScript( "g.v(1)", null) ) );
         Assert.assertEquals( 29l,
                 ( (JSONObject) object.get( "data" ) ).get( "age" ) );
         Assert.assertEquals( "marko",
@@ -120,14 +120,14 @@ public class GremlinPluginTest
         Representation result = GremlinPluginTest.executeTestScript("" +
                 "t = new Table();" +
                 "g.v(1).out('knows').as('friends').table(t).iterate();t;", null);
-        String resultString = json.format(result);
+        String resultString = json.assemble(result);
         assertTrue(resultString,resultString.contains("josh"));
     }
 
     @Test
     public void testExecuteScriptVertices() throws Exception
     {
-        JSONArray array = (JSONArray) parser.parse( json.format( GremlinPluginTest.executeTestScript( "g.V", null) ) );
+        JSONArray array = (JSONArray) parser.parse( json.assemble( GremlinPluginTest.executeTestScript( "g.V", null) ) );
         List<String> ids = new ArrayList<String>( Arrays.asList( "1", "2", "3",
                 "4", "5", "6" ) );
         Assert.assertEquals( 6, array.size() );
@@ -173,7 +173,7 @@ public class GremlinPluginTest
     @Test
     public void testExecuteScriptEdges() throws Exception
     {
-        JSONArray array = (JSONArray) parser.parse( json.format( GremlinPluginTest.executeTestScript( "g.E", null) ) );
+        JSONArray array = (JSONArray) parser.parse( json.assemble( GremlinPluginTest.executeTestScript( "g.E", null) ) );
         List<String> ids = new ArrayList<String>( Arrays.asList( "0", "1", "2",
                 "3", "4", "5" ) );
         Assert.assertEquals( array.size(), 6 );
@@ -192,7 +192,7 @@ public class GremlinPluginTest
     @Test
     public void testExecuteScriptGraph() throws Exception
     {
-        String ret = (String) parser.parse( json.format( GremlinPluginTest.executeTestScript( "g", null) ) );
+        String ret = (String) parser.parse( json.assemble( GremlinPluginTest.executeTestScript( "g", null) ) );
         Assert.assertEquals( ret, "ImpermanentGraphDatabase [" + neo4j.getStoreDir() + "]" );
     }
 
@@ -201,7 +201,7 @@ public class GremlinPluginTest
     {
         Assert.assertEquals(
                 1L,
-                parser.parse( json.format( GremlinPluginTest.executeTestScript( "1", null) ) ) );
+                parser.parse( json.assemble( GremlinPluginTest.executeTestScript( "1", null) ) ) );
     }
 
     @Test
@@ -209,7 +209,7 @@ public class GremlinPluginTest
     {
         Assert.assertEquals(
                 "[ 1, 2, 5, 6, 8 ]",
-                json.format( GremlinPluginTest.executeTestScript( "[1,2,5,6,8]", null) ) );
+                json.assemble( GremlinPluginTest.executeTestScript( "[1,2,5,6,8]", null) ) );
     }
 
     @Test
@@ -217,7 +217,7 @@ public class GremlinPluginTest
     {
         Assert.assertEquals(
                 "\"null\"",
-                json.format( GremlinPluginTest.executeTestScript( "for(i in 1..2){g.v(0)}", null) ) );
+                json.assemble( GremlinPluginTest.executeTestScript( "for(i in 1..2){g.v(0)}", null) ) );
     }
 
     @Test
@@ -225,7 +225,7 @@ public class GremlinPluginTest
     {
         Assert.assertEquals(
                 "1",
-                json.format( GremlinPluginTest.executeTestScript( "x", (Map)parser.parse( "{\"x\" : 1}")) ) );
+                json.assemble( GremlinPluginTest.executeTestScript( "x", (Map)parser.parse( "{\"x\" : 1}")) ) );
     }
     
     @Test
@@ -233,14 +233,14 @@ public class GremlinPluginTest
     {
         Assert.assertEquals(
                 "1",
-                json.format( GremlinPluginTest.executeTestScript( "1", (Map)parser.parse( "{}")) ) );
+                json.assemble( GremlinPluginTest.executeTestScript( "1", (Map)parser.parse( "{}")) ) );
     }
 
     @Test
     public void testMultilineScriptWithLinebreaks() throws BadInputException
     {
         Assert.assertEquals( "2",
-                json.format( GremlinPluginTest.executeTestScript( "1;\n2", null) ) );
+                json.assemble( GremlinPluginTest.executeTestScript( "1;\n2", null) ) );
     }
 
     @Test
@@ -257,7 +257,7 @@ public class GremlinPluginTest
                     {
                         Assert.assertEquals(
                                 x + "",
-                                json.format( GremlinPluginTest.executeTestScript( "x="
+                                json.assemble( GremlinPluginTest.executeTestScript( "x="
                                                                                   + x
                                                                                   + "; x", null) ) );
                     }
@@ -289,7 +289,7 @@ public class GremlinPluginTest
     @Test
     public void testExecuteScriptGetVerticesBySpecifiedName() throws Exception
     {
-        JSONObject object = (JSONObject) parser.parse( json.format( GremlinPluginTest.executeTestScript( "g.V.filter(){it.name=='marko'}.next()", null) ) );
+        JSONObject object = (JSONObject) parser.parse( json.assemble( GremlinPluginTest.executeTestScript( "g.V.filter(){it.name=='marko'}.next()", null) ) );
         Assert.assertEquals(
                 ( (JSONObject) object.get( "data" ) ).get( "name" ), "marko" );
         Assert.assertEquals(
