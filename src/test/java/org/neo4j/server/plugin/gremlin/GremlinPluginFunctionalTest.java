@@ -149,7 +149,7 @@ public class GremlinPluginFunctionalTest extends AbstractRestFunctionalTestBase
 
 
     /**
-     * Import a graph form a http://graphml.graphdrawing.org/[GraphML] file can
+     * Importing a graph from a http://graphml.graphdrawing.org/[GraphML] file can
      * be achieved through the Gremlin GraphMLReader. The following script
      * imports a small GraphML file from an URL into Neo4j, resulting in the
      * depicted graph. The underlying database is auto-indexed, see <<auto-indexing>>
