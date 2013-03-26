@@ -44,6 +44,9 @@ public class GremlinMapRepresentation extends MappingRepresentation
             } else if ( val instanceof String )
             {
                 serializer.putString( key.toString(), (String) val );
+            } else if ( val instanceof Boolean )
+            {
+                serializer.putBoolean( key.toString(), (Boolean) val );
             } else if ( val instanceof Iterable )
             {
                 serializer.putList( key.toString(), GremlinObjectToRepresentationConverter.getListRepresentation( (Iterable) val ) );
