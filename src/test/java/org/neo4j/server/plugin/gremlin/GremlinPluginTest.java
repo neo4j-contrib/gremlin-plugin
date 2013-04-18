@@ -46,6 +46,8 @@ import org.neo4j.server.rest.repr.Representation;
 import org.neo4j.server.rest.repr.formats.JsonFormat;
 import org.neo4j.test.ImpermanentGraphDatabase;
 
+import javax.ws.rs.core.Response;
+
 public class GremlinPluginTest
 {
     private static ImpermanentGraphDatabase neo4j = null;
@@ -106,27 +108,40 @@ public class GremlinPluginTest
     @Test
     public void testExecuteScriptVertex() throws Exception
     {
-        JSONObject object = (JSONObject) parser.parse( json.format( GremlinPluginTest.executeTestScript( "g.v(1)", null) ) );
+        JSONObject object = (JSONObject) parser.parse(entityToString(json.ok(GremlinPluginTest.executeTestScript("g.v(1)", null)).getEntity()));
         Assert.assertEquals( 29l,
                 ( (JSONObject) object.get( "data" ) ).get( "age" ) );
         Assert.assertEquals( "marko",
                 ( (JSONObject) object.get( "data" ) ).get( "name" ) );
     }
-    
+
+    private String entityToString(Object entity)
+    {
+        if ( entity instanceof String ) 
+        {
+            return (String) entity;
+        }
+        if ( entity instanceof byte[] )
+        {
+            return new String((byte[]) entity);
+        }
+        throw new IllegalArgumentException( String.format("Cannot convert %s to String", entity) );
+    }
+
     @Test
     public void testReturnTable() throws Exception
     {
         Representation result = GremlinPluginTest.executeTestScript("" +
                 "t = new Table();" +
                 "g.v(1).out('knows').as('friends').table(t).iterate();t;", null);
-        String resultString = json.format(result);
+        String resultString = entityToString(json.ok(result).getEntity());
         assertTrue(resultString,resultString.contains("josh"));
     }
 
     @Test
     public void testExecuteScriptVertices() throws Exception
     {
-        JSONArray array = (JSONArray) parser.parse( json.format( GremlinPluginTest.executeTestScript( "g.V", null) ) );
+        JSONArray array = (JSONArray) parser.parse(entityToString(json.ok( GremlinPluginTest.executeTestScript("g.V", null) ).getEntity()));
         List<String> ids = new ArrayList<String>( Arrays.asList( "1", "2", "3",
                 "4", "5", "6" ) );
         Assert.assertEquals( 7, array.size() );
@@ -175,7 +190,7 @@ public class GremlinPluginTest
     @Test
     public void testExecuteScriptEdges() throws Exception
     {
-        JSONArray array = (JSONArray) parser.parse( json.format( GremlinPluginTest.executeTestScript( "g.E", null) ) );
+        JSONArray array = (JSONArray) parser.parse(entityToString( json.ok( GremlinPluginTest.executeTestScript("g.E", null) ) .getEntity()));
         List<String> ids = new ArrayList<String>( Arrays.asList( "0", "1", "2",
                 "3", "4", "5" ) );
         Assert.assertEquals( array.size(), 6 );
@@ -194,7 +209,7 @@ public class GremlinPluginTest
     @Test
     public void testExecuteScriptGraph() throws Exception
     {
-        String ret = (String) parser.parse( json.format( GremlinPluginTest.executeTestScript( "g", null) ) );
+        String ret = (String) parser.parse(entityToString( json.ok( GremlinPluginTest.executeTestScript("g", null) ) .getEntity()));
         Assert.assertEquals( ret, "ImpermanentGraphDatabase [" + neo4j.getStoreDir() + "]" );
     }
 
@@ -203,7 +218,7 @@ public class GremlinPluginTest
     {
         Assert.assertEquals(
                 1L,
-                parser.parse( json.format( GremlinPluginTest.executeTestScript( "1", null) ) ) );
+                parser.parse(entityToString( json.ok( GremlinPluginTest.executeTestScript("1", null) ).getEntity())));
     }
 
     @Test
@@ -211,7 +226,7 @@ public class GremlinPluginTest
     {
         Assert.assertEquals(
                 "[ 1, 2, 5, 6, 8 ]",
-                json.format( GremlinPluginTest.executeTestScript( "[1,2,5,6,8]", null) ) );
+                entityToString(json.ok( GremlinPluginTest.executeTestScript( "[1,2,5,6,8]", null) ) .getEntity()));
     }
 
     @Test
@@ -219,7 +234,15 @@ public class GremlinPluginTest
     {
         Assert.assertEquals(
                 "\"null\"",
-                json.format( GremlinPluginTest.executeTestScript( "for(i in 1..2){g.v(0)}", null) ) );
+                entityToString(json.ok( GremlinPluginTest.executeTestScript( "for(i in 1..2){g.v(0)}", null) ).getEntity() ));
+    }
+
+    @Test
+    public void testExecuteScriptArrays() throws BadInputException
+    {
+        Assert.assertEquals(
+                "\"null\"",
+                entityToString(json.ok( GremlinPluginTest.executeTestScript( "for(i in 1..2){g.v(0)}", null) ) .getEntity()));
     }
 
     @Test
@@ -227,7 +250,7 @@ public class GremlinPluginTest
     {
         Assert.assertEquals(
                 "1",
-                json.format( GremlinPluginTest.executeTestScript( "x", (Map)parser.parse( "{\"x\" : 1}")) ) );
+                entityToString(json.ok( GremlinPluginTest.executeTestScript( "x", (Map)parser.parse( "{\"x\" : 1}")) ) .getEntity()));
     }
     
     @Test
@@ -235,14 +258,14 @@ public class GremlinPluginTest
     {
         Assert.assertEquals(
                 "1",
-                json.format( GremlinPluginTest.executeTestScript( "1", (Map)parser.parse( "{}")) ) );
+                entityToString(json.ok( GremlinPluginTest.executeTestScript( "1", (Map)parser.parse( "{}")) ) .getEntity()));
     }
 
     @Test
     public void testMultilineScriptWithLinebreaks() throws BadInputException
     {
         Assert.assertEquals( "2",
-                json.format( GremlinPluginTest.executeTestScript( "1;\n2", null) ) );
+                entityToString(json.ok( GremlinPluginTest.executeTestScript( "1;\n2", null) ).getEntity() ));
     }
 
     @Test
@@ -259,9 +282,9 @@ public class GremlinPluginTest
                     {
                         Assert.assertEquals(
                                 x + "",
-                                json.format( GremlinPluginTest.executeTestScript( "x="
+                                entityToString(json.ok( GremlinPluginTest.executeTestScript( "x="
                                                                                   + x
-                                                                                  + "; x", null) ) );
+                                                                                  + "; x", null) ).getEntity() ));
                     }
                     catch ( BadInputException e )
                     {
@@ -291,7 +314,7 @@ public class GremlinPluginTest
     @Test
     public void testExecuteScriptGetVerticesBySpecifiedName() throws Exception
     {
-        JSONObject object = (JSONObject) parser.parse( json.format( GremlinPluginTest.executeTestScript( "g.V.filter(){it.name=='marko'}.next()", null) ) );
+        JSONObject object = (JSONObject) parser.parse(entityToString( json.ok( GremlinPluginTest.executeTestScript("g.V.filter(){it.name=='marko'}.next()", null) ).getEntity()));
         Assert.assertEquals(
                 ( (JSONObject) object.get( "data" ) ).get( "name" ), "marko" );
         Assert.assertEquals(
