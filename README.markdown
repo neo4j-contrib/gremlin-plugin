@@ -1,23 +1,18 @@
 This is a Neo4j Server plugin, providing [Gremlin](http://gremlin.tinkerpop.com) backend scripting to the [Neo4j Server](http://neo4j.org). to deploy, please do the following
 
     mvn clean package
-    cp target/gremlin-translator-plugin-0.1-SNAPSHOT.jar $NEO4J_HOME/plugins
+    unzip target/neo4j-gremlin-plugin-2.0-SNAPSHOT-server-plugin.zip -d $NEO4J_HOME/plugins/gremlin-plugin
     cd $NEO4J_HOME
     bin/neo4j restart
     
 Eclipse setup:
 
-* Install m2eclipse maven support for Eclispe from the update site [http://download.eclipse.org/technology/m2e/releases](http://download.eclipse.org/technology/m2e/releases)
+* Install m2eclipse maven support for Eclipse from the update site [http://download.eclipse.org/technology/m2e/releases](http://download.eclipse.org/technology/m2e/releases)
 * clone this repo
 * do Eclipse->Import...->Maven->Existing_projects_into_workspace and point out your cloned code directory
 * wait until the process is finished and you should have a compiling setup in Eclipse.
   
-Integration testing:
     
-    mvn clean package
-    source set_env.sh
-    rake
-  
 access the plugin
 
     curl localhost:7474/db/data/
