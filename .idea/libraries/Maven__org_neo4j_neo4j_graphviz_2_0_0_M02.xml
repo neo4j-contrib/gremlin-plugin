@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: org.neo4j:neo4j-graphviz:2.0.0-M02">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/neo4j/neo4j-graphviz/2.0.0-M02/neo4j-graphviz-2.0.0-M02.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/org/neo4j/neo4j-graphviz/2.0.0-M02/neo4j-graphviz-2.0.0-M02-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/neo4j/neo4j-graphviz/2.0.0-M02/neo4j-graphviz-2.0.0-M02-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
