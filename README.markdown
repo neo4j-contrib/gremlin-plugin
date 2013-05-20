@@ -1,11 +1,42 @@
 This is a Neo4j Server plugin, providing [Gremlin](http://gremlin.tinkerpop.com) backend scripting to the [Neo4j Server](http://neo4j.org). to deploy, please do the following
 
+
+Maven setup
+-----------
+
+In your `pom.xml`, add    
+
+    <repositories>
+        <repository>
+            <id>neo4j-contrib-snapshots</id>
+            <url>https://github.com/neo4j-contrib/m2/raw/master/snapshots/url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+
+and
+
+    <dependency>
+         <groupId>org.neo4j.server.plugin</groupId>
+         <artifactId>neo4j-gremlin-plugin</artifactId>
+         <version>2.0-SNAPSHOT</version>
+         <type>test-jar</type>
+         <scope>test</scope>
+    </dependency>
+
+
+Building from source
+--------------------
+
     mvn clean package
     unzip target/neo4j-gremlin-plugin-2.0-SNAPSHOT-server-plugin.zip -d $NEO4J_HOME/plugins/gremlin-plugin
     cd $NEO4J_HOME
     bin/neo4j restart
     
-Eclipse setup:
+Eclipse setup
+-------------
 
 * Install m2eclipse maven support for Eclipse from the update site [http://download.eclipse.org/technology/m2e/releases](http://download.eclipse.org/technology/m2e/releases)
 * clone this repo
