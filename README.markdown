@@ -1,5 +1,12 @@
 This is a Neo4j Server plugin, providing [Gremlin](http://gremlin.tinkerpop.com) backend scripting to the [Neo4j Server](http://neo4j.org). to deploy, please do the following
 
+Building from source and deploying into Neo4j Server
+-----------------------------------------------------
+
+    mvn clean package
+    unzip target/neo4j-gremlin-plugin-2.0-SNAPSHOT-server-plugin.zip -d $NEO4J_HOME/plugins/gremlin-plugin
+    cd $NEO4J_HOME
+    bin/neo4j restart
 
 Maven setup
 -----------
@@ -27,13 +34,6 @@ and
     </dependency>
 
 
-Building from source
---------------------
-
-    mvn clean package
-    unzip target/neo4j-gremlin-plugin-2.0-SNAPSHOT-server-plugin.zip -d $NEO4J_HOME/plugins/gremlin-plugin
-    cd $NEO4J_HOME
-    bin/neo4j restart
     
 Eclipse setup
 -------------
