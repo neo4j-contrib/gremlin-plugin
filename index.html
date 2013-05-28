@@ -1,0 +1,2138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="generator" content="AsciiDoc 8.6.8">
+<title>Neo4j Gremlin Plugin v2.0-SNAPSHOT</title>
+<style type="text/css">
+/* Shared CSS for AsciiDoc xhtml11 and html5 backends */
+
+/* Default font. */
+body {
+  font-family: Georgia,serif;
+}
+
+/* Title font. */
+h1, h2, h3, h4, h5, h6,
+div.title, caption.title,
+thead, p.table.header,
+#toctitle,
+#author, #revnumber, #revdate, #revremark,
+#footer {
+  font-family: Arial,Helvetica,sans-serif;
+}
+
+body {
+  margin: 1em 5% 1em 5%;
+}
+
+a {
+  color: blue;
+  text-decoration: underline;
+}
+a:visited {
+  color: fuchsia;
+}
+
+em {
+  font-style: italic;
+  color: navy;
+}
+
+strong {
+  font-weight: bold;
+  color: #083194;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: #527bbd;
+  margin-top: 1.2em;
+  margin-bottom: 0.5em;
+  line-height: 1.3;
+}
+
+h1, h2, h3 {
+  border-bottom: 2px solid silver;
+}
+h2 {
+  padding-top: 0.5em;
+}
+h3 {
+  float: left;
+}
+h3 + * {
+  clear: left;
+}
+h5 {
+  font-size: 1.0em;
+}
+
+div.sectionbody {
+  margin-left: 0;
+}
+
+hr {
+  border: 1px solid silver;
+}
+
+p {
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+}
+
+ul, ol, li > p {
+  margin-top: 0;
+}
+ul > li     { color: #aaa; }
+ul > li > * { color: black; }
+
+.monospaced, code, pre {
+  font-family: "Courier New", Courier, monospace;
+  font-size: inherit;
+  color: navy;
+  padding: 0;
+  margin: 0;
+}
+
+
+#author {
+  color: #527bbd;
+  font-weight: bold;
+  font-size: 1.1em;
+}
+#email {
+}
+#revnumber, #revdate, #revremark {
+}
+
+#footer {
+  font-size: small;
+  border-top: 2px solid silver;
+  padding-top: 0.5em;
+  margin-top: 4.0em;
+}
+#footer-text {
+  float: left;
+  padding-bottom: 0.5em;
+}
+#footer-badges {
+  float: right;
+  padding-bottom: 0.5em;
+}
+
+#preamble {
+  margin-top: 1.5em;
+  margin-bottom: 1.5em;
+}
+div.imageblock, div.exampleblock, div.verseblock,
+div.quoteblock, div.literalblock, div.listingblock, div.sidebarblock,
+div.admonitionblock {
+  margin-top: 1.0em;
+  margin-bottom: 1.5em;
+}
+div.admonitionblock {
+  margin-top: 2.0em;
+  margin-bottom: 2.0em;
+  margin-right: 10%;
+  color: #606060;
+}
+
+div.content { /* Block element content. */
+  padding: 0;
+}
+
+/* Block element titles. */
+div.title, caption.title {
+  color: #527bbd;
+  font-weight: bold;
+  text-align: left;
+  margin-top: 1.0em;
+  margin-bottom: 0.5em;
+}
+div.title + * {
+  margin-top: 0;
+}
+
+td div.title:first-child {
+  margin-top: 0.0em;
+}
+div.content div.title:first-child {
+  margin-top: 0.0em;
+}
+div.content + div.title {
+  margin-top: 0.0em;
+}
+
+div.sidebarblock > div.content {
+  background: #ffffee;
+  border: 1px solid #dddddd;
+  border-left: 4px solid #f0f0f0;
+  padding: 0.5em;
+}
+
+div.listingblock > div.content {
+  border: 1px solid #dddddd;
+  border-left: 5px solid #f0f0f0;
+  background: #f8f8f8;
+  padding: 0.5em;
+}
+
+div.quoteblock, div.verseblock {
+  padding-left: 1.0em;
+  margin-left: 1.0em;
+  margin-right: 10%;
+  border-left: 5px solid #f0f0f0;
+  color: #888;
+}
+
+div.quoteblock > div.attribution {
+  padding-top: 0.5em;
+  text-align: right;
+}
+
+div.verseblock > pre.content {
+  font-family: inherit;
+  font-size: inherit;
+}
+div.verseblock > div.attribution {
+  padding-top: 0.75em;
+  text-align: left;
+}
+/* DEPRECATED: Pre version 8.2.7 verse style literal block. */
+div.verseblock + div.attribution {
+  text-align: left;
+}
+
+div.admonitionblock .icon {
+  vertical-align: top;
+  font-size: 1.1em;
+  font-weight: bold;
+  text-decoration: underline;
+  color: #527bbd;
+  padding-right: 0.5em;
+}
+div.admonitionblock td.content {
+  padding-left: 0.5em;
+  border-left: 3px solid #dddddd;
+}
+
+div.exampleblock > div.content {
+  border-left: 3px solid #dddddd;
+  padding-left: 0.5em;
+}
+
+div.imageblock div.content { padding-left: 0; }
+span.image img { border-style: none; }
+a.image:visited { color: white; }
+
+dl {
+  margin-top: 0.8em;
+  margin-bottom: 0.8em;
+}
+dt {
+  margin-top: 0.5em;
+  margin-bottom: 0;
+  font-style: normal;
+  color: navy;
+}
+dd > *:first-child {
+  margin-top: 0.1em;
+}
+
+ul, ol {
+    list-style-position: outside;
+}
+ol.arabic {
+  list-style-type: decimal;
+}
+ol.loweralpha {
+  list-style-type: lower-alpha;
+}
+ol.upperalpha {
+  list-style-type: upper-alpha;
+}
+ol.lowerroman {
+  list-style-type: lower-roman;
+}
+ol.upperroman {
+  list-style-type: upper-roman;
+}
+
+div.compact ul, div.compact ol,
+div.compact p, div.compact p,
+div.compact div, div.compact div {
+  margin-top: 0.1em;
+  margin-bottom: 0.1em;
+}
+
+tfoot {
+  font-weight: bold;
+}
+td > div.verse {
+  white-space: pre;
+}
+
+div.hdlist {
+  margin-top: 0.8em;
+  margin-bottom: 0.8em;
+}
+div.hdlist tr {
+  padding-bottom: 15px;
+}
+dt.hdlist1.strong, td.hdlist1.strong {
+  font-weight: bold;
+}
+td.hdlist1 {
+  vertical-align: top;
+  font-style: normal;
+  padding-right: 0.8em;
+  color: navy;
+}
+td.hdlist2 {
+  vertical-align: top;
+}
+div.hdlist.compact tr {
+  margin: 0;
+  padding-bottom: 0;
+}
+
+.comment {
+  background: yellow;
+}
+
+.footnote, .footnoteref {
+  font-size: 0.8em;
+}
+
+span.footnote, span.footnoteref {
+  vertical-align: super;
+}
+
+#footnotes {
+  margin: 20px 0 20px 0;
+  padding: 7px 0 0 0;
+}
+
+#footnotes div.footnote {
+  margin: 0 0 5px 0;
+}
+
+#footnotes hr {
+  border: none;
+  border-top: 1px solid silver;
+  height: 1px;
+  text-align: left;
+  margin-left: 0;
+  width: 20%;
+  min-width: 100px;
+}
+
+div.colist td {
+  padding-right: 0.5em;
+  padding-bottom: 0.3em;
+  vertical-align: top;
+}
+div.colist td img {
+  margin-top: 0.3em;
+}
+
+@media print {
+  #footer-badges { display: none; }
+}
+
+#toc {
+  margin-bottom: 2.5em;
+}
+
+#toctitle {
+  color: #527bbd;
+  font-size: 1.1em;
+  font-weight: bold;
+  margin-top: 1.0em;
+  margin-bottom: 0.1em;
+}
+
+div.toclevel0, div.toclevel1, div.toclevel2, div.toclevel3, div.toclevel4 {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+div.toclevel2 {
+  margin-left: 2em;
+  font-size: 0.9em;
+}
+div.toclevel3 {
+  margin-left: 4em;
+  font-size: 0.9em;
+}
+div.toclevel4 {
+  margin-left: 6em;
+  font-size: 0.9em;
+}
+
+span.aqua { color: aqua; }
+span.black { color: black; }
+span.blue { color: blue; }
+span.fuchsia { color: fuchsia; }
+span.gray { color: gray; }
+span.green { color: green; }
+span.lime { color: lime; }
+span.maroon { color: maroon; }
+span.navy { color: navy; }
+span.olive { color: olive; }
+span.purple { color: purple; }
+span.red { color: red; }
+span.silver { color: silver; }
+span.teal { color: teal; }
+span.white { color: white; }
+span.yellow { color: yellow; }
+
+span.aqua-background { background: aqua; }
+span.black-background { background: black; }
+span.blue-background { background: blue; }
+span.fuchsia-background { background: fuchsia; }
+span.gray-background { background: gray; }
+span.green-background { background: green; }
+span.lime-background { background: lime; }
+span.maroon-background { background: maroon; }
+span.navy-background { background: navy; }
+span.olive-background { background: olive; }
+span.purple-background { background: purple; }
+span.red-background { background: red; }
+span.silver-background { background: silver; }
+span.teal-background { background: teal; }
+span.white-background { background: white; }
+span.yellow-background { background: yellow; }
+
+span.big { font-size: 2em; }
+span.small { font-size: 0.6em; }
+
+span.underline { text-decoration: underline; }
+span.overline { text-decoration: overline; }
+span.line-through { text-decoration: line-through; }
+
+div.unbreakable { page-break-inside: avoid; }
+
+
+/*
+ * xhtml11 specific
+ *
+ * */
+
+div.tableblock {
+  margin-top: 1.0em;
+  margin-bottom: 1.5em;
+}
+div.tableblock > table {
+  border: 3px solid #527bbd;
+}
+thead, p.table.header {
+  font-weight: bold;
+  color: #527bbd;
+}
+p.table {
+  margin-top: 0;
+}
+/* Because the table frame attribute is overriden by CSS in most browsers. */
+div.tableblock > table[frame="void"] {
+  border-style: none;
+}
+div.tableblock > table[frame="hsides"] {
+  border-left-style: none;
+  border-right-style: none;
+}
+div.tableblock > table[frame="vsides"] {
+  border-top-style: none;
+  border-bottom-style: none;
+}
+
+
+/*
+ * html5 specific
+ *
+ * */
+
+table.tableblock {
+  margin-top: 1.0em;
+  margin-bottom: 1.5em;
+}
+thead, p.tableblock.header {
+  font-weight: bold;
+  color: #527bbd;
+}
+p.tableblock {
+  margin-top: 0;
+}
+table.tableblock {
+  border-width: 3px;
+  border-spacing: 0px;
+  border-style: solid;
+  border-color: #527bbd;
+  border-collapse: collapse;
+}
+th.tableblock, td.tableblock {
+  border-width: 1px;
+  padding: 4px;
+  border-style: solid;
+  border-color: #527bbd;
+}
+
+table.tableblock.frame-topbot {
+  border-left-style: hidden;
+  border-right-style: hidden;
+}
+table.tableblock.frame-sides {
+  border-top-style: hidden;
+  border-bottom-style: hidden;
+}
+table.tableblock.frame-none {
+  border-style: hidden;
+}
+
+th.tableblock.halign-left, td.tableblock.halign-left {
+  text-align: left;
+}
+th.tableblock.halign-center, td.tableblock.halign-center {
+  text-align: center;
+}
+th.tableblock.halign-right, td.tableblock.halign-right {
+  text-align: right;
+}
+
+th.tableblock.valign-top, td.tableblock.valign-top {
+  vertical-align: top;
+}
+th.tableblock.valign-middle, td.tableblock.valign-middle {
+  vertical-align: middle;
+}
+th.tableblock.valign-bottom, td.tableblock.valign-bottom {
+  vertical-align: bottom;
+}
+
+
+/*
+ * manpage specific
+ *
+ * */
+
+body.manpage h1 {
+  padding-top: 0.5em;
+  padding-bottom: 0.5em;
+  border-top: 2px solid silver;
+  border-bottom: 2px solid silver;
+}
+body.manpage h2 {
+  border-style: none;
+}
+body.manpage div.sectionbody {
+  margin-left: 3em;
+}
+
+@media print {
+  body.manpage div#toc { display: none; }
+}
+
+
+</style>
+<script type="text/javascript">
+/*<![CDATA[*/
+var asciidoc = {  // Namespace.
+
+/////////////////////////////////////////////////////////////////////
+// Table Of Contents generator
+/////////////////////////////////////////////////////////////////////
+
+/* Author: Mihai Bazon, September 2002
+ * http://students.infoiasi.ro/~mishoo
+ *
+ * Table Of Content generator
+ * Version: 0.4
+ *
+ * Feel free to use this script under the terms of the GNU General Public
+ * License, as long as you do not remove or alter this notice.
+ */
+
+ /* modified by Troy D. Hanson, September 2006. License: GPL */
+ /* modified by Stuart Rackham, 2006, 2009. License: GPL */
+
+// toclevels = 1..4.
+toc: function (toclevels) {
+
+  function getText(el) {
+    var text = "";
+    for (var i = el.firstChild; i != null; i = i.nextSibling) {
+      if (i.nodeType == 3 /* Node.TEXT_NODE */) // IE doesn't speak constants.
+        text += i.data;
+      else if (i.firstChild != null)
+        text += getText(i);
+    }
+    return text;
+  }
+
+  function TocEntry(el, text, toclevel) {
+    this.element = el;
+    this.text = text;
+    this.toclevel = toclevel;
+  }
+
+  function tocEntries(el, toclevels) {
+    var result = new Array;
+    var re = new RegExp('[hH]([1-'+(toclevels+1)+'])');
+    // Function that scans the DOM tree for header elements (the DOM2
+    // nodeIterator API would be a better technique but not supported by all
+    // browsers).
+    var iterate = function (el) {
+      for (var i = el.firstChild; i != null; i = i.nextSibling) {
+        if (i.nodeType == 1 /* Node.ELEMENT_NODE */) {
+          var mo = re.exec(i.tagName);
+          if (mo && (i.getAttribute("class") || i.getAttribute("className")) != "float") {
+            result[result.length] = new TocEntry(i, getText(i), mo[1]-1);
+          }
+          iterate(i);
+        }
+      }
+    }
+    iterate(el);
+    return result;
+  }
+
+  var toc = document.getElementById("toc");
+  if (!toc) {
+    return;
+  }
+
+  // Delete existing TOC entries in case we're reloading the TOC.
+  var tocEntriesToRemove = [];
+  var i;
+  for (i = 0; i < toc.childNodes.length; i++) {
+    var entry = toc.childNodes[i];
+    if (entry.nodeName.toLowerCase() == 'div'
+     && entry.getAttribute("class")
+     && entry.getAttribute("class").match(/^toclevel/))
+      tocEntriesToRemove.push(entry);
+  }
+  for (i = 0; i < tocEntriesToRemove.length; i++) {
+    toc.removeChild(tocEntriesToRemove[i]);
+  }
+
+  // Rebuild TOC entries.
+  var entries = tocEntries(document.getElementById("content"), toclevels);
+  for (var i = 0; i < entries.length; ++i) {
+    var entry = entries[i];
+    if (entry.element.id == "")
+      entry.element.id = "_toc_" + i;
+    var a = document.createElement("a");
+    a.href = "#" + entry.element.id;
+    a.appendChild(document.createTextNode(entry.text));
+    var div = document.createElement("div");
+    div.appendChild(a);
+    div.className = "toclevel" + entry.toclevel;
+    toc.appendChild(div);
+  }
+  if (entries.length == 0)
+    toc.parentNode.removeChild(toc);
+},
+
+
+/////////////////////////////////////////////////////////////////////
+// Footnotes generator
+/////////////////////////////////////////////////////////////////////
+
+/* Based on footnote generation code from:
+ * http://www.brandspankingnew.net/archive/2005/07/format_footnote.html
+ */
+
+footnotes: function () {
+  // Delete existing footnote entries in case we're reloading the footnodes.
+  var i;
+  var noteholder = document.getElementById("footnotes");
+  if (!noteholder) {
+    return;
+  }
+  var entriesToRemove = [];
+  for (i = 0; i < noteholder.childNodes.length; i++) {
+    var entry = noteholder.childNodes[i];
+    if (entry.nodeName.toLowerCase() == 'div' && entry.getAttribute("class") == "footnote")
+      entriesToRemove.push(entry);
+  }
+  for (i = 0; i < entriesToRemove.length; i++) {
+    noteholder.removeChild(entriesToRemove[i]);
+  }
+
+  // Rebuild footnote entries.
+  var cont = document.getElementById("content");
+  var spans = cont.getElementsByTagName("span");
+  var refs = {};
+  var n = 0;
+  for (i=0; i<spans.length; i++) {
+    if (spans[i].className == "footnote") {
+      n++;
+      var note = spans[i].getAttribute("data-note");
+      if (!note) {
+        // Use [\s\S] in place of . so multi-line matches work.
+        // Because JavaScript has no s (dotall) regex flag.
+        note = spans[i].innerHTML.match(/\s*\[([\s\S]*)]\s*/)[1];
+        spans[i].innerHTML =
+          "[<a id='_footnoteref_" + n + "' href='#_footnote_" + n +
+          "' title='View footnote' class='footnote'>" + n + "</a>]";
+        spans[i].setAttribute("data-note", note);
+      }
+      noteholder.innerHTML +=
+        "<div class='footnote' id='_footnote_" + n + "'>" +
+        "<a href='#_footnoteref_" + n + "' title='Return to text'>" +
+        n + "</a>. " + note + "</div>";
+      var id =spans[i].getAttribute("id");
+      if (id != null) refs["#"+id] = n;
+    }
+  }
+  if (n == 0)
+    noteholder.parentNode.removeChild(noteholder);
+  else {
+    // Process footnoterefs.
+    for (i=0; i<spans.length; i++) {
+      if (spans[i].className == "footnoteref") {
+        var href = spans[i].getElementsByTagName("a")[0].getAttribute("href");
+        href = href.match(/#.*/)[0];  // Because IE return full URL.
+        n = refs[href];
+        spans[i].innerHTML =
+          "[<a href='#_footnote_" + n +
+          "' title='View footnote' class='footnote'>" + n + "</a>]";
+      }
+    }
+  }
+},
+
+install: function(toclevels) {
+  var timerId;
+
+  function reinstall() {
+    asciidoc.footnotes();
+    if (toclevels) {
+      asciidoc.toc(toclevels);
+    }
+  }
+
+  function reinstallAndRemoveTimer() {
+    clearInterval(timerId);
+    reinstall();
+  }
+
+  timerId = setInterval(reinstall, 500);
+  if (document.addEventListener)
+    document.addEventListener("DOMContentLoaded", reinstallAndRemoveTimer, false);
+  else
+    window.onload = reinstallAndRemoveTimer;
+}
+
+}
+asciidoc.install(2);
+/*]]>*/
+</script>
+
+<!-- favicon -->
+
+<link rel="shortcut icon" href="http://neo4j.org/favicon.ico" type="image/vnd.microsoft.icon" />
+<link rel="icon" href="http://neo4j.org/favicon.ico" type="image/x-icon" />
+
+<!-- style -->
+
+<link href="css/shCore.css" rel="stylesheet" type="text/css" />
+<link href="css/shCoreEclipse.css" rel="stylesheet" type="text/css" />
+<link href="css/shThemeEclipse.css" rel="stylesheet" type="text/css" />
+<link href="css/neo.css" rel="stylesheet" type="text/css" />
+<link href="css/neo-asciidoc.css" rel="stylesheet" type="text/css" />
+
+<!-- Syntax Highlighter -->
+
+<script type="text/javascript" src="js/shCore.js"></script>
+<script type="text/javascript" src="js/shBrushJava.js"></script>
+<script type="text/javascript" src="js/shBrushJScript.js"></script>
+<script type="text/javascript" src="js/shBrushBash.js"></script>
+<script type="text/javascript" src="js/shBrushPlain.js"></script>
+<script type="text/javascript" src="js/shBrushXml.js"></script>
+<script type="text/javascript" src="js/shBrushGroovy.js"></script>
+<script type="text/javascript" src="js/shBrushCypher.js"></script>
+<script type="text/javascript" src="js/shBrushScala.js"></script>
+<script type="text/javascript" src="js/shBrushSql.js"></script>
+<script type="text/javascript" src="js/shBrushPython.js"></script>
+<script type="text/javascript" src="js/shBrushProperties.js"></script>
+
+<!-- activate when needed
+<script type="text/javascript" src="js/shBrushRuby.js"></script>
+<script type="text/javascript" src="js/shBrushCSharp.js"></script>
+-->
+
+<script type="text/javascript">
+  SyntaxHighlighter.defaults['tab-size'] = 4;
+  SyntaxHighlighter.defaults['gutter'] = false;
+  SyntaxHighlighter.defaults['toolbar'] = false;
+  SyntaxHighlighter.all()
+</script>
+
+<!-- JQuery -->
+
+<script type="text/javascript" src="js/jquery-1.6.4.min.js"></script>
+
+<!-- Replace SVG for browsers that lack support. -->
+<script type="text/javascript" src="js/svgreplacer.js"></script>
+
+<!-- Image Scaler -->
+
+<script type="text/javascript" src="js/imagescaler.js"></script>
+
+<!-- Table Styler -->
+
+<script type="text/javascript" src="js/tablestyler.js"></script>
+
+<!-- Cypher Console -->
+
+<script type="text/javascript" src="js/cypherconsole.js"></script>
+
+<!-- Version -->
+
+<script type="text/javascript" src="js/version.js"></script>
+
+
+</head>
+<body class="book">
+<div id="header">
+<h1>Neo4j Gremlin Plugin v2.0-SNAPSHOT</h1>
+<div id="toc">
+  <div id="toctitle">Table of Contents</div>
+  <noscript><p><b>JavaScript must be enabled in your browser to display the table of contents.</b></p></noscript>
+</div>
+</div>
+<div id="content">
+<div class="sect1">
+<h2 id="gremlin-plugin">Gremlin Plugin</h2>
+<div class="sectionbody">
+<div class="imageblock">
+<div class="content">
+<img src="images/gremlin-logo.png" alt="gremlin-logo.png">
+</div>
+</div>
+<div class="paragraph"><p><a href="http://gremlin.tinkerpop.com">Gremlin</a> is a Groovy based Graph Traversal Language. It provides a very expressive way of explicitly scripting traversals through a Neo4j graph.</p></div>
+<div class="paragraph"><p>The Neo4j Gremlin Plugin provides an endpoint to send Gremlin scripts to the Neo4j Server.
+The scripts are executed on the server database and the results are returned as Neo4j Node and Relationship representations.
+This keeps the types throughout the REST API consistent.
+The results are quite verbose when returning Neo4j <span class="monospaced">Node</span>,
+<span class="monospaced">Relationship</span> or <span class="monospaced">Graph</span> representations.
+On the other hand, just return properties like in the <a href="#rest-api-send-a-gremlin-script---json-encoded-with-table-results">[rest-api-send-a-gremlin-script---json-encoded-with-table-results]</a>
+example for responses tailored to specific needs.</p></div>
+<div class="admonitionblock">
+<table><tr>
+<td class="icon">
+<div class="title">Warning</div>
+</td>
+<td class="content">The Gremlin plugin lets you execute arbitrary Groovy code under the hood. In hosted and open environments, this can constitute a security risk.
+In these case, consider using declarative approaches like <a href="#cypher-query-lang">[cypher-query-lang]</a> or write your own server side plugin executing the
+interesting Gremlin or Java routines, see <a href="#server-plugins">[server-plugins]</a> or secure your server, see <a href="#security-server">[security-server]</a>.</td>
+</tr></table>
+</div>
+<div class="admonitionblock">
+<table><tr>
+<td class="icon">
+<div class="title">Tip</div>
+</td>
+<td class="content">When returning results from pipes like <span class="monospaced">g.v(0).in()</span>, make sure to iterate through the results in order not to return the pipe object but its content, like <span class="monospaced">g.v(0).in().iterate()</span>. For more caveats, see <a href="https://github.com/tinkerpop/gremlin/wiki/Troubleshooting">Gremlin Troubleshooting</a></td>
+</tr></table>
+</div>
+<div class="sect2">
+<h3 id="rest-api-send-a-gremlin-script---url-encoded">Send a Gremlin Script - URL encoded</h3>
+<div class="paragraph"><p>Scripts can be sent as URL-encoded In this example, the graph has been
+autoindexed by Neo4j, so we can look up the name property on nodes.</p></div>
+<div class="paragraph"><p><em>Raw script source</em></p></div>
+<div class="listingblock">
+<pre class="programlisting brush: groovy">g.getIndex('node_auto_index', Vertex.class).get('name','I')_().out()</pre></div>
+<div class="imageblock dot">
+<div class="content">
+<img src="images/Final-Graph-Send-a-Gremlin-Script---URL-encoded.svg" alt="Final-Graph-Send-a-Gremlin-Script---URL-encoded.svg">
+</div>
+<div class="title">Figure 1. Final Graph</div>
+</div>
+<div class="paragraph"><p><em>Example request</em></p></div>
+<div class="ulist"><ul>
+<li>
+<p>
+<strong><span class="monospaced">POST</span></strong>  <span class="monospaced">http://localhost:7474/db/data/ext/GremlinPlugin/graphdb/execute_script</span>
+</p>
+</li>
+<li>
+<p>
+<strong><span class="monospaced">Accept:</span></strong> <span class="monospaced">application/json</span>
+</p>
+</li>
+<li>
+<p>
+<strong><span class="monospaced">Content-Type:</span></strong> <span class="monospaced">application/x-www-form-urlencoded</span>
+</p>
+</li>
+</ul></div>
+<div class="listingblock">
+<pre class="programlisting brush: javascript">script=g.getIndex%28%27node_auto_index%27%2C+Vertex.class%29.get%28%27name%27%2C%27I%27%29_%28%29.out%28%29</pre></div>
+<div class="paragraph"><p><em>Example response</em></p></div>
+<div class="ulist"><ul>
+<li>
+<p>
+<strong><span class="monospaced">200:</span></strong> <span class="monospaced">OK</span>
+</p>
+</li>
+<li>
+<p>
+<strong><span class="monospaced">Content-Type:</span></strong> <span class="monospaced">application/json</span>
+</p>
+</li>
+</ul></div>
+<div class="listingblock">
+<pre class="programlisting brush: javascript">[ {
+  "outgoing_relationships" : "http://localhost:7474/db/data/node/1/relationships/out",
+  "labels" : "http://localhost:7474/db/data/node/1/labels",
+  "data" : {
+    "name" : "you"
+  },
+  "all_typed_relationships" : "http://localhost:7474/db/data/node/1/relationships/all/{-list|&amp;|types}",
+  "traverse" : "http://localhost:7474/db/data/node/1/traverse/{returnType}",
+  "self" : "http://localhost:7474/db/data/node/1",
+  "property" : "http://localhost:7474/db/data/node/1/properties/{key}",
+  "outgoing_typed_relationships" : "http://localhost:7474/db/data/node/1/relationships/out/{-list|&amp;|types}",
+  "properties" : "http://localhost:7474/db/data/node/1/properties",
+  "incoming_relationships" : "http://localhost:7474/db/data/node/1/relationships/in",
+  "extensions" : {
+  },
+  "create_relationship" : "http://localhost:7474/db/data/node/1/relationships",
+  "paged_traverse" : "http://localhost:7474/db/data/node/1/paged/traverse/{returnType}{?pageSize,leaseTime}",
+  "all_relationships" : "http://localhost:7474/db/data/node/1/relationships/all",
+  "incoming_typed_relationships" : "http://localhost:7474/db/data/node/1/relationships/in/{-list|&amp;|types}"
+} ]</pre></div>
+</div>
+<div class="sect2">
+<h3 id="rest-api-load-a-sample-graph">Load a sample graph</h3>
+<div class="paragraph"><p>Import a graph form a <a href="http://graphml.graphdrawing.org/">GraphML</a> file can
+be achieved through the Gremlin GraphMLReader. The following script
+imports a small GraphML file from an URL into Neo4j, resulting in the
+depicted graph. The underlying database is auto-indexed, see <a href="#auto-indexing">[auto-indexing]</a>
+so the script can return the imported node by index lookup.</p></div>
+<div class="paragraph"><p><em>Raw script source</em></p></div>
+<div class="listingblock">
+<pre class="programlisting brush: groovy">g.loadGraphML('https://raw.github.com/neo4j-contrib/gremlin-plugin/master/src/data/graphml1.xml')
+g.getIndex('node_auto_index', Vertex.class).get('name','you')</pre></div>
+<div class="imageblock dot">
+<div class="content">
+<img src="images/Final-Graph-Load-a-sample-graph.svg" alt="Final-Graph-Load-a-sample-graph.svg">
+</div>
+<div class="title">Figure 2. Final Graph</div>
+</div>
+<div class="paragraph"><p><em>Example request</em></p></div>
+<div class="ulist"><ul>
+<li>
+<p>
+<strong><span class="monospaced">POST</span></strong>  <span class="monospaced">http://localhost:7474/db/data/ext/GremlinPlugin/graphdb/execute_script</span>
+</p>
+</li>
+<li>
+<p>
+<strong><span class="monospaced">Accept:</span></strong> <span class="monospaced">application/json</span>
+</p>
+</li>
+<li>
+<p>
+<strong><span class="monospaced">Content-Type:</span></strong> <span class="monospaced">application/json</span>
+</p>
+</li>
+</ul></div>
+<div class="listingblock">
+<pre class="programlisting brush: javascript">{
+  "script" : "g.loadGraphML('https://raw.github.com/neo4j-contrib/gremlin-plugin/master/src/data/graphml1.xml');g.getIndex('node_auto_index', Vertex.class).get('name','you');",
+  "params" : {
+  }
+}</pre></div>
+<div class="paragraph"><p><em>Example response</em></p></div>
+<div class="ulist"><ul>
+<li>
+<p>
+<strong><span class="monospaced">200:</span></strong> <span class="monospaced">OK</span>
+</p>
+</li>
+<li>
+<p>
+<strong><span class="monospaced">Content-Type:</span></strong> <span class="monospaced">application/json</span>
+</p>
+</li>
+</ul></div>
+<div class="listingblock">
+<pre class="programlisting brush: javascript">[ {
+  "outgoing_relationships" : "http://localhost:7474/db/data/node/10/relationships/out",
+  "labels" : "http://localhost:7474/db/data/node/10/labels",
+  "data" : {
+    "name" : "you"
+  },
+  "all_typed_relationships" : "http://localhost:7474/db/data/node/10/relationships/all/{-list|&amp;|types}",
+  "traverse" : "http://localhost:7474/db/data/node/10/traverse/{returnType}",
+  "self" : "http://localhost:7474/db/data/node/10",
+  "property" : "http://localhost:7474/db/data/node/10/properties/{key}",
+  "outgoing_typed_relationships" : "http://localhost:7474/db/data/node/10/relationships/out/{-list|&amp;|types}",
+  "properties" : "http://localhost:7474/db/data/node/10/properties",
+  "incoming_relationships" : "http://localhost:7474/db/data/node/10/relationships/in",
+  "extensions" : {
+  },
+  "create_relationship" : "http://localhost:7474/db/data/node/10/relationships",
+  "paged_traverse" : "http://localhost:7474/db/data/node/10/paged/traverse/{returnType}{?pageSize,leaseTime}",
+  "all_relationships" : "http://localhost:7474/db/data/node/10/relationships/all",
+  "incoming_typed_relationships" : "http://localhost:7474/db/data/node/10/relationships/in/{-list|&amp;|types}"
+} ]</pre></div>
+</div>
+<div class="sect2">
+<h3 id="rest-api-sort-a-result-using-raw-groovy-operations">Sort a result using raw Groovy operations</h3>
+<div class="paragraph"><p>The following script returns a sorted list of all nodes connected via
+outgoing relationships to node 1, sorted by their <span class="monospaced">name</span>-property.</p></div>
+<div class="paragraph"><p><em>Raw script source</em></p></div>
+<div class="listingblock">
+<pre class="programlisting brush: groovy">g.getIndex('node_auto_index', Vertex.class).get('name','I')._().out.sort{it.name}</pre></div>
+<div class="imageblock dot">
+<div class="content">
+<img src="images/Final-Graph-Sort-a-result-using-raw-Groovy-operations.svg" alt="Final-Graph-Sort-a-result-using-raw-Groovy-operations.svg">
+</div>
+<div class="title">Figure 3. Final Graph</div>
+</div>
+<div class="paragraph"><p><em>Example request</em></p></div>
+<div class="ulist"><ul>
+<li>
+<p>
+<strong><span class="monospaced">POST</span></strong>  <span class="monospaced">http://localhost:7474/db/data/ext/GremlinPlugin/graphdb/execute_script</span>
+</p>
+</li>
+<li>
+<p>
+<strong><span class="monospaced">Accept:</span></strong> <span class="monospaced">application/json</span>
+</p>
+</li>
+<li>
+<p>
+<strong><span class="monospaced">Content-Type:</span></strong> <span class="monospaced">application/json</span>
+</p>
+</li>
+</ul></div>
+<div class="listingblock">
+<pre class="programlisting brush: javascript">{
+  "script" : "g.getIndex('node_auto_index', Vertex.class).get('name','I')._().out.sort{it.name}",
+  "params" : {
+  }
+}</pre></div>
+<div class="paragraph"><p><em>Example response</em></p></div>
+<div class="ulist"><ul>
+<li>
+<p>
+<strong><span class="monospaced">200:</span></strong> <span class="monospaced">OK</span>
+</p>
+</li>
+<li>
+<p>
+<strong><span class="monospaced">Content-Type:</span></strong> <span class="monospaced">application/json</span>
+</p>
+</li>
+</ul></div>
+<div class="listingblock">
+<pre class="programlisting brush: javascript">[ {
+  "outgoing_relationships" : "http://localhost:7474/db/data/node/16/relationships/out",
+  "labels" : "http://localhost:7474/db/data/node/16/labels",
+  "data" : {
+    "name" : "him"
+  },
+  "all_typed_relationships" : "http://localhost:7474/db/data/node/16/relationships/all/{-list|&amp;|types}",
+  "traverse" : "http://localhost:7474/db/data/node/16/traverse/{returnType}",
+  "self" : "http://localhost:7474/db/data/node/16",
+  "property" : "http://localhost:7474/db/data/node/16/properties/{key}",
+  "outgoing_typed_relationships" : "http://localhost:7474/db/data/node/16/relationships/out/{-list|&amp;|types}",
+  "properties" : "http://localhost:7474/db/data/node/16/properties",
+  "incoming_relationships" : "http://localhost:7474/db/data/node/16/relationships/in",
+  "extensions" : {
+  },
+  "create_relationship" : "http://localhost:7474/db/data/node/16/relationships",
+  "paged_traverse" : "http://localhost:7474/db/data/node/16/paged/traverse/{returnType}{?pageSize,leaseTime}",
+  "all_relationships" : "http://localhost:7474/db/data/node/16/relationships/all",
+  "incoming_typed_relationships" : "http://localhost:7474/db/data/node/16/relationships/in/{-list|&amp;|types}"
+}, {
+  "outgoing_relationships" : "http://localhost:7474/db/data/node/15/relationships/out",
+  "labels" : "http://localhost:7474/db/data/node/15/labels",
+  "data" : {
+    "name" : "you"
+  },
+  "all_typed_relationships" : "http://localhost:7474/db/data/node/15/relationships/all/{-list|&amp;|types}",
+  "traverse" : "http://localhost:7474/db/data/node/15/traverse/{returnType}",
+  "self" : "http://localhost:7474/db/data/node/15",
+  "property" : "http://localhost:7474/db/data/node/15/properties/{key}",
+  "outgoing_typed_relationships" : "http://localhost:7474/db/data/node/15/relationships/out/{-list|&amp;|types}",
+  "properties" : "http://localhost:7474/db/data/node/15/properties",
+  "incoming_relationships" : "http://localhost:7474/db/data/node/15/relationships/in",
+  "extensions" : {
+  },
+  "create_relationship" : "http://localhost:7474/db/data/node/15/relationships",
+  "paged_traverse" : "http://localhost:7474/db/data/node/15/paged/traverse/{returnType}{?pageSize,leaseTime}",
+  "all_relationships" : "http://localhost:7474/db/data/node/15/relationships/all",
+  "incoming_typed_relationships" : "http://localhost:7474/db/data/node/15/relationships/in/{-list|&amp;|types}"
+} ]</pre></div>
+</div>
+<div class="sect2">
+<h3 id="rest-api-send-a-gremlin-script---json-encoded-with-table-results">Send a Gremlin Script - JSON encoded with table results</h3>
+<div class="paragraph"><p>To send a Script JSON encoded, set the payload Content-Type Header. In
+this example, find all the things that my friends like, and return a
+table listing my friends by their name, and the names of the things they
+like in a table with two columns, ignoring the third named step variable
+<span class="monospaced">I</span>. Remember that everything in Gremlin is an iterator - in order to
+populate the result table <span class="monospaced">t</span>, iterate through the pipes with
+<span class="monospaced">iterate()</span>.</p></div>
+<div class="paragraph"><p><em>Raw script source</em></p></div>
+<div class="listingblock">
+<pre class="programlisting brush: groovy">t= new Table()
+g.v(23).as('I').out('know').as('friend').out('like').as('likes').table(t,['friend','likes']){it.name}{it.name}.iterate()
+t</pre></div>
+<div class="imageblock dot">
+<div class="content">
+<img src="images/Final-Graph-Send-a-Gremlin-Script---JSON-encoded-with-table-results.svg" alt="Final-Graph-Send-a-Gremlin-Script---JSON-encoded-with-table-results.svg">
+</div>
+<div class="title">Figure 4. Final Graph</div>
+</div>
+<div class="paragraph"><p><em>Example request</em></p></div>
+<div class="ulist"><ul>
+<li>
+<p>
+<strong><span class="monospaced">POST</span></strong>  <span class="monospaced">http://localhost:7474/db/data/ext/GremlinPlugin/graphdb/execute_script</span>
+</p>
+</li>
+<li>
+<p>
+<strong><span class="monospaced">Accept:</span></strong> <span class="monospaced">application/json</span>
+</p>
+</li>
+<li>
+<p>
+<strong><span class="monospaced">Content-Type:</span></strong> <span class="monospaced">application/json</span>
+</p>
+</li>
+</ul></div>
+<div class="listingblock">
+<pre class="programlisting brush: javascript">{
+  "script" : "t= new Table();g.v(23).as('I').out('know').as('friend').out('like').as('likes').table(t,['friend','likes']){it.name}{it.name}.iterate();t;",
+  "params" : {
+  }
+}</pre></div>
+<div class="paragraph"><p><em>Example response</em></p></div>
+<div class="ulist"><ul>
+<li>
+<p>
+<strong><span class="monospaced">200:</span></strong> <span class="monospaced">OK</span>
+</p>
+</li>
+<li>
+<p>
+<strong><span class="monospaced">Content-Type:</span></strong> <span class="monospaced">application/json</span>
+</p>
+</li>
+</ul></div>
+<div class="listingblock">
+<pre class="programlisting brush: javascript">{
+  "columns" : [ "friend", "likes" ],
+  "data" : [ [ "Joe", "cats" ], [ "Joe", "dogs" ] ]
+}</pre></div>
+</div>
+<div class="sect2">
+<h3 id="rest-api-returning-nested-pipes">Returning nested pipes</h3>
+<div class="paragraph"><p><em>Raw script source</em></p></div>
+<div class="listingblock">
+<pre class="programlisting brush: groovy">g.v(27).as('I').out('know').as('friend').out('like').as('likes').table(new Table()){it.name}{it.name}.cap</pre></div>
+<div class="imageblock dot">
+<div class="content">
+<img src="images/Final-Graph-returning-nested-pipes.svg" alt="Final-Graph-returning-nested-pipes.svg">
+</div>
+<div class="title">Figure 5. Final Graph</div>
+</div>
+<div class="paragraph"><p><em>Example request</em></p></div>
+<div class="ulist"><ul>
+<li>
+<p>
+<strong><span class="monospaced">POST</span></strong>  <span class="monospaced">http://localhost:7474/db/data/ext/GremlinPlugin/graphdb/execute_script</span>
+</p>
+</li>
+<li>
+<p>
+<strong><span class="monospaced">Accept:</span></strong> <span class="monospaced">application/json</span>
+</p>
+</li>
+<li>
+<p>
+<strong><span class="monospaced">Content-Type:</span></strong> <span class="monospaced">application/json</span>
+</p>
+</li>
+</ul></div>
+<div class="listingblock">
+<pre class="programlisting brush: javascript">{
+  "script" : "g.v(27).as('I').out('know').as('friend').out('like').as('likes').table(new Table()){it.name}{it.name}.cap;",
+  "params" : {
+  }
+}</pre></div>
+<div class="paragraph"><p><em>Example response</em></p></div>
+<div class="ulist"><ul>
+<li>
+<p>
+<strong><span class="monospaced">200:</span></strong> <span class="monospaced">OK</span>
+</p>
+</li>
+<li>
+<p>
+<strong><span class="monospaced">Content-Type:</span></strong> <span class="monospaced">application/json</span>
+</p>
+</li>
+</ul></div>
+<div class="listingblock">
+<pre class="programlisting brush: javascript">[ {
+  "data" : [ [ "I", "Joe", "cats" ], [ "I", "Joe", "dogs" ] ],
+  "columns" : [ "I", "friend", "likes" ]
+} ]</pre></div>
+</div>
+<div class="sect2">
+<h3 id="rest-api-set-script-variables">Set script variables</h3>
+<div class="paragraph"><p>To set variables in the bindings for the Gremlin Script Engine on the
+server, you can include a <span class="monospaced">params</span> parameter with a String representing a
+JSON map of variables to set to initial values. These can then be
+accessed as normal variables within the script.</p></div>
+<div class="paragraph"><p><em>Raw script source</em></p></div>
+<div class="listingblock">
+<pre class="programlisting brush: groovy">meaning_of_life</pre></div>
+<div class="imageblock dot">
+<div class="content">
+<img src="images/Final-Graph-Set-script-variables.svg" alt="Final-Graph-Set-script-variables.svg">
+</div>
+<div class="title">Figure 6. Final Graph</div>
+</div>
+<div class="paragraph"><p><em>Example request</em></p></div>
+<div class="ulist"><ul>
+<li>
+<p>
+<strong><span class="monospaced">POST</span></strong>  <span class="monospaced">http://localhost:7474/db/data/ext/GremlinPlugin/graphdb/execute_script</span>
+</p>
+</li>
+<li>
+<p>
+<strong><span class="monospaced">Accept:</span></strong> <span class="monospaced">application/json</span>
+</p>
+</li>
+<li>
+<p>
+<strong><span class="monospaced">Content-Type:</span></strong> <span class="monospaced">application/json</span>
+</p>
+</li>
+</ul></div>
+<div class="listingblock">
+<pre class="programlisting brush: javascript">{
+  "script" : "meaning_of_life",
+  "params" : {
+    "meaning_of_life" : 42.0
+  }
+}</pre></div>
+<div class="paragraph"><p><em>Example response</em></p></div>
+<div class="ulist"><ul>
+<li>
+<p>
+<strong><span class="monospaced">200:</span></strong> <span class="monospaced">OK</span>
+</p>
+</li>
+<li>
+<p>
+<strong><span class="monospaced">Content-Type:</span></strong> <span class="monospaced">application/json</span>
+</p>
+</li>
+</ul></div>
+<div class="listingblock">
+<pre class="programlisting brush: javascript">42.0</pre></div>
+</div>
+<div class="sect2">
+<h3 id="rest-api-send-a-gremlin-script-with-variables-in-a-json-map">Send a Gremlin Script with variables in a JSON Map</h3>
+<div class="paragraph"><p>Send a Gremlin Script, as JSON payload and additional parameters</p></div>
+<div class="paragraph"><p><em>Raw script source</em></p></div>
+<div class="listingblock">
+<pre class="programlisting brush: groovy">g.v(me).out</pre></div>
+<div class="imageblock dot">
+<div class="content">
+<img src="images/Final-Graph-Send-a-Gremlin-Script-with-variables-in-a-JSON-Map.svg" alt="Final-Graph-Send-a-Gremlin-Script-with-variables-in-a-JSON-Map.svg">
+</div>
+<div class="title">Figure 7. Final Graph</div>
+</div>
+<div class="paragraph"><p><em>Example request</em></p></div>
+<div class="ulist"><ul>
+<li>
+<p>
+<strong><span class="monospaced">POST</span></strong>  <span class="monospaced">http://localhost:7474/db/data/ext/GremlinPlugin/graphdb/execute_script</span>
+</p>
+</li>
+<li>
+<p>
+<strong><span class="monospaced">Accept:</span></strong> <span class="monospaced">application/json</span>
+</p>
+</li>
+<li>
+<p>
+<strong><span class="monospaced">Content-Type:</span></strong> <span class="monospaced">application/json</span>
+</p>
+</li>
+</ul></div>
+<div class="listingblock">
+<pre class="programlisting brush: javascript">{
+  "script" : "g.v(me).out",
+  "params" : {
+    "me" : "6"
+  }
+}</pre></div>
+<div class="paragraph"><p><em>Example response</em></p></div>
+<div class="ulist"><ul>
+<li>
+<p>
+<strong><span class="monospaced">200:</span></strong> <span class="monospaced">OK</span>
+</p>
+</li>
+<li>
+<p>
+<strong><span class="monospaced">Content-Type:</span></strong> <span class="monospaced">application/json</span>
+</p>
+</li>
+</ul></div>
+<div class="listingblock">
+<pre class="programlisting brush: javascript">[ {
+  "outgoing_relationships" : "http://localhost:7474/db/data/node/5/relationships/out",
+  "labels" : "http://localhost:7474/db/data/node/5/labels",
+  "data" : {
+    "name" : "you"
+  },
+  "all_typed_relationships" : "http://localhost:7474/db/data/node/5/relationships/all/{-list|&amp;|types}",
+  "traverse" : "http://localhost:7474/db/data/node/5/traverse/{returnType}",
+  "self" : "http://localhost:7474/db/data/node/5",
+  "property" : "http://localhost:7474/db/data/node/5/properties/{key}",
+  "outgoing_typed_relationships" : "http://localhost:7474/db/data/node/5/relationships/out/{-list|&amp;|types}",
+  "properties" : "http://localhost:7474/db/data/node/5/properties",
+  "incoming_relationships" : "http://localhost:7474/db/data/node/5/relationships/in",
+  "extensions" : {
+  },
+  "create_relationship" : "http://localhost:7474/db/data/node/5/relationships",
+  "paged_traverse" : "http://localhost:7474/db/data/node/5/paged/traverse/{returnType}{?pageSize,leaseTime}",
+  "all_relationships" : "http://localhost:7474/db/data/node/5/relationships/all",
+  "incoming_typed_relationships" : "http://localhost:7474/db/data/node/5/relationships/in/{-list|&amp;|types}"
+} ]</pre></div>
+</div>
+<div class="sect2">
+<h3 id="rest-api-return-paths-from-a-gremlin-script">Return paths from a Gremlin script</h3>
+<div class="paragraph"><p>The following script returns paths. Paths in Gremlin consist of the pipes
+that make up the path from the starting pipes. The server is returning
+JSON representations of their content as a nested list.</p></div>
+<div class="paragraph"><p><em>Raw script source</em></p></div>
+<div class="listingblock">
+<pre class="programlisting brush: groovy">g.v(20).out.name.path</pre></div>
+<div class="imageblock dot">
+<div class="content">
+<img src="images/Final-Graph-Return-paths-from-a-Gremlin-script.svg" alt="Final-Graph-Return-paths-from-a-Gremlin-script.svg">
+</div>
+<div class="title">Figure 8. Final Graph</div>
+</div>
+<div class="paragraph"><p><em>Example request</em></p></div>
+<div class="ulist"><ul>
+<li>
+<p>
+<strong><span class="monospaced">POST</span></strong>  <span class="monospaced">http://localhost:7474/db/data/ext/GremlinPlugin/graphdb/execute_script</span>
+</p>
+</li>
+<li>
+<p>
+<strong><span class="monospaced">Accept:</span></strong> <span class="monospaced">application/json</span>
+</p>
+</li>
+<li>
+<p>
+<strong><span class="monospaced">Content-Type:</span></strong> <span class="monospaced">application/json</span>
+</p>
+</li>
+</ul></div>
+<div class="listingblock">
+<pre class="programlisting brush: javascript">{
+  "script" : "g.v(20).out.name.path",
+  "params" : {
+  }
+}</pre></div>
+<div class="paragraph"><p><em>Example response</em></p></div>
+<div class="ulist"><ul>
+<li>
+<p>
+<strong><span class="monospaced">200:</span></strong> <span class="monospaced">OK</span>
+</p>
+</li>
+<li>
+<p>
+<strong><span class="monospaced">Content-Type:</span></strong> <span class="monospaced">application/json</span>
+</p>
+</li>
+</ul></div>
+<div class="listingblock">
+<pre class="programlisting brush: javascript">[ [ {
+  "outgoing_relationships" : "http://localhost:7474/db/data/node/20/relationships/out",
+  "labels" : "http://localhost:7474/db/data/node/20/labels",
+  "data" : {
+    "name" : "I"
+  },
+  "all_typed_relationships" : "http://localhost:7474/db/data/node/20/relationships/all/{-list|&amp;|types}",
+  "traverse" : "http://localhost:7474/db/data/node/20/traverse/{returnType}",
+  "self" : "http://localhost:7474/db/data/node/20",
+  "property" : "http://localhost:7474/db/data/node/20/properties/{key}",
+  "outgoing_typed_relationships" : "http://localhost:7474/db/data/node/20/relationships/out/{-list|&amp;|types}",
+  "properties" : "http://localhost:7474/db/data/node/20/properties",
+  "incoming_relationships" : "http://localhost:7474/db/data/node/20/relationships/in",
+  "extensions" : {
+  },
+  "create_relationship" : "http://localhost:7474/db/data/node/20/relationships",
+  "paged_traverse" : "http://localhost:7474/db/data/node/20/paged/traverse/{returnType}{?pageSize,leaseTime}",
+  "all_relationships" : "http://localhost:7474/db/data/node/20/relationships/all",
+  "incoming_typed_relationships" : "http://localhost:7474/db/data/node/20/relationships/in/{-list|&amp;|types}"
+}, {
+  "outgoing_relationships" : "http://localhost:7474/db/data/node/18/relationships/out",
+  "labels" : "http://localhost:7474/db/data/node/18/labels",
+  "data" : {
+    "name" : "you"
+  },
+  "all_typed_relationships" : "http://localhost:7474/db/data/node/18/relationships/all/{-list|&amp;|types}",
+  "traverse" : "http://localhost:7474/db/data/node/18/traverse/{returnType}",
+  "self" : "http://localhost:7474/db/data/node/18",
+  "property" : "http://localhost:7474/db/data/node/18/properties/{key}",
+  "outgoing_typed_relationships" : "http://localhost:7474/db/data/node/18/relationships/out/{-list|&amp;|types}",
+  "properties" : "http://localhost:7474/db/data/node/18/properties",
+  "incoming_relationships" : "http://localhost:7474/db/data/node/18/relationships/in",
+  "extensions" : {
+  },
+  "create_relationship" : "http://localhost:7474/db/data/node/18/relationships",
+  "paged_traverse" : "http://localhost:7474/db/data/node/18/paged/traverse/{returnType}{?pageSize,leaseTime}",
+  "all_relationships" : "http://localhost:7474/db/data/node/18/relationships/all",
+  "incoming_typed_relationships" : "http://localhost:7474/db/data/node/18/relationships/in/{-list|&amp;|types}"
+}, "you" ], [ {
+  "outgoing_relationships" : "http://localhost:7474/db/data/node/20/relationships/out",
+  "labels" : "http://localhost:7474/db/data/node/20/labels",
+  "data" : {
+    "name" : "I"
+  },
+  "all_typed_relationships" : "http://localhost:7474/db/data/node/20/relationships/all/{-list|&amp;|types}",
+  "traverse" : "http://localhost:7474/db/data/node/20/traverse/{returnType}",
+  "self" : "http://localhost:7474/db/data/node/20",
+  "property" : "http://localhost:7474/db/data/node/20/properties/{key}",
+  "outgoing_typed_relationships" : "http://localhost:7474/db/data/node/20/relationships/out/{-list|&amp;|types}",
+  "properties" : "http://localhost:7474/db/data/node/20/properties",
+  "incoming_relationships" : "http://localhost:7474/db/data/node/20/relationships/in",
+  "extensions" : {
+  },
+  "create_relationship" : "http://localhost:7474/db/data/node/20/relationships",
+  "paged_traverse" : "http://localhost:7474/db/data/node/20/paged/traverse/{returnType}{?pageSize,leaseTime}",
+  "all_relationships" : "http://localhost:7474/db/data/node/20/relationships/all",
+  "incoming_typed_relationships" : "http://localhost:7474/db/data/node/20/relationships/in/{-list|&amp;|types}"
+}, {
+  "outgoing_relationships" : "http://localhost:7474/db/data/node/19/relationships/out",
+  "labels" : "http://localhost:7474/db/data/node/19/labels",
+  "data" : {
+    "name" : "him"
+  },
+  "all_typed_relationships" : "http://localhost:7474/db/data/node/19/relationships/all/{-list|&amp;|types}",
+  "traverse" : "http://localhost:7474/db/data/node/19/traverse/{returnType}",
+  "self" : "http://localhost:7474/db/data/node/19",
+  "property" : "http://localhost:7474/db/data/node/19/properties/{key}",
+  "outgoing_typed_relationships" : "http://localhost:7474/db/data/node/19/relationships/out/{-list|&amp;|types}",
+  "properties" : "http://localhost:7474/db/data/node/19/properties",
+  "incoming_relationships" : "http://localhost:7474/db/data/node/19/relationships/in",
+  "extensions" : {
+  },
+  "create_relationship" : "http://localhost:7474/db/data/node/19/relationships",
+  "paged_traverse" : "http://localhost:7474/db/data/node/19/paged/traverse/{returnType}{?pageSize,leaseTime}",
+  "all_relationships" : "http://localhost:7474/db/data/node/19/relationships/all",
+  "incoming_typed_relationships" : "http://localhost:7474/db/data/node/19/relationships/in/{-list|&amp;|types}"
+}, "him" ] ]</pre></div>
+</div>
+<div class="sect2">
+<h3 id="rest-api-send-an-arbitrary-groovy-script---lucene-sorting">Send an arbitrary Groovy script - Lucene sorting</h3>
+<div class="paragraph"><p>This example demonstrates that you via the Groovy runtime embedded with
+the server have full access to all of the servers Java APIs. The below
+example creates Nodes in the database both via the Blueprints and the
+Neo4j API indexes the nodes via the native Neo4j Indexing API constructs
+a custom Lucene sorting and searching returns a Neo4j IndexHits result
+iterator.</p></div>
+<div class="paragraph"><p><em>Raw script source</em></p></div>
+<div class="listingblock">
+<pre class="programlisting brush: groovy">'******** Additional imports *********'
+import org.neo4j.graphdb.index.*
+import org.neo4j.graphdb.*
+import org.neo4j.index.lucene.*
+import org.apache.lucene.search.*
+
+'**** Blueprints API methods on the injected Neo4jGraph at variable g ****'
+meVertex = g.addVertex([name:'me'])
+meNode = meVertex.getRawVertex()
+
+'*** get the Neo4j raw instance ***'
+neo4j = g.getRawGraph()
+
+
+'******** Neo4j API methods: *********'
+tx = neo4j.beginTx()
+ youNode = neo4j.createNode()
+ youNode.setProperty('name','you')
+ youNode.createRelationshipTo(meNode,DynamicRelationshipType.withName('knows'))
+
+'*** index using Neo4j APIs ***'
+ idxManager = neo4j.index()
+ personIndex = idxManager.forNodes('persons')
+ personIndex.add(meNode,'name',meNode.getProperty('name'))
+ personIndex.add(youNode,'name',youNode.getProperty('name'))
+tx.success()
+tx.finish()
+g.stopTransaction(SUCCESS)
+
+'*** Prepare a custom Lucene query context with Neo4j API ***'
+query = new QueryContext( 'name:*' ).sort( new Sort(new SortField( 'name',SortField.STRING, true ) ) )
+results = personIndex.query( query )</pre></div>
+<div class="imageblock dot">
+<div class="content">
+<img src="images/Final-Graph-Send-an-arbitrary-Groovy-script---Lucene-sorting.svg" alt="Final-Graph-Send-an-arbitrary-Groovy-script---Lucene-sorting.svg">
+</div>
+<div class="title">Figure 9. Final Graph</div>
+</div>
+<div class="paragraph"><p><em>Example request</em></p></div>
+<div class="ulist"><ul>
+<li>
+<p>
+<strong><span class="monospaced">POST</span></strong>  <span class="monospaced">http://localhost:7474/db/data/ext/GremlinPlugin/graphdb/execute_script</span>
+</p>
+</li>
+<li>
+<p>
+<strong><span class="monospaced">Accept:</span></strong> <span class="monospaced">application/json</span>
+</p>
+</li>
+<li>
+<p>
+<strong><span class="monospaced">Content-Type:</span></strong> <span class="monospaced">application/json</span>
+</p>
+</li>
+</ul></div>
+<div class="listingblock">
+<pre class="programlisting brush: javascript">{
+  "script" : "'******** Additional imports *********';import org.neo4j.graphdb.index.*;import org.neo4j.graphdb.*;import org.neo4j.index.lucene.*;import org.apache.lucene.search.*;;'**** Blueprints API methods on the injected Neo4jGraph at variable g ****';meVertex = g.addVertex([name:'me']);meNode = meVertex.getRawVertex();;'*** get the Neo4j raw instance ***';neo4j = g.getRawGraph();;;'******** Neo4j API methods: *********';tx = neo4j.beginTx(); youNode = neo4j.createNode(); youNode.setProperty('name','you'); youNode.createRelationshipTo(meNode,DynamicRelationshipType.withName('knows'));;'*** index using Neo4j APIs ***'; idxManager = neo4j.index(); personIndex = idxManager.forNodes('persons'); personIndex.add(meNode,'name',meNode.getProperty('name')); personIndex.add(youNode,'name',youNode.getProperty('name'));tx.success();tx.finish();g.stopTransaction(SUCCESS);;'*** Prepare a custom Lucene query context with Neo4j API ***';query = new QueryContext( 'name:*' ).sort( new Sort(new SortField( 'name',SortField.STRING, true ) ) );results = personIndex.query( query );",
+  "params" : {
+  }
+}</pre></div>
+<div class="paragraph"><p><em>Example response</em></p></div>
+<div class="ulist"><ul>
+<li>
+<p>
+<strong><span class="monospaced">200:</span></strong> <span class="monospaced">OK</span>
+</p>
+</li>
+<li>
+<p>
+<strong><span class="monospaced">Content-Type:</span></strong> <span class="monospaced">application/json</span>
+</p>
+</li>
+</ul></div>
+<div class="listingblock">
+<pre class="programlisting brush: javascript">[ {
+  "outgoing_relationships" : "http://localhost:7474/db/data/node/30/relationships/out",
+  "labels" : "http://localhost:7474/db/data/node/30/labels",
+  "data" : {
+    "name" : "you"
+  },
+  "all_typed_relationships" : "http://localhost:7474/db/data/node/30/relationships/all/{-list|&amp;|types}",
+  "traverse" : "http://localhost:7474/db/data/node/30/traverse/{returnType}",
+  "self" : "http://localhost:7474/db/data/node/30",
+  "property" : "http://localhost:7474/db/data/node/30/properties/{key}",
+  "outgoing_typed_relationships" : "http://localhost:7474/db/data/node/30/relationships/out/{-list|&amp;|types}",
+  "properties" : "http://localhost:7474/db/data/node/30/properties",
+  "incoming_relationships" : "http://localhost:7474/db/data/node/30/relationships/in",
+  "extensions" : {
+  },
+  "create_relationship" : "http://localhost:7474/db/data/node/30/relationships",
+  "paged_traverse" : "http://localhost:7474/db/data/node/30/paged/traverse/{returnType}{?pageSize,leaseTime}",
+  "all_relationships" : "http://localhost:7474/db/data/node/30/relationships/all",
+  "incoming_typed_relationships" : "http://localhost:7474/db/data/node/30/relationships/in/{-list|&amp;|types}"
+}, {
+  "outgoing_relationships" : "http://localhost:7474/db/data/node/29/relationships/out",
+  "labels" : "http://localhost:7474/db/data/node/29/labels",
+  "data" : {
+    "name" : "me"
+  },
+  "all_typed_relationships" : "http://localhost:7474/db/data/node/29/relationships/all/{-list|&amp;|types}",
+  "traverse" : "http://localhost:7474/db/data/node/29/traverse/{returnType}",
+  "self" : "http://localhost:7474/db/data/node/29",
+  "property" : "http://localhost:7474/db/data/node/29/properties/{key}",
+  "outgoing_typed_relationships" : "http://localhost:7474/db/data/node/29/relationships/out/{-list|&amp;|types}",
+  "properties" : "http://localhost:7474/db/data/node/29/properties",
+  "incoming_relationships" : "http://localhost:7474/db/data/node/29/relationships/in",
+  "extensions" : {
+  },
+  "create_relationship" : "http://localhost:7474/db/data/node/29/relationships",
+  "paged_traverse" : "http://localhost:7474/db/data/node/29/paged/traverse/{returnType}{?pageSize,leaseTime}",
+  "all_relationships" : "http://localhost:7474/db/data/node/29/relationships/all",
+  "incoming_typed_relationships" : "http://localhost:7474/db/data/node/29/relationships/in/{-list|&amp;|types}"
+} ]</pre></div>
+</div>
+<div class="sect2">
+<h3 id="rest-api-emit-a-sample-graph">Emit a sample graph</h3>
+<div class="paragraph"><p>Exporting a graph can be done by simple emitting the appropriate String.</p></div>
+<div class="paragraph"><p><em>Raw script source</em></p></div>
+<div class="listingblock">
+<pre class="programlisting brush: groovy">writer = new GraphMLWriter(g)
+out = new java.io.ByteArrayOutputStream()
+writer.outputGraph(out)
+result = out.toString()</pre></div>
+<div class="imageblock dot">
+<div class="content">
+<img src="images/Final-Graph-Emit-a-sample-graph.svg" alt="Final-Graph-Emit-a-sample-graph.svg">
+</div>
+<div class="title">Figure 10. Final Graph</div>
+</div>
+<div class="paragraph"><p><em>Example request</em></p></div>
+<div class="ulist"><ul>
+<li>
+<p>
+<strong><span class="monospaced">POST</span></strong>  <span class="monospaced">http://localhost:7474/db/data/ext/GremlinPlugin/graphdb/execute_script</span>
+</p>
+</li>
+<li>
+<p>
+<strong><span class="monospaced">Accept:</span></strong> <span class="monospaced">application/json</span>
+</p>
+</li>
+<li>
+<p>
+<strong><span class="monospaced">Content-Type:</span></strong> <span class="monospaced">application/json</span>
+</p>
+</li>
+</ul></div>
+<div class="listingblock">
+<pre class="programlisting brush: javascript">{
+  "script" : "writer = new GraphMLWriter(g);out = new java.io.ByteArrayOutputStream();writer.outputGraph(out);result = out.toString();",
+  "params" : {
+  }
+}</pre></div>
+<div class="paragraph"><p><em>Example response</em></p></div>
+<div class="ulist"><ul>
+<li>
+<p>
+<strong><span class="monospaced">200:</span></strong> <span class="monospaced">OK</span>
+</p>
+</li>
+<li>
+<p>
+<strong><span class="monospaced">Content-Type:</span></strong> <span class="monospaced">application/json</span>
+</p>
+</li>
+</ul></div>
+<div class="listingblock">
+<pre class="programlisting brush: javascript">"&lt;?xml version=\"1.0\" ?&gt;&lt;graphml xmlns=\"http://graphml.graphdrawing.org/xmlns\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.1/graphml.xsd\"&gt;&lt;key id=\"name\" for=\"node\" attr.name=\"name\" attr.type=\"string\"&gt;&lt;/key&gt;&lt;graph id=\"G\" edgedefault=\"directed\"&gt;&lt;node id=\"12\"&gt;&lt;data key=\"name\"&gt;you&lt;/data&gt;&lt;/node&gt;&lt;node id=\"13\"&gt;&lt;data key=\"name\"&gt;him&lt;/data&gt;&lt;/node&gt;&lt;node id=\"14\"&gt;&lt;data key=\"name\"&gt;I&lt;/data&gt;&lt;/node&gt;&lt;edge id=\"6\" source=\"14\" target=\"12\" label=\"know\"&gt;&lt;/edge&gt;&lt;edge id=\"7\" source=\"14\" target=\"13\" label=\"know\"&gt;&lt;/edge&gt;&lt;/graph&gt;&lt;/graphml&gt;"</pre></div>
+</div>
+<div class="sect2">
+<h3 id="rest-api-hyperedges---find-user-roles-in-groups">HyperEdges - find user roles in groups</h3>
+<div class="paragraph"><p>Imagine a user being part of different groups. A group can have different
+roles, and a user can be part of different groups. He also can have
+different roles in different groups apart from the membership. The
+association of a User, a Group and a Role can be referred to as a
+<em>HyperEdge</em>. However, it can be easily modeled in a property graph as a
+node that captures this n-ary relationship, as depicted below in the
+<span class="monospaced">U1G2R1</span> node.</p></div>
+<div class="paragraph"><p>To find out in what roles a user is for a particular groups (here
+<em>Group2</em>), the following script can traverse this HyperEdge node and
+provide answers.</p></div>
+<div class="paragraph"><p><em>Raw script source</em></p></div>
+<div class="listingblock">
+<pre class="programlisting brush: groovy">g.v(37).out('hasRoleInGroup').as('hyperedge').out('hasGroup').filter{it.name=='Group2'}.back('hyperedge').out('hasRole').name</pre></div>
+<div class="imageblock dot">
+<div class="content">
+<img src="images/Final-Graph-HyperEdges---find-user-roles-in-groups.svg" alt="Final-Graph-HyperEdges---find-user-roles-in-groups.svg">
+</div>
+<div class="title">Figure 11. Final Graph</div>
+</div>
+<div class="paragraph"><p><em>Example request</em></p></div>
+<div class="ulist"><ul>
+<li>
+<p>
+<strong><span class="monospaced">POST</span></strong>  <span class="monospaced">http://localhost:7474/db/data/ext/GremlinPlugin/graphdb/execute_script</span>
+</p>
+</li>
+<li>
+<p>
+<strong><span class="monospaced">Accept:</span></strong> <span class="monospaced">application/json</span>
+</p>
+</li>
+<li>
+<p>
+<strong><span class="monospaced">Content-Type:</span></strong> <span class="monospaced">application/json</span>
+</p>
+</li>
+</ul></div>
+<div class="listingblock">
+<pre class="programlisting brush: javascript">{
+  "script" : "g.v(37).out('hasRoleInGroup').as('hyperedge').out('hasGroup').filter{it.name=='Group2'}.back('hyperedge').out('hasRole').name",
+  "params" : {
+  }
+}</pre></div>
+<div class="paragraph"><p><em>Example response</em></p></div>
+<div class="ulist"><ul>
+<li>
+<p>
+<strong><span class="monospaced">200:</span></strong> <span class="monospaced">OK</span>
+</p>
+</li>
+<li>
+<p>
+<strong><span class="monospaced">Content-Type:</span></strong> <span class="monospaced">application/json</span>
+</p>
+</li>
+</ul></div>
+<div class="listingblock">
+<pre class="programlisting brush: javascript">[ "Role1" ]</pre></div>
+</div>
+<div class="sect2">
+<h3 id="rest-api-group-count">Group count</h3>
+<div class="paragraph"><p>This example is showing a group count in Gremlin, for instance the
+counting of the different relationship types connected to some the start
+node. The result is collected into a variable that then is returned.</p></div>
+<div class="paragraph"><p><em>Raw script source</em></p></div>
+<div class="listingblock">
+<pre class="programlisting brush: groovy">m = [:]
+g.v(41).bothE().label.groupCount(m).iterate()
+m</pre></div>
+<div class="imageblock dot">
+<div class="content">
+<img src="images/Final-Graph-group-count.svg" alt="Final-Graph-group-count.svg">
+</div>
+<div class="title">Figure 12. Final Graph</div>
+</div>
+<div class="paragraph"><p><em>Example request</em></p></div>
+<div class="ulist"><ul>
+<li>
+<p>
+<strong><span class="monospaced">POST</span></strong>  <span class="monospaced">http://localhost:7474/db/data/ext/GremlinPlugin/graphdb/execute_script</span>
+</p>
+</li>
+<li>
+<p>
+<strong><span class="monospaced">Accept:</span></strong> <span class="monospaced">application/json</span>
+</p>
+</li>
+<li>
+<p>
+<strong><span class="monospaced">Content-Type:</span></strong> <span class="monospaced">application/json</span>
+</p>
+</li>
+</ul></div>
+<div class="listingblock">
+<pre class="programlisting brush: javascript">{
+  "script" : "m = [:];g.v(41).bothE().label.groupCount(m).iterate();m",
+  "params" : {
+  }
+}</pre></div>
+<div class="paragraph"><p><em>Example response</em></p></div>
+<div class="ulist"><ul>
+<li>
+<p>
+<strong><span class="monospaced">200:</span></strong> <span class="monospaced">OK</span>
+</p>
+</li>
+<li>
+<p>
+<strong><span class="monospaced">Content-Type:</span></strong> <span class="monospaced">application/json</span>
+</p>
+</li>
+</ul></div>
+<div class="listingblock">
+<pre class="programlisting brush: javascript">{
+  "knows" : 2,
+  "likes" : 1
+}</pre></div>
+</div>
+<div class="sect2">
+<h3 id="rest-api-collect-multiple-traversal-results">Collect multiple traversal results</h3>
+<div class="paragraph"><p>Multiple traversals can be combined into a single result, using splitting
+and merging pipes in a lazy fashion.</p></div>
+<div class="paragraph"><p><em>Raw script source</em></p></div>
+<div class="listingblock">
+<pre class="programlisting brush: groovy">g.getIndex('node_auto_index', Vertex.class).get('name','Peter')._().copySplit(_().out('knows'), _().in('likes')).fairMerge.name</pre></div>
+<div class="imageblock dot">
+<div class="content">
+<img src="images/Final-Graph-collect-multiple-traversal-results.svg" alt="Final-Graph-collect-multiple-traversal-results.svg">
+</div>
+<div class="title">Figure 13. Final Graph</div>
+</div>
+<div class="paragraph"><p><em>Example request</em></p></div>
+<div class="ulist"><ul>
+<li>
+<p>
+<strong><span class="monospaced">POST</span></strong>  <span class="monospaced">http://localhost:7474/db/data/ext/GremlinPlugin/graphdb/execute_script</span>
+</p>
+</li>
+<li>
+<p>
+<strong><span class="monospaced">Accept:</span></strong> <span class="monospaced">application/json</span>
+</p>
+</li>
+<li>
+<p>
+<strong><span class="monospaced">Content-Type:</span></strong> <span class="monospaced">application/json</span>
+</p>
+</li>
+</ul></div>
+<div class="listingblock">
+<pre class="programlisting brush: javascript">{
+  "script" : "g.getIndex('node_auto_index', Vertex.class).get('name','Peter')._().copySplit(_().out('knows'), _().in('likes')).fairMerge.name",
+  "params" : {
+  }
+}</pre></div>
+<div class="paragraph"><p><em>Example response</em></p></div>
+<div class="ulist"><ul>
+<li>
+<p>
+<strong><span class="monospaced">200:</span></strong> <span class="monospaced">OK</span>
+</p>
+</li>
+<li>
+<p>
+<strong><span class="monospaced">Content-Type:</span></strong> <span class="monospaced">application/json</span>
+</p>
+</li>
+</ul></div>
+<div class="listingblock">
+<pre class="programlisting brush: javascript">[ "Ian", "Marie" ]</pre></div>
+</div>
+<div class="sect2">
+<h3 id="rest-api-collaborative-filtering">Collaborative filtering</h3>
+<div class="paragraph"><p>This example demonstrates basic collaborative filtering - ordering a
+traversal after occurence counts and substracting objects that are not
+interesting in the final result.</p></div>
+<div class="paragraph"><p>Here, we are finding Friends-of-Friends that are not Joes friends
+already. The same can be applied to graphs of users that <span class="monospaced">LIKE</span> things
+and others.</p></div>
+<div class="paragraph"><p><em>Raw script source</em></p></div>
+<div class="listingblock">
+<pre class="programlisting brush: groovy">x=[]
+fof=[:]
+g.v(63).out('knows').aggregate(x).out('knows').except(x).groupCount(fof).iterate()
+fof.sort{a,b -&gt; b.value &lt;=&gt; a.value}</pre></div>
+<div class="imageblock dot">
+<div class="content">
+<img src="images/Final-Graph-collaborative-filtering.svg" alt="Final-Graph-collaborative-filtering.svg">
+</div>
+<div class="title">Figure 14. Final Graph</div>
+</div>
+<div class="paragraph"><p><em>Example request</em></p></div>
+<div class="ulist"><ul>
+<li>
+<p>
+<strong><span class="monospaced">POST</span></strong>  <span class="monospaced">http://localhost:7474/db/data/ext/GremlinPlugin/graphdb/execute_script</span>
+</p>
+</li>
+<li>
+<p>
+<strong><span class="monospaced">Accept:</span></strong> <span class="monospaced">application/json</span>
+</p>
+</li>
+<li>
+<p>
+<strong><span class="monospaced">Content-Type:</span></strong> <span class="monospaced">application/json</span>
+</p>
+</li>
+</ul></div>
+<div class="listingblock">
+<pre class="programlisting brush: javascript">{
+  "script" : "x=[];fof=[:];g.v(63).out('knows').aggregate(x).out('knows').except(x).groupCount(fof).iterate();fof.sort{a,b -&gt; b.value &lt;=&gt; a.value}",
+  "params" : {
+  }
+}</pre></div>
+<div class="paragraph"><p><em>Example response</em></p></div>
+<div class="ulist"><ul>
+<li>
+<p>
+<strong><span class="monospaced">200:</span></strong> <span class="monospaced">OK</span>
+</p>
+</li>
+<li>
+<p>
+<strong><span class="monospaced">Content-Type:</span></strong> <span class="monospaced">application/json</span>
+</p>
+</li>
+</ul></div>
+<div class="listingblock">
+<pre class="programlisting brush: javascript">{
+  "v[61]" : 2,
+  "v[60]" : 1,
+  "v[62]" : 1
+}</pre></div>
+</div>
+<div class="sect2">
+<h3 id="rest-api-chunking-and-offsetting-in-gremlin">Chunking and offsetting in Gremlin</h3>
+<div class="paragraph"><p><em>Raw script source</em></p></div>
+<div class="listingblock">
+<pre class="programlisting brush: groovy">g.v(51).out('knows').filter{it.name == 'Sara'}[0..100]</pre></div>
+<div class="imageblock dot">
+<div class="content">
+<img src="images/Final-Graph-chunking-and-offsetting-in-Gremlin.svg" alt="Final-Graph-chunking-and-offsetting-in-Gremlin.svg">
+</div>
+<div class="title">Figure 15. Final Graph</div>
+</div>
+<div class="paragraph"><p><em>Example request</em></p></div>
+<div class="ulist"><ul>
+<li>
+<p>
+<strong><span class="monospaced">POST</span></strong>  <span class="monospaced">http://localhost:7474/db/data/ext/GremlinPlugin/graphdb/execute_script</span>
+</p>
+</li>
+<li>
+<p>
+<strong><span class="monospaced">Accept:</span></strong> <span class="monospaced">application/json</span>
+</p>
+</li>
+<li>
+<p>
+<strong><span class="monospaced">Content-Type:</span></strong> <span class="monospaced">application/json</span>
+</p>
+</li>
+</ul></div>
+<div class="listingblock">
+<pre class="programlisting brush: javascript">{
+  "script" : "g.v(51).out('knows').filter{it.name == 'Sara'}[0..100]",
+  "params" : {
+  }
+}</pre></div>
+<div class="paragraph"><p><em>Example response</em></p></div>
+<div class="ulist"><ul>
+<li>
+<p>
+<strong><span class="monospaced">200:</span></strong> <span class="monospaced">OK</span>
+</p>
+</li>
+<li>
+<p>
+<strong><span class="monospaced">Content-Type:</span></strong> <span class="monospaced">application/json</span>
+</p>
+</li>
+</ul></div>
+<div class="listingblock">
+<pre class="programlisting brush: javascript">[ {
+  "outgoing_relationships" : "http://localhost:7474/db/data/node/49/relationships/out",
+  "labels" : "http://localhost:7474/db/data/node/49/labels",
+  "data" : {
+    "name" : "Sara"
+  },
+  "all_typed_relationships" : "http://localhost:7474/db/data/node/49/relationships/all/{-list|&amp;|types}",
+  "traverse" : "http://localhost:7474/db/data/node/49/traverse/{returnType}",
+  "self" : "http://localhost:7474/db/data/node/49",
+  "property" : "http://localhost:7474/db/data/node/49/properties/{key}",
+  "outgoing_typed_relationships" : "http://localhost:7474/db/data/node/49/relationships/out/{-list|&amp;|types}",
+  "properties" : "http://localhost:7474/db/data/node/49/properties",
+  "incoming_relationships" : "http://localhost:7474/db/data/node/49/relationships/in",
+  "extensions" : {
+  },
+  "create_relationship" : "http://localhost:7474/db/data/node/49/relationships",
+  "paged_traverse" : "http://localhost:7474/db/data/node/49/paged/traverse/{returnType}{?pageSize,leaseTime}",
+  "all_relationships" : "http://localhost:7474/db/data/node/49/relationships/all",
+  "incoming_typed_relationships" : "http://localhost:7474/db/data/node/49/relationships/in/{-list|&amp;|types}"
+} ]</pre></div>
+</div>
+<div class="sect2">
+<h3 id="rest-api-modify-the-graph-while-traversing">Modify the graph while traversing</h3>
+<div class="paragraph"><p>This example is showing a group count in Gremlin, for instance the
+counting of the different relationship types connected to some the start
+node. The result is collected into a variable that then is returned.</p></div>
+<div class="imageblock dot">
+<div class="content">
+<img src="images/Starting-Graph-starting_graphmodify-the-graph-while-traversing.svg" alt="Starting-Graph-starting_graphmodify-the-graph-while-traversing.svg">
+</div>
+<div class="title">Figure 16. Starting Graph</div>
+</div>
+<div class="paragraph"><p><em>Raw script source</em></p></div>
+<div class="listingblock">
+<pre class="programlisting brush: groovy">g.v(44).bothE.each{g.removeEdge(it)}
+g.stopTransaction(SUCCESS)</pre></div>
+<div class="imageblock dot">
+<div class="content">
+<img src="images/Final-Graph-modify-the-graph-while-traversing.svg" alt="Final-Graph-modify-the-graph-while-traversing.svg">
+</div>
+<div class="title">Figure 17. Final Graph</div>
+</div>
+<div class="paragraph"><p><em>Example request</em></p></div>
+<div class="ulist"><ul>
+<li>
+<p>
+<strong><span class="monospaced">POST</span></strong>  <span class="monospaced">http://localhost:7474/db/data/ext/GremlinPlugin/graphdb/execute_script</span>
+</p>
+</li>
+<li>
+<p>
+<strong><span class="monospaced">Accept:</span></strong> <span class="monospaced">application/json</span>
+</p>
+</li>
+<li>
+<p>
+<strong><span class="monospaced">Content-Type:</span></strong> <span class="monospaced">application/json</span>
+</p>
+</li>
+</ul></div>
+<div class="listingblock">
+<pre class="programlisting brush: javascript">{
+  "script" : "g.v(44).bothE.each{g.removeEdge(it)};g.stopTransaction(SUCCESS);",
+  "params" : {
+  }
+}</pre></div>
+<div class="paragraph"><p><em>Example response</em></p></div>
+<div class="ulist"><ul>
+<li>
+<p>
+<strong><span class="monospaced">200:</span></strong> <span class="monospaced">OK</span>
+</p>
+</li>
+<li>
+<p>
+<strong><span class="monospaced">Content-Type:</span></strong> <span class="monospaced">application/json</span>
+</p>
+</li>
+</ul></div>
+<div class="listingblock">
+<pre class="programlisting brush: javascript">"null"</pre></div>
+</div>
+<div class="sect2">
+<h3 id="rest-api-flow-algorithms-with-gremlin">Flow algorithms with Gremlin</h3>
+<div class="paragraph"><p>This is a basic stub example for implementing flow algorithms in for
+instance <a href="http://en.wikipedia.org/wiki/Flow_network">Flow Networks</a> with a
+pipes-based approach and scripting, here between <span class="monospaced">source</span> and <span class="monospaced">sink</span>
+using the <span class="monospaced">capacity</span> property on relationships as the base for the flow
+function and modifying the graph during calculation.</p></div>
+<div class="imageblock dot">
+<div class="content">
+<img src="images/Starting-Graph-starting_graphflow-algorithms-with-Gremlin.svg" alt="Starting-Graph-starting_graphflow-algorithms-with-Gremlin.svg">
+</div>
+<div class="title">Figure 18. Starting Graph</div>
+</div>
+<div class="paragraph"><p><em>Raw script source</em></p></div>
+<div class="listingblock">
+<pre class="programlisting brush: groovy">source=g.v(72)
+sink=g.v(73)
+maxFlow = 0
+source.outE.inV.loop(2){!it.object.equals(sink)}.path.each{flow = it.capacity.min()
+ maxFlow += flow
+it.findAll{it.capacity}.each{it.capacity -= flow}}
+g.stopTransaction(SUCCESS)
+maxFlow</pre></div>
+<div class="imageblock dot">
+<div class="content">
+<img src="images/Final-Graph-flow-algorithms-with-Gremlin.svg" alt="Final-Graph-flow-algorithms-with-Gremlin.svg">
+</div>
+<div class="title">Figure 19. Final Graph</div>
+</div>
+<div class="paragraph"><p><em>Example request</em></p></div>
+<div class="ulist"><ul>
+<li>
+<p>
+<strong><span class="monospaced">POST</span></strong>  <span class="monospaced">http://localhost:7474/db/data/ext/GremlinPlugin/graphdb/execute_script</span>
+</p>
+</li>
+<li>
+<p>
+<strong><span class="monospaced">Accept:</span></strong> <span class="monospaced">application/json</span>
+</p>
+</li>
+<li>
+<p>
+<strong><span class="monospaced">Content-Type:</span></strong> <span class="monospaced">application/json</span>
+</p>
+</li>
+</ul></div>
+<div class="listingblock">
+<pre class="programlisting brush: javascript">{
+  "script" : "source=g.v(72);sink=g.v(73);maxFlow = 0;source.outE.inV.loop(2){!it.object.equals(sink)}.path.each{flow = it.capacity.min(); maxFlow += flow;it.findAll{it.capacity}.each{it.capacity -= flow}};g.stopTransaction(SUCCESS);maxFlow",
+  "params" : {
+  }
+}</pre></div>
+<div class="paragraph"><p><em>Example response</em></p></div>
+<div class="ulist"><ul>
+<li>
+<p>
+<strong><span class="monospaced">200:</span></strong> <span class="monospaced">OK</span>
+</p>
+</li>
+<li>
+<p>
+<strong><span class="monospaced">Content-Type:</span></strong> <span class="monospaced">application/json</span>
+</p>
+</li>
+</ul></div>
+<div class="listingblock">
+<pre class="programlisting brush: javascript">4</pre></div>
+</div>
+<div class="sect2">
+<h3 id="rest-api-script-execution-errors">Script execution errors</h3>
+<div class="paragraph"><p>Script errors
+will result in an HTTP error response code.</p></div>
+<div class="imageblock dot">
+<div class="content">
+<img src="images/Final-Graph-script-execution-errors.svg" alt="Final-Graph-script-execution-errors.svg">
+</div>
+<div class="title">Figure 20. Final Graph</div>
+</div>
+<div class="paragraph"><p><em>Example request</em></p></div>
+<div class="ulist"><ul>
+<li>
+<p>
+<strong><span class="monospaced">POST</span></strong>  <span class="monospaced">http://localhost:7474/db/data/ext/GremlinPlugin/graphdb/execute_script</span>
+</p>
+</li>
+<li>
+<p>
+<strong><span class="monospaced">Accept:</span></strong> <span class="monospaced">application/json</span>
+</p>
+</li>
+<li>
+<p>
+<strong><span class="monospaced">Content-Type:</span></strong> <span class="monospaced">application/json</span>
+</p>
+</li>
+</ul></div>
+<div class="listingblock">
+<pre class="programlisting brush: javascript">{
+  "script" : "g.blah"
+}</pre></div>
+<div class="paragraph"><p><em>Example response</em></p></div>
+<div class="ulist"><ul>
+<li>
+<p>
+<strong><span class="monospaced">400:</span></strong> <span class="monospaced">Bad Request</span>
+</p>
+</li>
+<li>
+<p>
+<strong><span class="monospaced">Content-Type:</span></strong> <span class="monospaced">application/json</span>
+</p>
+</li>
+</ul></div>
+<div class="listingblock">
+<pre class="programlisting brush: javascript">{
+  "message": "javax.script.ScriptException: groovy.lang.MissingPropertyException: No such property: blah for class: com.tinkerpop.blueprints.impls.neo4j.Neo4jGraph\nPossible solutions: class",
+  "exception": "BadInputException",
+  "fullname": "org.neo4j.server.rest.repr.BadInputException",
+  "stacktrace": [
+    "org.neo4j.server.plugin.gremlin.GremlinPlugin.executeScript(GremlinPlugin.java:84)",
+    "java.lang.reflect.Method.invoke(Method.java:597)",
+    "org.neo4j.server.plugins.PluginMethod.invoke(PluginMethod.java:57)",
+    "org.neo4j.server.plugins.PluginManager.invoke(PluginManager.java:168)",
+    "org.neo4j.server.rest.web.ExtensionService.invokeGraphDatabaseExtension(ExtensionService.java:300)",
+    "org.neo4j.server.rest.web.ExtensionService.invokeGraphDatabaseExtension(ExtensionService.java:122)",
+    "java.lang.reflect.Method.invoke(Method.java:597)"
+  ]
+}</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div id="footnotes"><hr></div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2013-05-28 12:20:39 CEST
+</div>
+</div>
+</body>
+</html>
