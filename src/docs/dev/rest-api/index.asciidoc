@@ -22,7 +22,7 @@ interesting Gremlin or Java routines, see <<server-plugins>> or secure your serv
 [TIP]
 When returning results from pipes like `g.v(0).in()`, make sure to iterate through the results in order not to return the pipe object but its content, like `g.v(0).in().iterate()`. For more caveats, see https://github.com/tinkerpop/gremlin/wiki/Troubleshooting[Gremlin Troubleshooting]
 
-:leveloffset: 1
+:leveloffset: 0
 
 include::send-a-gremlin-script---url-encoded.asciidoc[]
 

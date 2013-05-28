@@ -47,7 +47,10 @@ public class GremlinPluginFunctionalTest extends AbstractRestFunctionalTestBase
 {
     private static final String ENDPOINT = "http://localhost:7474/db/data/ext/GremlinPlugin/graphdb/execute_script";
 
-
+    protected String getDocumentationSectionName() {
+        return "rest-api";
+    }
+    
     protected String doGremlinRestCall( String endpoint, String scriptTemplate, Status status, Pair<String, String>... params ) {
         data.get();
         String parameterString = createParameterString( params );

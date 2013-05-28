@@ -1,4 +1,6 @@
-This is a Neo4j Server plugin, providing [Gremlin](http://gremlin.tinkerpop.com) backend scripting to the [Neo4j Server](http://neo4j.org). to deploy, please do the following
+This is a [Neo4j Server](http://neo4j.org/download) plugin, providing [Gremlin](http://gremlin.tinkerpop.com) backend scripting to the [Neo4j Server](http://neo4j.org). To deploy, please do the following
+
+For usage, see the [current documentation](http://neo4j-contrib.github.io/gremlin-plugin/).
 
 Building from source and deploying into Neo4j Server
 -----------------------------------------------------
