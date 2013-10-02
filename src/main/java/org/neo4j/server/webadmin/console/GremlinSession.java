@@ -19,14 +19,6 @@
  */
 package org.neo4j.server.webadmin.console;
 
-import java.io.BufferedOutputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import com.tinkerpop.blueprints.TransactionalGraph;
 import com.tinkerpop.blueprints.impls.neo4j.Neo4jGraph;
 import groovy.lang.Binding;
@@ -36,43 +28,43 @@ import org.neo4j.helpers.Pair;
 import org.neo4j.server.database.Database;
 import org.neo4j.server.logging.Logger;
 
-public class GremlinSession implements ScriptSession
-{
+import java.io.BufferedOutputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+public class GremlinSession implements ScriptSession {
     private static final String INIT_FUNCTION = "init()";
-
-    private static final Logger log = Logger.getLogger( GremlinSession.class );
-
-    protected GremlinWebConsole scriptEngine;
+    private static final Logger log = Logger.getLogger(GremlinSession.class);
     private final Database database;
     private final IO io;
     private final ByteArrayOutputStream baos = new ByteArrayOutputStream();
     private final List<String> initialBindings;
+    protected GremlinWebConsole scriptEngine;
 
-    public GremlinSession( Database database )
-    {
+    public GremlinSession(Database database) {
         this.database = database;
-        PrintStream out = new PrintStream( new BufferedOutputStream( baos ) );
+        PrintStream out = new PrintStream(new BufferedOutputStream(baos));
 
-        io = new IO( System.in, out, out );
+        io = new IO(System.in, out, out);
 
         Map<String, Object> bindings = new HashMap<String, Object>();
-        bindings.put( "g", getGremlinWrappedGraph() );
-        bindings.put( "out", out );
+        bindings.put("g", getGremlinWrappedGraph());
+        bindings.put("out", out);
 
-        initialBindings = new ArrayList<String>( bindings.keySet() );
+        initialBindings = new ArrayList<String>(bindings.keySet());
 
-        try
-        {
-            scriptEngine = new GremlinWebConsole( new Binding( bindings ), io );
-        } catch ( final Exception failure )
-        {
-            scriptEngine = new GremlinWebConsole()
-            {
+        try {
+            scriptEngine = new GremlinWebConsole(new Binding(bindings), io);
+        } catch (final Exception failure) {
+            scriptEngine = new GremlinWebConsole() {
                 @Override
-                public void execute( String script )
-                {
-                    io.out.println( "Could not start Groovy during Gremlin initialization, reason:" );
-                    failure.printStackTrace( io.out );
+                public void execute(String script) {
+                    io.out.println("Could not start Groovy during Gremlin initialization, reason:");
+                    failure.printStackTrace(io.out);
                 }
             };
         }
@@ -87,60 +79,55 @@ public class GremlinSession implements ScriptSession
      *         message.
      */
     @Override
-    public Pair<String, String> evaluate( String script )
-    {
+    public Pair<String, String> evaluate(String script) {
         String result = null;
-        try
-        {
-            if ( script.equals( INIT_FUNCTION ) )
-            {
+        try {
+            if (script.equals(INIT_FUNCTION)) {
                 result = init();
-            } else
-            {
-                try
-                {
-                    scriptEngine.execute( script );
+            } else {
+                try {
+                    scriptEngine.execute(script);
                     result = baos.toString();
-                } finally
-                {
+                } finally {
                     resetIO();
                 }
             }
-        } catch ( GroovyRuntimeException ex )
-        {
-            log.error( ex );
+        } catch (GroovyRuntimeException ex) {
+            log.error(ex);
             result = ex.getMessage();
         }
-        return Pair.of( result, null );
+        return Pair.of(result, null);
     }
 
-    private String init()
-    {
+    private String init() {
         StringBuffer out = new StringBuffer();
-        out.append( "\n" );
-        out.append( "         \\,,,/\n" );
-        out.append( "         (o o)\n" );
-        out.append( "-----oOOo-(_)-oOOo-----\n" );
-        out.append( "\n" );
+        out.append("\n");
+        out.append("         \\,,,/\n");
+        out.append("         (o o)\n");
+        out.append("-----oOOo-(_)-oOOo-----\n");
+        out.append("\n");
 
-        out.append( "Available variables:\n" );
-        for ( String variable : initialBindings )
-        {
-            out.append( "  " + variable + "\t= " );
-            out.append( evaluate( variable ) );
+        out.append("Available variables:\n");
+        for (String variable : initialBindings) {
+            out.append("  " + variable + "\t= ");
+            out.append(evaluate(variable));
         }
-        out.append( "\n" );
+        out.append("\n");
 
         return out.toString();
     }
 
-    private void resetIO()
-    {
+    private void resetIO() {
         baos.reset();
     }
 
-    private TransactionalGraph getGremlinWrappedGraph()
-    {
-        return new Neo4jGraph( database.graph, false );
+    private TransactionalGraph getGremlinWrappedGraph() {
+        Neo4jGraph neo4jGraph = null;
+        try {
+            neo4jGraph = new Neo4jGraph(database.graph, false);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        return neo4jGraph;
     }
 }

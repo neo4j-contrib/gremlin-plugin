@@ -19,41 +19,63 @@
  */
 package org.neo4j.server.webadmin.rest;
 
+import org.dummy.web.service.DummyThirdPartyWebService;
 import org.junit.After;
+import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.neo4j.server.NeoServer;
 import org.neo4j.server.configuration.Configurator;
+import org.neo4j.server.helpers.CommunityServerBuilder;
+import org.neo4j.server.helpers.FunctionalTestHelper;
+import org.neo4j.server.helpers.ServerHelper;
 import org.neo4j.server.rest.JaxRsResponse;
 import org.neo4j.server.rest.RestRequest;
+import org.neo4j.server.rest.domain.GraphDbHelper;
 import org.neo4j.test.server.ExclusiveServerTestBase;
+import org.neo4j.test.server.SharedServerTestBase;
+
+import java.io.IOException;
+import java.net.URI;
 
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
-import static org.neo4j.server.helpers.ServerBuilder.server;
+//import static org.neo4j.server.helpers.ServerBuilder.server;
 
 public class ConfigureEnabledManagementConsolesGremlinTest extends ExclusiveServerTestBase {
-
     private NeoServer server;
 
+
+    @Before
+    public void cleanTheDatabase() throws IOException {
+        ServerHelper.cleanTheDatabase(server);
+        server = ServerHelper.createNonPersistentServer();
+    }
+
     @After
-    public void stopTheServer()
+    public void stopServer()
     {
-        server.stop();
+        if ( server != null )
+        {
+            server.stop();
+        }
     }
     
     @Test
     public void shouldBeAbleToDisableGremlinConsole() throws Exception {
-        server = server().withProperty(Configurator.MANAGEMENT_CONSOLE_ENGINES, "shell").build();
-        server.start();
 
+        
         assertThat(exec("g","gremlin").getStatus(), is(400));
         assertThat(exec("ls","shell").getStatus(),  is(200));
     }
 
     @Test
     public void shouldBeAbleToEnableGremlinConsole() throws Exception {
-        server = server().withProperty(Configurator.MANAGEMENT_CONSOLE_ENGINES, "shell,gremlin").build();
+        server.stop();
+        server = CommunityServerBuilder.server()
+                .withProperty(Configurator.MANAGEMENT_CONSOLE_ENGINES, "shell,gremlin").build();
         server.start();
+
 
         assertThat(exec("g","gremlin").getStatus(), is(200));
         assertThat(exec("ls","shell").getStatus(),  is(200));
@@ -62,8 +84,8 @@ public class ConfigureEnabledManagementConsolesGremlinTest extends ExclusiveServ
     @Test
     public void shouldBeAbleToExplicitlySetConsolesToEnabled() throws Exception 
     {
-        server = server().withProperty(Configurator.MANAGEMENT_CONSOLE_ENGINES, "").build();
-        server.start();
+//        server = server().withProperty(Configurator.MANAGEMENT_CONSOLE_ENGINES, "").build();
+//        server.start();
         
         assertThat(exec("g","gremlin").getStatus(), is(400));
         assertThat(exec("ls","shell").getStatus(),  is(400));
@@ -73,8 +95,8 @@ public class ConfigureEnabledManagementConsolesGremlinTest extends ExclusiveServ
     
     @Test
     public void gremlinAndShellConsolesShouldNotBeEnabledByDefault() throws Exception {
-        server = server().build();
-        server.start();
+//        server = server().build();
+//        server.start();
         
         assertThat(exec("g","gremlin").getStatus(), is(400));
         assertThat(exec("ls","shell").getStatus(),  is(200));

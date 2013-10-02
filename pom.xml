@@ -20,7 +20,7 @@
         <jackson.version>1.8.3</jackson.version>
         <cxf.version>2.3.1</cxf.version>
         <servlet-api.version>2.5</servlet-api.version>
-        <neo4j.version>2.0.0-M02</neo4j.version>
+        <neo4j.version>2.0.0-M05</neo4j.version>
         <blueprints.version>2.3.0</blueprints.version>
         <gremlin.version>2.3.0</gremlin.version>
         <jersey.server.version>1.6</jersey.server.version>
@@ -274,7 +274,7 @@
                 <dependency>
                     <groupId>org.neo4j.build.plugins</groupId>
                     <artifactId>neo4j-doctools</artifactId>
-                    <version>13-SNAPSHOT</version>
+                    <version>1-SNAPSHOT</version>
                     <scope>provided</scope>
                 </dependency>
             </dependencies>

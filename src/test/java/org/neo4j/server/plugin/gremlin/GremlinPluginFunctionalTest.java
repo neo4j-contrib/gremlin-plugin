@@ -50,6 +50,19 @@ public class GremlinPluginFunctionalTest extends AbstractRestFunctionalTestBase
     protected String getDocumentationSectionName() {
         return "rest-api";
     }
+
+    private String createParameterString( Pair<String, String>[] params )
+    {
+        String paramString = "";
+        for ( Pair<String, String> param : params )
+        {
+            String delimiter = paramString.isEmpty() || paramString.endsWith( "{" ) ? "" : ",";
+
+            paramString += delimiter + "\"" + param.first() + "\":\"" + param.other() + "\"";
+        }
+
+        return paramString;
+    }
     
     protected String doGremlinRestCall( String endpoint, String scriptTemplate, Status status, Pair<String, String>... params ) {
         data.get();
