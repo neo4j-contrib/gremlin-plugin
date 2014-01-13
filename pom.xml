@@ -16,14 +16,10 @@
 
     <properties>
         <!-- Jar Versions -->
-        <spring.version>3.0.4.RELEASE</spring.version>
-        <jackson.version>1.8.3</jackson.version>
-        <cxf.version>2.3.1</cxf.version>
-        <servlet-api.version>2.5</servlet-api.version>
-        <neo4j.version>2.0.0-M05</neo4j.version>
-        <blueprints.version>2.3.0</blueprints.version>
-        <gremlin.version>2.3.0</gremlin.version>
-        <jersey.server.version>1.6</jersey.server.version>
+        <neo4j.version>2.0.0</neo4j.version>
+        <blueprints.version>2.5.0-SNAPSHOT</blueprints.version>
+        <gremlin.version>2.5.0-SNAPSHOT</gremlin.version>
+        <jersey.server.version>1.9</jersey.server.version>
         <license-text.header>GPL-3-header.txt</license-text.header>
         <docs.url>http://docs.neo4j.org/chunked/${project.version}/gremlin-plugin.html</docs.url>
         <github.global.server>github</github.global.server>
@@ -121,7 +117,7 @@
         </dependency>
         <dependency>
             <groupId>com.tinkerpop.blueprints</groupId>
-            <artifactId>blueprints-neo4j-graph</artifactId>
+            <artifactId>blueprints-neo4j2-graph</artifactId>
             <version>${blueprints.version}</version>
             <exclusions>
                 <exclusion>
@@ -248,6 +244,15 @@
                     <argLine>-Xmx1024m</argLine>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.1</version>
+                <configuration>
+                    <source>1.7</source>
+                    <target>1.7</target>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
     <repositories>
@@ -274,7 +279,7 @@
                 <dependency>
                     <groupId>org.neo4j.build.plugins</groupId>
                     <artifactId>neo4j-doctools</artifactId>
-                    <version>1-SNAPSHOT</version>
+                    <version>14</version>
                     <scope>provided</scope>
                 </dependency>
             </dependencies>

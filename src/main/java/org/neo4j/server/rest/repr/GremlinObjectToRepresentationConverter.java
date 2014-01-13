@@ -23,9 +23,9 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.Map;
 
-import com.tinkerpop.blueprints.impls.neo4j.Neo4jEdge;
-import com.tinkerpop.blueprints.impls.neo4j.Neo4jGraph;
-import com.tinkerpop.blueprints.impls.neo4j.Neo4jVertex;
+import com.tinkerpop.blueprints.impls.neo4j2.Neo4jEdge;
+import com.tinkerpop.blueprints.impls.neo4j2.Neo4jGraph;
+import com.tinkerpop.blueprints.impls.neo4j2.Neo4jVertex;
 import com.tinkerpop.pipes.util.structures.Table;
 import org.neo4j.helpers.collection.FirstItemIterable;
 import org.neo4j.helpers.collection.IterableWrapper;

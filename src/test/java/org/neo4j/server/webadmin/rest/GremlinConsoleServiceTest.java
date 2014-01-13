@@ -35,8 +35,10 @@ import org.hamcrest.Matchers;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.neo4j.graphdb.GraphDatabaseService;
+import org.neo4j.kernel.AbstractGraphDatabase;
 import org.neo4j.server.database.Database;
-import org.neo4j.server.database.WrappingDatabase;
+import org.neo4j.server.database.WrappedDatabase;
 import org.neo4j.server.rest.repr.OutputFormat;
 import org.neo4j.server.rest.repr.formats.JsonFormat;
 import org.neo4j.server.webadmin.console.ConsoleSessionFactory;
@@ -44,6 +46,7 @@ import org.neo4j.server.webadmin.console.GremlinSession;
 import org.neo4j.server.webadmin.console.ScriptSession;
 import org.neo4j.server.webadmin.rest.console.ConsoleService;
 import org.neo4j.test.ImpermanentGraphDatabase;
+import org.neo4j.test.TestGraphDatabaseFactory;
 
 public class GremlinConsoleServiceTest implements ConsoleSessionFactory
 {
@@ -54,11 +57,11 @@ public class GremlinConsoleServiceTest implements ConsoleSessionFactory
     @Test
     public void retrievesTheReferenceNode() throws UnsupportedEncodingException
     {
-        Response evaluatedGremlinResponse = consoleService.exec( new JsonFormat(), "{ \"command\" : \"g.addVertex(null);g.v(1)\" }" );
+        Response evaluatedGremlinResponse = consoleService.exec( new JsonFormat(), "{ \"command\" : \"g.addVertex(null);g.v(0)\" }" );
 
         assertEquals( 200, evaluatedGremlinResponse.getStatus() );
         String response = decode( evaluatedGremlinResponse );
-        MatcherAssert.assertThat(response, Matchers.containsString("v[1]"));
+        MatcherAssert.assertThat(response, Matchers.containsString("v[0]"));
     }
 
     private String decode( final Response response ) throws UnsupportedEncodingException
@@ -74,12 +77,12 @@ public class GremlinConsoleServiceTest implements ConsoleSessionFactory
 
         assertEquals( 200, evaluatedGremlinResponse.getStatus() );
         String response = decode( evaluatedGremlinResponse );
-        MatcherAssert.assertThat(response, Matchers.containsString("v[1]"));
+        MatcherAssert.assertThat(response, Matchers.containsString("v[0]"));
 
         evaluatedGremlinResponse = consoleService.exec( new JsonFormat(), "{ \"command\" : \"g.addVertex(null)\" }" );
         response = decode( evaluatedGremlinResponse );
         assertEquals( 200, evaluatedGremlinResponse.getStatus() );
-        MatcherAssert.assertThat(response, Matchers.containsString("v[2]"));
+        MatcherAssert.assertThat(response, Matchers.containsString("v[1]"));
     }
     
     @Test
@@ -115,7 +118,8 @@ public class GremlinConsoleServiceTest implements ConsoleSessionFactory
     @Before
     public void setUp() throws Exception
     {
-        this.database = new WrappingDatabase( new ImpermanentGraphDatabase() );
+        GraphDatabaseService db = new TestGraphDatabaseFactory().newImpermanentDatabase();
+        this.database = new WrappedDatabase((AbstractGraphDatabase) db);
         this.consoleService = new ConsoleService( this, database, new OutputFormat( new JsonFormat(), uri, null ) );
     }
 

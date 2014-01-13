@@ -25,7 +25,7 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.neo4j.server.database.Database;
-import org.neo4j.server.database.WrappingDatabase;
+import org.neo4j.server.database.WrappedDatabase;
 import org.neo4j.test.ImpermanentGraphDatabase;
 
 public class GremlinSessionTest
@@ -57,14 +57,15 @@ public class GremlinSessionTest
     public void testGremlinVersion()
     {
         String result = session.evaluate( "Gremlin.version()" ).first();
-        assertEquals( "2.3.0" + NEWLINE, result );
+        assertEquals( "2.5.0-SNAPSHOT" + NEWLINE, result );
     }
 
     @Test
     public void canCreateNodesAndEdgesInGremlinLand()
     {
         String result = session.evaluate( "g.addVertex(null)" ).first();
-        assertEquals( "v[1]" + NEWLINE, result );
+        assertEquals( "v[0]" + NEWLINE, result );
+        session.evaluate( "g.addVertex(null)" );
         result = session.evaluate( "g.V.next(2)" ).first();
         assertEquals( "v[0]" + NEWLINE+"v[1]" + NEWLINE, result );
         result = session.evaluate( "g.addVertex(null)" ).first();
@@ -78,7 +79,7 @@ public class GremlinSessionTest
     @BeforeClass
     public static void setUp() throws Exception
     {
-        database = new WrappingDatabase( new ImpermanentGraphDatabase() );
+        database = new WrappedDatabase( new ImpermanentGraphDatabase() );
         session = new GremlinSession( database );
     }
 

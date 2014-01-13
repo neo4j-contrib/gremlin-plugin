@@ -20,7 +20,7 @@
 package org.neo4j.server.webadmin.console;
 
 import com.tinkerpop.blueprints.TransactionalGraph;
-import com.tinkerpop.blueprints.impls.neo4j.Neo4jGraph;
+import com.tinkerpop.blueprints.impls.neo4j2.Neo4jGraph;
 import groovy.lang.Binding;
 import groovy.lang.GroovyRuntimeException;
 import org.codehaus.groovy.tools.shell.IO;
@@ -124,7 +124,7 @@ public class GremlinSession implements ScriptSession {
     private TransactionalGraph getGremlinWrappedGraph() {
         Neo4jGraph neo4jGraph = null;
         try {
-            neo4jGraph = new Neo4jGraph(database.graph, false);
+            neo4jGraph = new Neo4jGraph(database.getGraph());
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

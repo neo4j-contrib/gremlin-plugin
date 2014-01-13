@@ -29,7 +29,7 @@ import java.util.Map;
 
 import com.tinkerpop.blueprints.Graph;
 import com.tinkerpop.blueprints.Vertex;
-import com.tinkerpop.blueprints.impls.neo4j.Neo4jGraph;
+import com.tinkerpop.blueprints.impls.neo4j2.Neo4jGraph;
 import junit.framework.Assert;
 
 import org.json.simple.JSONArray;
@@ -64,39 +64,39 @@ public class GremlinPluginTest
         plugin = new GremlinPlugin();
         Graph graph = new Neo4jGraph( neo4j );
 //        graph.clear();
-        Vertex marko = graph.addVertex( "1" );
+        Vertex marko = graph.addVertex( "0" );
         marko.setProperty( "name", "marko" );
         marko.setProperty( "age", 29 );
 
-        Vertex vadas = graph.addVertex( "2" );
+        Vertex vadas = graph.addVertex( "1" );
         vadas.setProperty( "name", "vadas" );
         vadas.setProperty( "age", 27 );
 
-        Vertex lop = graph.addVertex( "3" );
+        Vertex lop = graph.addVertex( "2" );
         lop.setProperty( "name", "lop" );
         lop.setProperty( "lang", "java" );
 
-        Vertex josh = graph.addVertex( "4" );
+        Vertex josh = graph.addVertex( "3" );
         josh.setProperty( "name", "josh" );
         josh.setProperty( "age", 32 );
 
-        Vertex ripple = graph.addVertex( "5" );
+        Vertex ripple = graph.addVertex( "4" );
         ripple.setProperty( "name", "ripple" );
         ripple.setProperty( "lang", "java" );
 
-        Vertex peter = graph.addVertex( "6" );
+        Vertex peter = graph.addVertex( "5" );
         peter.setProperty( "name", "peter" );
         peter.setProperty( "age", 35 );
 
-        graph.addEdge( "7", marko, vadas, "knows" ).setProperty( "weight", 0.5f );
-        graph.addEdge( "8", marko, josh, "knows" ).setProperty( "weight", 1.0f );
-        graph.addEdge( "9", marko, lop, "created" ).setProperty( "weight", 0.4f );
+        graph.addEdge( "6", marko, vadas, "knows" ).setProperty( "weight", 0.5f );
+        graph.addEdge( "7", marko, josh, "knows" ).setProperty( "weight", 1.0f );
+        graph.addEdge( "8", marko, lop, "created" ).setProperty( "weight", 0.4f );
 
-        graph.addEdge( "10", josh, ripple, "created" ).setProperty( "weight",
+        graph.addEdge( "9", josh, ripple, "created" ).setProperty( "weight",
                 1.0f );
-        graph.addEdge( "11", josh, lop, "created" ).setProperty( "weight", 0.4f );
+        graph.addEdge( "10", josh, lop, "created" ).setProperty( "weight", 0.4f );
 
-        graph.addEdge( "12", peter, lop, "created" ).setProperty( "weight",
+        graph.addEdge( "11", peter, lop, "created" ).setProperty( "weight",
                 0.2f );
     }
 
@@ -108,7 +108,7 @@ public class GremlinPluginTest
     @Test
     public void testExecuteScriptVertex() throws Exception
     {
-        JSONObject object = (JSONObject) parser.parse(entityToString(json.ok(GremlinPluginTest.executeTestScript("g.v(1)", null)).getEntity()));
+        JSONObject object = (JSONObject) parser.parse(entityToString(json.ok(GremlinPluginTest.executeTestScript("g.v(0)", null)).getEntity()));
         Assert.assertEquals( 29l,
                 ( (JSONObject) object.get( "data" ) ).get( "age" ) );
         Assert.assertEquals( "marko",
@@ -133,7 +133,7 @@ public class GremlinPluginTest
     {
         Representation result = GremlinPluginTest.executeTestScript("" +
                 "t = new Table();" +
-                "g.v(1).out('knows').as('friends').table(t).iterate();t;", null);
+                "g.v(0).out('knows').as('friends').table(t).iterate();t;", null);
         String resultString = entityToString(json.ok(result).getEntity());
         assertTrue(resultString,resultString.contains("josh"));
     }
@@ -142,9 +142,9 @@ public class GremlinPluginTest
     public void testExecuteScriptVertices() throws Exception
     {
         JSONArray array = (JSONArray) parser.parse(entityToString(json.ok( GremlinPluginTest.executeTestScript("g.V", null) ).getEntity()));
-        List<String> ids = new ArrayList<String>( Arrays.asList( "1", "2", "3",
-                "4", "5", "6" ) );
-        Assert.assertEquals( 7, array.size() );
+        List<String> ids = new ArrayList<String>( Arrays.asList( "0","1", "2", "3",
+                "4", "5" ) );
+        Assert.assertEquals( 6, array.size() );
         for ( Object object : array )
         {
             String self = (String) ( (JSONObject) object ).get( "self" );
@@ -153,28 +153,25 @@ public class GremlinPluginTest
             String name = (String) ( (JSONObject) ( (JSONObject) object ).get( "data" ) ).get( "name" );
             if ( id.equals( "0" ) )
             {
+                Assert.assertEquals( name, "marko" );
             }
             else if ( id.equals( "1" ) )
             {
-                Assert.assertEquals( name, "marko" );
+                Assert.assertEquals( name, "vadas" );
             }
             else if ( id.equals( "2" ) )
             {
-                Assert.assertEquals( name, "vadas" );
+                Assert.assertEquals( name, "lop" );
             }
             else if ( id.equals( "3" ) )
             {
-                Assert.assertEquals( name, "lop" );
+                Assert.assertEquals( name, "josh" );
             }
             else if ( id.equals( "4" ) )
             {
-                Assert.assertEquals( name, "josh" );
-            }
-            else if ( id.equals( "5" ) )
-            {
                 Assert.assertEquals( name, "ripple" );
             }
-            else if ( id.equals( "6" ) )
+            else if ( id.equals( "5" ) )
             {
                 Assert.assertEquals( name, "peter" );
             }
@@ -233,7 +230,7 @@ public class GremlinPluginTest
     public void testExecuteScriptNull() throws BadInputException
     {
         Assert.assertEquals(
-                "\"null\"",
+                "null",
                 entityToString(json.ok( GremlinPluginTest.executeTestScript( "for(i in 1..2){g.v(0)}", null) ).getEntity() ));
     }
 
@@ -241,7 +238,7 @@ public class GremlinPluginTest
     public void testExecuteScriptArrays() throws BadInputException
     {
         Assert.assertEquals(
-                "\"null\"",
+                "null",
                 entityToString(json.ok( GremlinPluginTest.executeTestScript( "for(i in 1..2){g.v(0)}", null) ) .getEntity()));
     }
 
@@ -298,16 +295,10 @@ public class GremlinPluginTest
 
     private static Representation executeTestScript(final String script, Map params) throws BadInputException
     {
-        Transaction tx = null;
-        try
-        {
-            tx = neo4j.beginTx();
-            return plugin.executeScript( neo4j, script, params );
-        }
-        finally
-        {
+        try (Transaction tx = neo4j.beginTx()) {
+            Representation result = plugin.executeScript(neo4j, script, params);
             tx.success();
-            tx.finish();
+            return result;
         }
     }
 
@@ -320,6 +311,6 @@ public class GremlinPluginTest
         Assert.assertEquals(
                 ( (JSONObject) object.get( "data" ) ).get( "age" ), 29l );
         String self = (String) ( (JSONObject) object ).get( "self" );
-        Assert.assertEquals( self.substring( self.lastIndexOf( "/" ) + 1 ), "1" );
+        Assert.assertEquals( self.substring( self.lastIndexOf( "/" ) + 1 ), "0" );
     }
 }

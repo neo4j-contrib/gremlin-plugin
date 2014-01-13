@@ -26,8 +26,9 @@ import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.SimpleBindings;
 
-import com.tinkerpop.blueprints.impls.neo4j.Neo4jGraph;
+import com.tinkerpop.blueprints.impls.neo4j2.Neo4jGraph;
 import org.neo4j.graphdb.GraphDatabaseService;
+import org.neo4j.graphdb.Transaction;
 import org.neo4j.server.plugins.Description;
 import org.neo4j.server.plugins.Name;
 import org.neo4j.server.plugins.Parameter;
@@ -71,14 +72,16 @@ public class GremlinPlugin extends ServerPlugin
             @Description("JSON Map of additional parameters for script variables") @Parameter(name = "params", optional = true) final Map params ) throws BadInputException
     {
 
-        try
+        try (Transaction tx = neo4j.beginTx())
         {
             engineReplacementDecision.beforeExecution( script );
 
             final Bindings bindings = createBindings( neo4j, params );
 
             final Object result = engine().eval( script, bindings );
-            return GremlinObjectToRepresentationConverter.convert( result );
+            Representation representation = GremlinObjectToRepresentationConverter.convert(result);
+            tx.success();
+            return representation;
         } catch ( final Exception e )
         {
             throw new BadInputException( e.getMessage() );
@@ -98,7 +101,7 @@ public class GremlinPlugin extends ServerPlugin
     private Bindings createInitialBinding( GraphDatabaseService neo4j )
     {
         final Bindings bindings = new SimpleBindings();
-        final Neo4jGraph graph = new Neo4jGraph( neo4j, false );
+        final Neo4jGraph graph = new Neo4jGraph( neo4j );
         bindings.put( g, graph );
         return bindings;
     }
