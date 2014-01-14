@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2002-2013 "Neo Technology,"
+ * Copyright (c) 2002-2014 "Neo Technology,"
  * Network Engine for Objects in Lund AB [http://neotechnology.com]
  *
  * This file is part of Neo4j.
@@ -26,7 +26,7 @@ import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.SimpleBindings;
 
-import com.tinkerpop.blueprints.impls.neo4j2.Neo4jGraph;
+import com.tinkerpop.blueprints.impls.neo4j2.Neo4j2Graph;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Transaction;
 import org.neo4j.server.plugins.Description;
@@ -64,7 +64,7 @@ public class GremlinPlugin extends ServerPlugin
     }
 
     @Name("execute_script")
-    @Description("execute a Gremlin script with 'g' set to the Neo4jGraph and 'results' containing the results. Only results of one object type is supported.")
+    @Description("execute a Gremlin script with 'g' set to the Neo4j2Graph and 'results' containing the results. Only results of one object type is supported.")
     @PluginTarget(GraphDatabaseService.class)
     public Representation executeScript(
             @Source final GraphDatabaseService neo4j,
@@ -72,15 +72,16 @@ public class GremlinPlugin extends ServerPlugin
             @Description("JSON Map of additional parameters for script variables") @Parameter(name = "params", optional = true) final Map params ) throws BadInputException
     {
 
-        try (Transaction tx = neo4j.beginTx())
+        Neo4j2Graph neo4jGraph = new Neo4j2Graph(neo4j);
+        try
         {
             engineReplacementDecision.beforeExecution( script );
-
-            final Bindings bindings = createBindings( neo4j, params );
+            neo4jGraph.autoStartTransaction();
+            final Bindings bindings = createBindings(params, neo4jGraph);
 
             final Object result = engine().eval( script, bindings );
             Representation representation = GremlinObjectToRepresentationConverter.convert(result);
-            tx.success();
+            neo4jGraph.commit();
             return representation;
         } catch ( final Exception e )
         {
@@ -88,9 +89,9 @@ public class GremlinPlugin extends ServerPlugin
         }
     }
 
-    private Bindings createBindings( GraphDatabaseService neo4j, Map params )
+    private Bindings createBindings(Map params, Neo4j2Graph neo4jGraph)
     {
-        final Bindings bindings = createInitialBinding( neo4j );
+        final Bindings bindings = createInitialBinding(neo4jGraph);
         if ( params != null )
         {
             bindings.putAll( params );
@@ -98,11 +99,10 @@ public class GremlinPlugin extends ServerPlugin
         return bindings;
     }
 
-    private Bindings createInitialBinding( GraphDatabaseService neo4j )
+    private Bindings createInitialBinding(Neo4j2Graph neo4jGraph)
     {
         final Bindings bindings = new SimpleBindings();
-        final Neo4jGraph graph = new Neo4jGraph( neo4j );
-        bindings.put( g, graph );
+        bindings.put( g, neo4jGraph);
         return bindings;
     }
 

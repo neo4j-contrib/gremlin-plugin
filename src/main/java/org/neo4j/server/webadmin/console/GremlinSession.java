@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2002-2013 "Neo Technology,"
+ * Copyright (c) 2002-2014 "Neo Technology,"
  * Network Engine for Objects in Lund AB [http://neotechnology.com]
  *
  * This file is part of Neo4j.
@@ -20,7 +20,7 @@
 package org.neo4j.server.webadmin.console;
 
 import com.tinkerpop.blueprints.TransactionalGraph;
-import com.tinkerpop.blueprints.impls.neo4j2.Neo4jGraph;
+import com.tinkerpop.blueprints.impls.neo4j2.Neo4j2Graph;
 import groovy.lang.Binding;
 import groovy.lang.GroovyRuntimeException;
 import org.codehaus.groovy.tools.shell.IO;
@@ -122,9 +122,9 @@ public class GremlinSession implements ScriptSession {
     }
 
     private TransactionalGraph getGremlinWrappedGraph() {
-        Neo4jGraph neo4jGraph = null;
+        Neo4j2Graph neo4jGraph = null;
         try {
-            neo4jGraph = new Neo4jGraph(database.getGraph());
+            neo4jGraph = new Neo4j2Graph(database.getGraph());
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

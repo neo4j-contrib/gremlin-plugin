@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2002-2013 "Neo Technology,"
+ * Copyright (c) 2002-2014 "Neo Technology,"
  * Network Engine for Objects in Lund AB [http://neotechnology.com]
  *
  * This file is part of Neo4j.
@@ -340,7 +340,7 @@ public class GremlinPluginFunctionalTest extends AbstractRestFunctionalTestBase
                 + "import org.neo4j.index.lucene.*;"
                 + "import org.apache.lucene.search.*;"
                 + ";"
-                + "'**** Blueprints API methods on the injected Neo4jGraph at variable g ****';"
+                + "'**** Blueprints API methods on the injected Neo4j2Graph at variable g ****';"
                 + "meVertex = g.addVertex([name:'me']);"
                 + "meNode = meVertex.getRawVertex();"
                 + ";"
@@ -359,7 +359,6 @@ public class GremlinPluginFunctionalTest extends AbstractRestFunctionalTestBase
                 + " personIndex = idxManager.forNodes('persons');"
                 + " personIndex.add(meNode,'name',meNode.getProperty('name'));"
                 + " personIndex.add(youNode,'name',youNode.getProperty('name'));"
-                + "g.stopTransaction(SUCCESS);"
                 + "tx.success();"
                 + "tx.finish();"
                 + ";"
@@ -443,7 +442,7 @@ public class GremlinPluginFunctionalTest extends AbstractRestFunctionalTestBase
 
         try (Transaction tx = graphdb().beginTx()) {
             assertTrue( getNode( "Peter" ).hasRelationship() );
-            String script = "g.v(%Peter%).bothE.each{g.removeEdge(it)};";
+            String script = "g.v(%Peter%).bothE.each{g.removeEdge(it)};g.stopTransaction(SUCCESS);";
             String response = doRestCall( script, OK );
             assertFalse( getNode( "Peter" ).hasRelationship() );
             tx.success();
@@ -592,7 +591,6 @@ public class GremlinPluginFunctionalTest extends AbstractRestFunctionalTestBase
             @REL( start = "middle", end = "sink", type = "CONNECTED", properties = { @PROP( key = "capacity", value = "3", type = PropType.INTEGER ) } ),
             @REL( start = "source", end = "sink", type = "CONNECTED", properties = { @PROP( key = "capacity", value = "1", type = PropType.INTEGER ) } ),
             @REL( start = "source", end = "sink", type = "CONNECTED", properties = { @PROP( key = "capacity", value = "2", type = PropType.INTEGER ) } ) }, autoIndexNodes = true )
-    @Ignore("TODO")
     public void flow_algorithms_with_Gremlin()
             throws UnsupportedEncodingException
     {

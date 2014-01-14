@@ -1,0 +1,6 @@
+.shell_history
+*.iml
+*.iws
+.idea
+target
+

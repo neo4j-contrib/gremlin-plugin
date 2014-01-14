@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2002-2013 "Neo Technology,"
+ * Copyright (c) 2002-2014 "Neo Technology,"
  * Network Engine for Objects in Lund AB [http://neotechnology.com]
  *
  * This file is part of Neo4j.
@@ -29,7 +29,7 @@ import java.util.Map;
 
 import com.tinkerpop.blueprints.Graph;
 import com.tinkerpop.blueprints.Vertex;
-import com.tinkerpop.blueprints.impls.neo4j2.Neo4jGraph;
+import com.tinkerpop.blueprints.impls.neo4j2.Neo4j2Graph;
 import junit.framework.Assert;
 
 import org.json.simple.JSONArray;
@@ -62,7 +62,7 @@ public class GremlinPluginTest
                 new URI( "http://localhost/" ), null );
         neo4j = new ImpermanentGraphDatabase();
         plugin = new GremlinPlugin();
-        Graph graph = new Neo4jGraph( neo4j );
+        Graph graph = new Neo4j2Graph( neo4j );
 //        graph.clear();
         Vertex marko = graph.addVertex( "0" );
         marko.setProperty( "name", "marko" );
