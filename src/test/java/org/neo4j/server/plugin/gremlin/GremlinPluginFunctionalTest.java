@@ -184,7 +184,7 @@ public class GremlinPluginFunctionalTest extends AbstractRestFunctionalTestBase
         data.get().clear();
         String script = "" +
                 "g.loadGraphML('https://raw.github.com/neo4j-contrib/gremlin-plugin/master/src/data/graphml1.xml');" +
-                "g.getIndex('node_auto_index', Vertex.class).get('name','you');";
+                "g.autoStartTransaction();g.getIndex('node_auto_index', Vertex.class).get('name','you').toList();";
         String response = doRestCall( script, OK );
         assertTrue( response.contains( "you" ) );
     }
@@ -364,7 +364,7 @@ public class GremlinPluginFunctionalTest extends AbstractRestFunctionalTestBase
                 + ";"
                 + "'*** Prepare a custom Lucene query context with Neo4j API ***';"
                 + "query = new QueryContext( 'name:*' ).sort( new Sort(new SortField( 'name',SortField.STRING, true ) ) );"
-                + "results = personIndex.query( query );";
+                + "results = personIndex.query( query ).toList();";
         String response = doRestCall( script, OK );
         assertTrue( response.contains( "me" ) );
 
@@ -442,8 +442,11 @@ public class GremlinPluginFunctionalTest extends AbstractRestFunctionalTestBase
 
         try (Transaction tx = graphdb().beginTx()) {
             assertTrue( getNode( "Peter" ).hasRelationship() );
-            String script = "g.v(%Peter%).bothE.each{g.removeEdge(it)};g.stopTransaction(SUCCESS);";
-            String response = doRestCall( script, OK );
+            tx.success();
+        }
+        String script = "g.v(%Peter%).bothE.each{g.removeEdge(it)};";
+        String response = doRestCall( script, OK );
+        try (Transaction tx = graphdb().beginTx()) {
             assertFalse( getNode( "Peter" ).hasRelationship() );
             tx.success();
         }

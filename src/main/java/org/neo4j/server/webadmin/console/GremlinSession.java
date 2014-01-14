@@ -24,6 +24,7 @@ import com.tinkerpop.blueprints.impls.neo4j2.Neo4j2Graph;
 import groovy.lang.Binding;
 import groovy.lang.GroovyRuntimeException;
 import org.codehaus.groovy.tools.shell.IO;
+import org.neo4j.graphdb.Transaction;
 import org.neo4j.helpers.Pair;
 import org.neo4j.server.database.Database;
 import org.neo4j.server.logging.Logger;
@@ -81,7 +82,7 @@ public class GremlinSession implements ScriptSession {
     @Override
     public Pair<String, String> evaluate(String script) {
         String result = null;
-        try {
+        try (Transaction tx = database.getGraph().beginTx()) {
             if (script.equals(INIT_FUNCTION)) {
                 result = init();
             } else {
@@ -92,6 +93,7 @@ public class GremlinSession implements ScriptSession {
                     resetIO();
                 }
             }
+            tx.success();
         } catch (GroovyRuntimeException ex) {
             log.error(ex);
             result = ex.getMessage();
@@ -100,7 +102,7 @@ public class GremlinSession implements ScriptSession {
     }
 
     private String init() {
-        StringBuffer out = new StringBuffer();
+        StringBuilder out = new StringBuilder();
         out.append("\n");
         out.append("         \\,,,/\n");
         out.append("         (o o)\n");

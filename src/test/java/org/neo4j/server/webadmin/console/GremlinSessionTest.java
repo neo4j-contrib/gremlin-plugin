@@ -39,7 +39,7 @@ public class GremlinSessionTest
     {
         String result = session.evaluate( "g" ).first();
 
-        assertEquals( String.format( "neo4jgraph[%s]" + NEWLINE, database.getGraph().toString() ), result );
+        assertEquals( String.format( "neo4j2graph[%s]" + NEWLINE, database.getGraph().toString() ), result );
     }
 
     @Test
