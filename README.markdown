@@ -5,6 +5,10 @@ For usage, see the [current documentation](http://neo4j-contrib.github.io/gremli
 Building from source and deploying into Neo4j Server
 -----------------------------------------------------
 
+Ensure Maven knows where to find Java 1.7. **Note**: on Mac OSX (tested on 10.9), please see this issue/workaround [StackOverflow](http://stackoverflow.com/questions/17824889/how-to-force-maven-3-1-to-use-right-version-of-java-on-mac-os-8-10).
+
+Also ensure you do not have neo4j currently running or the build tests will fail as it attempts to start up a neo4j instance on the same port as the defaults for neo4j. Otherwise the tests and the build will fail.
+
     mvn clean package
     unzip target/neo4j-gremlin-plugin-2.0-SNAPSHOT-server-plugin.zip -d $NEO4J_HOME/plugins/gremlin-plugin
     cd $NEO4J_HOME
