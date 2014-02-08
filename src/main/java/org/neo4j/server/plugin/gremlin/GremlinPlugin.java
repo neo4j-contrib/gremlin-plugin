@@ -76,7 +76,7 @@ public class GremlinPlugin extends ServerPlugin
         try
         {
             engineReplacementDecision.beforeExecution( script );
-            neo4jGraph.autoStartTransaction();
+            neo4jGraph.autoStartTransaction(true);
             final Bindings bindings = createBindings(params, neo4jGraph);
 
             final Object result = engine().eval( script, bindings );

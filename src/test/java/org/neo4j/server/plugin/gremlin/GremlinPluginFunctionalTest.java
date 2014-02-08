@@ -184,7 +184,7 @@ public class GremlinPluginFunctionalTest extends AbstractRestFunctionalTestBase
         data.get().clear();
         String script = "" +
                 "g.loadGraphML('https://raw.github.com/neo4j-contrib/gremlin-plugin/master/src/data/graphml1.xml');" +
-                "g.autoStartTransaction();g.getIndex('node_auto_index', Vertex.class).get('name','you').toList();";
+                "g.autoStartTransaction(false);g.getIndex('node_auto_index', Vertex.class).get('name','you').toList();";
         String response = doRestCall( script, OK );
         assertTrue( response.contains( "you" ) );
     }
