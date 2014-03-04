@@ -85,7 +85,8 @@ public class GremlinPlugin extends ServerPlugin
             return representation;
         } catch ( final Exception e )
         {
-            throw new BadInputException( e.getMessage() );
+            neo4jGraph.rollback();
+	    throw new BadInputException( e.getMessage() );
         }
     }
 
