@@ -19,6 +19,9 @@
  */
 package org.neo4j.server.webadmin.console;
 
+import groovy.lang.Binding;
+import groovy.lang.GroovyRuntimeException;
+
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
@@ -27,30 +30,30 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.codehaus.groovy.tools.shell.IO;
+
+import org.neo4j.helpers.Pair;
+import org.neo4j.kernel.logging.ConsoleLogger;
+import org.neo4j.server.database.Database;
+
 import com.tinkerpop.blueprints.pgm.TransactionalGraph;
 import com.tinkerpop.blueprints.pgm.impls.neo4j.Neo4jGraph;
-import groovy.lang.Binding;
-import groovy.lang.GroovyRuntimeException;
-import org.codehaus.groovy.tools.shell.IO;
-import org.neo4j.helpers.Pair;
-import org.neo4j.server.database.Database;
-import org.neo4j.server.logging.Logger;
 
 public class GremlinSession implements ScriptSession
 {
     private static final String INIT_FUNCTION = "init()";
-
-    private static final Logger log = Logger.getLogger( GremlinSession.class );
 
     protected GremlinWebConsole scriptEngine;
     private final Database database;
     private final IO io;
     private final ByteArrayOutputStream baos = new ByteArrayOutputStream();
     private final List<String> initialBindings;
+    private final ConsoleLogger log;
 
     public GremlinSession( Database database )
     {
         this.database = database;
+        this.log = database.getLogging().getConsoleLog( getClass() );
         PrintStream out = new PrintStream( new BufferedOutputStream( baos ) );
 
         io = new IO( System.in, out, out );
@@ -108,7 +111,7 @@ public class GremlinSession implements ScriptSession
             }
         } catch ( GroovyRuntimeException ex )
         {
-            log.error( ex );
+            log.error( "Groovy error", ex );
             result = ex.getMessage();
         }
         return Pair.of( result, null );
