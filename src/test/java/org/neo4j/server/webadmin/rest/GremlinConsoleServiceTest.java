@@ -19,15 +19,10 @@
  */
 package org.neo4j.server.webadmin.rest;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.containsString;
-import static org.junit.Assert.assertEquals;
-
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
-
 import javax.ws.rs.core.Response;
 
 import org.hamcrest.MatcherAssert;
@@ -35,6 +30,7 @@ import org.hamcrest.Matchers;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+
 import org.neo4j.server.database.Database;
 import org.neo4j.server.database.WrappingDatabase;
 import org.neo4j.server.rest.repr.OutputFormat;
@@ -44,6 +40,10 @@ import org.neo4j.server.webadmin.console.GremlinSession;
 import org.neo4j.server.webadmin.console.ScriptSession;
 import org.neo4j.server.webadmin.rest.console.ConsoleService;
 import org.neo4j.test.ImpermanentGraphDatabase;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.containsString;
+import static org.junit.Assert.assertEquals;
 
 public class GremlinConsoleServiceTest implements ConsoleSessionFactory
 {
@@ -86,7 +86,7 @@ public class GremlinConsoleServiceTest implements ConsoleSessionFactory
     public void advertisesAvailableConsoleEngines() throws URISyntaxException, UnsupportedEncodingException
     {
         
-        ConsoleService consoleServiceWithShellAndGremlin = new ConsoleService( new GremlinAndShellConsoleSessionFactory(), null, new OutputFormat( new JsonFormat(), uri, null ) );
+        ConsoleService consoleServiceWithShellAndGremlin = new ConsoleService( new GremlinAndShellConsoleSessionFactory(), database, new OutputFormat( new JsonFormat(), uri, null ) );
         
         String response = decode( consoleServiceWithShellAndGremlin.getServiceDefinition());
 
