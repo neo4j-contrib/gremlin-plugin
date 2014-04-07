@@ -29,6 +29,7 @@ import javax.script.SimpleBindings;
 import com.tinkerpop.blueprints.impls.neo4j2.Neo4j2Graph;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Transaction;
+import org.neo4j.kernel.GraphDatabaseAPI;
 import org.neo4j.server.plugins.Description;
 import org.neo4j.server.plugins.Name;
 import org.neo4j.server.plugins.Parameter;
@@ -58,6 +59,12 @@ public class GremlinPlugin extends ServerPlugin
     private volatile ScriptEngine engine;
     private final EngineReplacementDecision engineReplacementDecision = new ScriptCountingEngineReplacementDecision( 500 );
 
+    /**
+     * Keep a global gremlin graph around, because they are very expensive to instantiate. No need for volatile as the
+     * synchronized block adds the required memory fences for us.
+     */
+    private Neo4j2Graph gremlin;
+
     private ScriptEngine createQueryEngine()
     {
         return new ScriptEngineManager().getEngineByName( "gremlin-groovy" );
@@ -71,22 +78,19 @@ public class GremlinPlugin extends ServerPlugin
             @Description("The Gremlin script") @Parameter(name = "script", optional = false) final String script,
             @Description("JSON Map of additional parameters for script variables") @Parameter(name = "params", optional = true) final Map params ) throws BadInputException
     {
-
-        Neo4j2Graph neo4jGraph = new Neo4j2Graph(neo4j);
-        try
+        Neo4j2Graph neo4jGraph = getOrCreateGremlin( (GraphDatabaseAPI) neo4j );
+        try(Transaction tx = neo4j.beginTx())
         {
             engineReplacementDecision.beforeExecution( script );
-            neo4jGraph.autoStartTransaction(true);
             final Bindings bindings = createBindings(params, neo4jGraph);
-
             final Object result = engine().eval( script, bindings );
             Representation representation = GremlinObjectToRepresentationConverter.convert(result);
-            neo4jGraph.commit();
+            tx.success();
             return representation;
-        } catch ( final Exception e )
+        }
+        catch ( final Exception e )
         {
-            neo4jGraph.rollback();
-	    throw new BadInputException( e.getMessage() );
+	        throw new BadInputException( e.getMessage(), e );
         }
     }
 
@@ -117,9 +121,19 @@ public class GremlinPlugin extends ServerPlugin
         return this.engine;
     }
 
-    public Representation getRepresentation( final Object data )
+    private Neo4j2Graph getOrCreateGremlin( GraphDatabaseAPI requestDb )
     {
-        return GremlinObjectToRepresentationConverter.convert( data );
-    }
+        if(gremlin == null)
+        {
+            synchronized ( this )
+            {
+                if(gremlin == null)
+                {
+                    gremlin = new Neo4j2Graph(requestDb);
+                }
+            }
+        }
 
+        return gremlin;
+    }
 }
