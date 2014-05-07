@@ -16,9 +16,9 @@
 
     <properties>
         <!-- Jar Versions -->
-        <neo4j.version>2.0.0</neo4j.version>
-        <blueprints.version>2.5.0-SNAPSHOT</blueprints.version>
-        <gremlin.version>2.5.0-SNAPSHOT</gremlin.version>
+        <neo4j.version>2.1.0-M01</neo4j.version>
+        <blueprints.version>2.5.0</blueprints.version>
+        <gremlin.version>2.5.0</gremlin.version>
         <jersey.server.version>1.9</jersey.server.version>
         <license-text.header>GPL-3-header.txt</license-text.header>
         <docs.url>http://docs.neo4j.org/chunked/${project.version}/gremlin-plugin.html</docs.url>
@@ -280,7 +280,7 @@
                 <dependency>
                     <groupId>org.neo4j.build.plugins</groupId>
                     <artifactId>neo4j-doctools</artifactId>
-                    <version>14</version>
+                    <version>18</version>
                     <scope>provided</scope>
                 </dependency>
             </dependencies>

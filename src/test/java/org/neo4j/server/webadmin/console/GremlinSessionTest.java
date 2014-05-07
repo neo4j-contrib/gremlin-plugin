@@ -27,6 +27,7 @@ import org.junit.Test;
 import org.neo4j.server.database.Database;
 import org.neo4j.server.database.WrappedDatabase;
 import org.neo4j.test.ImpermanentGraphDatabase;
+import org.neo4j.test.TestGraphDatabaseFactory;
 
 public class GremlinSessionTest
 {
@@ -57,7 +58,7 @@ public class GremlinSessionTest
     public void testGremlinVersion()
     {
         String result = session.evaluate( "Gremlin.version()" ).first();
-        assertEquals( "2.5.0-SNAPSHOT" + NEWLINE, result );
+        assertEquals( "2.5.0" + NEWLINE, result );
     }
 
     @Test
@@ -79,7 +80,7 @@ public class GremlinSessionTest
     @BeforeClass
     public static void setUp() throws Exception
     {
-        database = new WrappedDatabase( new ImpermanentGraphDatabase() );
+        database = new WrappedDatabase((org.neo4j.kernel.GraphDatabaseAPI) new TestGraphDatabaseFactory().newImpermanentDatabase());
         session = new GremlinSession( database );
     }
 
