@@ -3,7 +3,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="generator" content="AsciiDoc 8.6.8">
-<title>Neo4j Gremlin Plugin v2.0-SNAPSHOT</title>
+<title>Neo4j Gremlin Plugin v2.1-SNAPSHOT</title>
 <style type="text/css">
 /* Shared CSS for AsciiDoc xhtml11 and html5 backends */
 
@@ -795,7 +795,7 @@ asciidoc.install(2);
 </head>
 <body class="book">
 <div id="header">
-<h1>Neo4j Gremlin Plugin v2.0-SNAPSHOT</h1>
+<h1>Neo4j Gremlin Plugin v2.1-SNAPSHOT</h1>
 <div id="toc">
   <div id="toctitle">Table of Contents</div>
   <noscript><p><b>JavaScript must be enabled in your browser to display the table of contents.</b></p></noscript>
@@ -858,7 +858,7 @@ autoindexed by Neo4j, so we can look up the name property on nodes.</p></div>
 </li>
 <li>
 <p>
-<strong><span class="monospaced">Accept:</span></strong> <span class="monospaced">application/json</span>
+<strong><span class="monospaced">Accept:</span></strong> <span class="monospaced">application/json; charset=UTF-8</span>
 </p>
 </li>
 <li>
@@ -878,30 +878,30 @@ autoindexed by Neo4j, so we can look up the name property on nodes.</p></div>
 </li>
 <li>
 <p>
-<strong><span class="monospaced">Content-Type:</span></strong> <span class="monospaced">application/json</span>
+<strong><span class="monospaced">Content-Type:</span></strong> <span class="monospaced">application/json; charset=UTF-8</span>
 </p>
 </li>
 </ul></div>
 <div class="listingblock">
 <pre class="programlisting brush: javascript">[ {
-  "outgoing_relationships" : "http://localhost:7474/db/data/node/1/relationships/out",
-  "labels" : "http://localhost:7474/db/data/node/1/labels",
+  "labels" : "http://localhost:7474/db/data/node/0/labels",
+  "outgoing_relationships" : "http://localhost:7474/db/data/node/0/relationships/out",
   "data" : {
     "name" : "you"
   },
-  "all_typed_relationships" : "http://localhost:7474/db/data/node/1/relationships/all/{-list|&amp;|types}",
-  "traverse" : "http://localhost:7474/db/data/node/1/traverse/{returnType}",
-  "self" : "http://localhost:7474/db/data/node/1",
-  "property" : "http://localhost:7474/db/data/node/1/properties/{key}",
-  "outgoing_typed_relationships" : "http://localhost:7474/db/data/node/1/relationships/out/{-list|&amp;|types}",
-  "properties" : "http://localhost:7474/db/data/node/1/properties",
-  "incoming_relationships" : "http://localhost:7474/db/data/node/1/relationships/in",
+  "traverse" : "http://localhost:7474/db/data/node/0/traverse/{returnType}",
+  "all_typed_relationships" : "http://localhost:7474/db/data/node/0/relationships/all/{-list|&amp;|types}",
+  "property" : "http://localhost:7474/db/data/node/0/properties/{key}",
+  "self" : "http://localhost:7474/db/data/node/0",
+  "properties" : "http://localhost:7474/db/data/node/0/properties",
+  "outgoing_typed_relationships" : "http://localhost:7474/db/data/node/0/relationships/out/{-list|&amp;|types}",
+  "incoming_relationships" : "http://localhost:7474/db/data/node/0/relationships/in",
   "extensions" : {
   },
-  "create_relationship" : "http://localhost:7474/db/data/node/1/relationships",
-  "paged_traverse" : "http://localhost:7474/db/data/node/1/paged/traverse/{returnType}{?pageSize,leaseTime}",
-  "all_relationships" : "http://localhost:7474/db/data/node/1/relationships/all",
-  "incoming_typed_relationships" : "http://localhost:7474/db/data/node/1/relationships/in/{-list|&amp;|types}"
+  "create_relationship" : "http://localhost:7474/db/data/node/0/relationships",
+  "paged_traverse" : "http://localhost:7474/db/data/node/0/paged/traverse/{returnType}{?pageSize,leaseTime}",
+  "all_relationships" : "http://localhost:7474/db/data/node/0/relationships/all",
+  "incoming_typed_relationships" : "http://localhost:7474/db/data/node/0/relationships/in/{-list|&amp;|types}"
 } ]</pre></div>
 </div>
 <div class="sect2">
@@ -914,7 +914,8 @@ so the script can return the imported node by index lookup.</p></div>
 <div class="paragraph"><p><em>Raw script source</em></p></div>
 <div class="listingblock">
 <pre class="programlisting brush: groovy">g.loadGraphML('https://raw.github.com/neo4j-contrib/gremlin-plugin/master/src/data/graphml1.xml')
-g.getIndex('node_auto_index', Vertex.class).get('name','you')</pre></div>
+g.autoStartTransaction(false)
+g.getIndex('node_auto_index', Vertex.class).get('name','you').toList()</pre></div>
 <div class="imageblock dot">
 <div class="content">
 <img src="images/Final-Graph-Load-a-sample-graph.svg" alt="Final-Graph-Load-a-sample-graph.svg">
@@ -930,7 +931,7 @@ g.getIndex('node_auto_index', Vertex.class).get('name','you')</pre></div>
 </li>
 <li>
 <p>
-<strong><span class="monospaced">Accept:</span></strong> <span class="monospaced">application/json</span>
+<strong><span class="monospaced">Accept:</span></strong> <span class="monospaced">application/json; charset=UTF-8</span>
 </p>
 </li>
 <li>
@@ -941,9 +942,7 @@ g.getIndex('node_auto_index', Vertex.class).get('name','you')</pre></div>
 </ul></div>
 <div class="listingblock">
 <pre class="programlisting brush: javascript">{
-  "script" : "g.loadGraphML('https://raw.github.com/neo4j-contrib/gremlin-plugin/master/src/data/graphml1.xml');g.getIndex('node_auto_index', Vertex.class).get('name','you');",
-  "params" : {
-  }
+  "script" : "g.loadGraphML('https://raw.github.com/neo4j-contrib/gremlin-plugin/master/src/data/graphml1.xml');g.autoStartTransaction(false);g.getIndex('node_auto_index', Vertex.class).get('name','you').toList();"
 }</pre></div>
 <div class="paragraph"><p><em>Example response</em></p></div>
 <div class="ulist"><ul>
@@ -954,30 +953,30 @@ g.getIndex('node_auto_index', Vertex.class).get('name','you')</pre></div>
 </li>
 <li>
 <p>
-<strong><span class="monospaced">Content-Type:</span></strong> <span class="monospaced">application/json</span>
+<strong><span class="monospaced">Content-Type:</span></strong> <span class="monospaced">application/json; charset=UTF-8</span>
 </p>
 </li>
 </ul></div>
 <div class="listingblock">
 <pre class="programlisting brush: javascript">[ {
-  "outgoing_relationships" : "http://localhost:7474/db/data/node/10/relationships/out",
-  "labels" : "http://localhost:7474/db/data/node/10/labels",
+  "labels" : "http://localhost:7474/db/data/node/9/labels",
+  "outgoing_relationships" : "http://localhost:7474/db/data/node/9/relationships/out",
   "data" : {
     "name" : "you"
   },
-  "all_typed_relationships" : "http://localhost:7474/db/data/node/10/relationships/all/{-list|&amp;|types}",
-  "traverse" : "http://localhost:7474/db/data/node/10/traverse/{returnType}",
-  "self" : "http://localhost:7474/db/data/node/10",
-  "property" : "http://localhost:7474/db/data/node/10/properties/{key}",
-  "outgoing_typed_relationships" : "http://localhost:7474/db/data/node/10/relationships/out/{-list|&amp;|types}",
-  "properties" : "http://localhost:7474/db/data/node/10/properties",
-  "incoming_relationships" : "http://localhost:7474/db/data/node/10/relationships/in",
+  "traverse" : "http://localhost:7474/db/data/node/9/traverse/{returnType}",
+  "all_typed_relationships" : "http://localhost:7474/db/data/node/9/relationships/all/{-list|&amp;|types}",
+  "property" : "http://localhost:7474/db/data/node/9/properties/{key}",
+  "self" : "http://localhost:7474/db/data/node/9",
+  "properties" : "http://localhost:7474/db/data/node/9/properties",
+  "outgoing_typed_relationships" : "http://localhost:7474/db/data/node/9/relationships/out/{-list|&amp;|types}",
+  "incoming_relationships" : "http://localhost:7474/db/data/node/9/relationships/in",
   "extensions" : {
   },
-  "create_relationship" : "http://localhost:7474/db/data/node/10/relationships",
-  "paged_traverse" : "http://localhost:7474/db/data/node/10/paged/traverse/{returnType}{?pageSize,leaseTime}",
-  "all_relationships" : "http://localhost:7474/db/data/node/10/relationships/all",
-  "incoming_typed_relationships" : "http://localhost:7474/db/data/node/10/relationships/in/{-list|&amp;|types}"
+  "create_relationship" : "http://localhost:7474/db/data/node/9/relationships",
+  "paged_traverse" : "http://localhost:7474/db/data/node/9/paged/traverse/{returnType}{?pageSize,leaseTime}",
+  "all_relationships" : "http://localhost:7474/db/data/node/9/relationships/all",
+  "incoming_typed_relationships" : "http://localhost:7474/db/data/node/9/relationships/in/{-list|&amp;|types}"
 } ]</pre></div>
 </div>
 <div class="sect2">
@@ -1002,7 +1001,7 @@ outgoing relationships to node 1, sorted by their <span class="monospaced">name<
 </li>
 <li>
 <p>
-<strong><span class="monospaced">Accept:</span></strong> <span class="monospaced">application/json</span>
+<strong><span class="monospaced">Accept:</span></strong> <span class="monospaced">application/json; charset=UTF-8</span>
 </p>
 </li>
 <li>
@@ -1013,9 +1012,7 @@ outgoing relationships to node 1, sorted by their <span class="monospaced">name<
 </ul></div>
 <div class="listingblock">
 <pre class="programlisting brush: javascript">{
-  "script" : "g.getIndex('node_auto_index', Vertex.class).get('name','I')._().out.sort{it.name}",
-  "params" : {
-  }
+  "script" : "g.getIndex('node_auto_index', Vertex.class).get('name','I')._().out.sort{it.name}"
 }</pre></div>
 <div class="paragraph"><p><em>Example response</em></p></div>
 <div class="ulist"><ul>
@@ -1026,42 +1023,23 @@ outgoing relationships to node 1, sorted by their <span class="monospaced">name<
 </li>
 <li>
 <p>
-<strong><span class="monospaced">Content-Type:</span></strong> <span class="monospaced">application/json</span>
+<strong><span class="monospaced">Content-Type:</span></strong> <span class="monospaced">application/json; charset=UTF-8</span>
 </p>
 </li>
 </ul></div>
 <div class="listingblock">
 <pre class="programlisting brush: javascript">[ {
-  "outgoing_relationships" : "http://localhost:7474/db/data/node/16/relationships/out",
-  "labels" : "http://localhost:7474/db/data/node/16/labels",
+  "labels" : "http://localhost:7474/db/data/node/15/labels",
+  "outgoing_relationships" : "http://localhost:7474/db/data/node/15/relationships/out",
   "data" : {
     "name" : "him"
   },
-  "all_typed_relationships" : "http://localhost:7474/db/data/node/16/relationships/all/{-list|&amp;|types}",
-  "traverse" : "http://localhost:7474/db/data/node/16/traverse/{returnType}",
-  "self" : "http://localhost:7474/db/data/node/16",
-  "property" : "http://localhost:7474/db/data/node/16/properties/{key}",
-  "outgoing_typed_relationships" : "http://localhost:7474/db/data/node/16/relationships/out/{-list|&amp;|types}",
-  "properties" : "http://localhost:7474/db/data/node/16/properties",
-  "incoming_relationships" : "http://localhost:7474/db/data/node/16/relationships/in",
-  "extensions" : {
-  },
-  "create_relationship" : "http://localhost:7474/db/data/node/16/relationships",
-  "paged_traverse" : "http://localhost:7474/db/data/node/16/paged/traverse/{returnType}{?pageSize,leaseTime}",
-  "all_relationships" : "http://localhost:7474/db/data/node/16/relationships/all",
-  "incoming_typed_relationships" : "http://localhost:7474/db/data/node/16/relationships/in/{-list|&amp;|types}"
-}, {
-  "outgoing_relationships" : "http://localhost:7474/db/data/node/15/relationships/out",
-  "labels" : "http://localhost:7474/db/data/node/15/labels",
-  "data" : {
-    "name" : "you"
-  },
-  "all_typed_relationships" : "http://localhost:7474/db/data/node/15/relationships/all/{-list|&amp;|types}",
   "traverse" : "http://localhost:7474/db/data/node/15/traverse/{returnType}",
-  "self" : "http://localhost:7474/db/data/node/15",
+  "all_typed_relationships" : "http://localhost:7474/db/data/node/15/relationships/all/{-list|&amp;|types}",
   "property" : "http://localhost:7474/db/data/node/15/properties/{key}",
-  "outgoing_typed_relationships" : "http://localhost:7474/db/data/node/15/relationships/out/{-list|&amp;|types}",
+  "self" : "http://localhost:7474/db/data/node/15",
   "properties" : "http://localhost:7474/db/data/node/15/properties",
+  "outgoing_typed_relationships" : "http://localhost:7474/db/data/node/15/relationships/out/{-list|&amp;|types}",
   "incoming_relationships" : "http://localhost:7474/db/data/node/15/relationships/in",
   "extensions" : {
   },
@@ -1069,6 +1047,25 @@ outgoing relationships to node 1, sorted by their <span class="monospaced">name<
   "paged_traverse" : "http://localhost:7474/db/data/node/15/paged/traverse/{returnType}{?pageSize,leaseTime}",
   "all_relationships" : "http://localhost:7474/db/data/node/15/relationships/all",
   "incoming_typed_relationships" : "http://localhost:7474/db/data/node/15/relationships/in/{-list|&amp;|types}"
+}, {
+  "labels" : "http://localhost:7474/db/data/node/14/labels",
+  "outgoing_relationships" : "http://localhost:7474/db/data/node/14/relationships/out",
+  "data" : {
+    "name" : "you"
+  },
+  "traverse" : "http://localhost:7474/db/data/node/14/traverse/{returnType}",
+  "all_typed_relationships" : "http://localhost:7474/db/data/node/14/relationships/all/{-list|&amp;|types}",
+  "property" : "http://localhost:7474/db/data/node/14/properties/{key}",
+  "self" : "http://localhost:7474/db/data/node/14",
+  "properties" : "http://localhost:7474/db/data/node/14/properties",
+  "outgoing_typed_relationships" : "http://localhost:7474/db/data/node/14/relationships/out/{-list|&amp;|types}",
+  "incoming_relationships" : "http://localhost:7474/db/data/node/14/relationships/in",
+  "extensions" : {
+  },
+  "create_relationship" : "http://localhost:7474/db/data/node/14/relationships",
+  "paged_traverse" : "http://localhost:7474/db/data/node/14/paged/traverse/{returnType}{?pageSize,leaseTime}",
+  "all_relationships" : "http://localhost:7474/db/data/node/14/relationships/all",
+  "incoming_typed_relationships" : "http://localhost:7474/db/data/node/14/relationships/in/{-list|&amp;|types}"
 } ]</pre></div>
 </div>
 <div class="sect2">
@@ -1083,7 +1080,7 @@ populate the result table <span class="monospaced">t</span>, iterate through the
 <div class="paragraph"><p><em>Raw script source</em></p></div>
 <div class="listingblock">
 <pre class="programlisting brush: groovy">t= new Table()
-g.v(23).as('I').out('know').as('friend').out('like').as('likes').table(t,['friend','likes']){it.name}{it.name}.iterate()
+g.v(22).as('I').out('know').as('friend').out('like').as('likes').table(t,['friend','likes']){it.name}{it.name}.iterate()
 t</pre></div>
 <div class="imageblock dot">
 <div class="content">
@@ -1100,7 +1097,7 @@ t</pre></div>
 </li>
 <li>
 <p>
-<strong><span class="monospaced">Accept:</span></strong> <span class="monospaced">application/json</span>
+<strong><span class="monospaced">Accept:</span></strong> <span class="monospaced">application/json; charset=UTF-8</span>
 </p>
 </li>
 <li>
@@ -1111,9 +1108,7 @@ t</pre></div>
 </ul></div>
 <div class="listingblock">
 <pre class="programlisting brush: javascript">{
-  "script" : "t= new Table();g.v(23).as('I').out('know').as('friend').out('like').as('likes').table(t,['friend','likes']){it.name}{it.name}.iterate();t;",
-  "params" : {
-  }
+  "script" : "t= new Table();g.v(22).as('I').out('know').as('friend').out('like').as('likes').table(t,['friend','likes']){it.name}{it.name}.iterate();t;"
 }</pre></div>
 <div class="paragraph"><p><em>Example response</em></p></div>
 <div class="ulist"><ul>
@@ -1124,7 +1119,7 @@ t</pre></div>
 </li>
 <li>
 <p>
-<strong><span class="monospaced">Content-Type:</span></strong> <span class="monospaced">application/json</span>
+<strong><span class="monospaced">Content-Type:</span></strong> <span class="monospaced">application/json; charset=UTF-8</span>
 </p>
 </li>
 </ul></div>
@@ -1138,7 +1133,7 @@ t</pre></div>
 <h3 id="rest-api-returning-nested-pipes">Returning nested pipes</h3>
 <div class="paragraph"><p><em>Raw script source</em></p></div>
 <div class="listingblock">
-<pre class="programlisting brush: groovy">g.v(27).as('I').out('know').as('friend').out('like').as('likes').table(new Table()){it.name}{it.name}.cap</pre></div>
+<pre class="programlisting brush: groovy">g.v(26).as('I').out('know').as('friend').out('like').as('likes').table(new Table()){it.name}{it.name}.cap</pre></div>
 <div class="imageblock dot">
 <div class="content">
 <img src="images/Final-Graph-returning-nested-pipes.svg" alt="Final-Graph-returning-nested-pipes.svg">
@@ -1154,7 +1149,7 @@ t</pre></div>
 </li>
 <li>
 <p>
-<strong><span class="monospaced">Accept:</span></strong> <span class="monospaced">application/json</span>
+<strong><span class="monospaced">Accept:</span></strong> <span class="monospaced">application/json; charset=UTF-8</span>
 </p>
 </li>
 <li>
@@ -1165,9 +1160,7 @@ t</pre></div>
 </ul></div>
 <div class="listingblock">
 <pre class="programlisting brush: javascript">{
-  "script" : "g.v(27).as('I').out('know').as('friend').out('like').as('likes').table(new Table()){it.name}{it.name}.cap;",
-  "params" : {
-  }
+  "script" : "g.v(26).as('I').out('know').as('friend').out('like').as('likes').table(new Table()){it.name}{it.name}.cap;"
 }</pre></div>
 <div class="paragraph"><p><em>Example response</em></p></div>
 <div class="ulist"><ul>
@@ -1178,7 +1171,7 @@ t</pre></div>
 </li>
 <li>
 <p>
-<strong><span class="monospaced">Content-Type:</span></strong> <span class="monospaced">application/json</span>
+<strong><span class="monospaced">Content-Type:</span></strong> <span class="monospaced">application/json; charset=UTF-8</span>
 </p>
 </li>
 </ul></div>
@@ -1212,7 +1205,7 @@ accessed as normal variables within the script.</p></div>
 </li>
 <li>
 <p>
-<strong><span class="monospaced">Accept:</span></strong> <span class="monospaced">application/json</span>
+<strong><span class="monospaced">Accept:</span></strong> <span class="monospaced">application/json; charset=UTF-8</span>
 </p>
 </li>
 <li>
@@ -1237,7 +1230,7 @@ accessed as normal variables within the script.</p></div>
 </li>
 <li>
 <p>
-<strong><span class="monospaced">Content-Type:</span></strong> <span class="monospaced">application/json</span>
+<strong><span class="monospaced">Content-Type:</span></strong> <span class="monospaced">application/json; charset=UTF-8</span>
 </p>
 </li>
 </ul></div>
@@ -1265,7 +1258,7 @@ accessed as normal variables within the script.</p></div>
 </li>
 <li>
 <p>
-<strong><span class="monospaced">Accept:</span></strong> <span class="monospaced">application/json</span>
+<strong><span class="monospaced">Accept:</span></strong> <span class="monospaced">application/json; charset=UTF-8</span>
 </p>
 </li>
 <li>
@@ -1278,7 +1271,7 @@ accessed as normal variables within the script.</p></div>
 <pre class="programlisting brush: javascript">{
   "script" : "g.v(me).out",
   "params" : {
-    "me" : "6"
+    "me" : "5"
   }
 }</pre></div>
 <div class="paragraph"><p><em>Example response</em></p></div>
@@ -1290,30 +1283,30 @@ accessed as normal variables within the script.</p></div>
 </li>
 <li>
 <p>
-<strong><span class="monospaced">Content-Type:</span></strong> <span class="monospaced">application/json</span>
+<strong><span class="monospaced">Content-Type:</span></strong> <span class="monospaced">application/json; charset=UTF-8</span>
 </p>
 </li>
 </ul></div>
 <div class="listingblock">
 <pre class="programlisting brush: javascript">[ {
-  "outgoing_relationships" : "http://localhost:7474/db/data/node/5/relationships/out",
-  "labels" : "http://localhost:7474/db/data/node/5/labels",
+  "labels" : "http://localhost:7474/db/data/node/4/labels",
+  "outgoing_relationships" : "http://localhost:7474/db/data/node/4/relationships/out",
   "data" : {
     "name" : "you"
   },
-  "all_typed_relationships" : "http://localhost:7474/db/data/node/5/relationships/all/{-list|&amp;|types}",
-  "traverse" : "http://localhost:7474/db/data/node/5/traverse/{returnType}",
-  "self" : "http://localhost:7474/db/data/node/5",
-  "property" : "http://localhost:7474/db/data/node/5/properties/{key}",
-  "outgoing_typed_relationships" : "http://localhost:7474/db/data/node/5/relationships/out/{-list|&amp;|types}",
-  "properties" : "http://localhost:7474/db/data/node/5/properties",
-  "incoming_relationships" : "http://localhost:7474/db/data/node/5/relationships/in",
+  "traverse" : "http://localhost:7474/db/data/node/4/traverse/{returnType}",
+  "all_typed_relationships" : "http://localhost:7474/db/data/node/4/relationships/all/{-list|&amp;|types}",
+  "property" : "http://localhost:7474/db/data/node/4/properties/{key}",
+  "self" : "http://localhost:7474/db/data/node/4",
+  "properties" : "http://localhost:7474/db/data/node/4/properties",
+  "outgoing_typed_relationships" : "http://localhost:7474/db/data/node/4/relationships/out/{-list|&amp;|types}",
+  "incoming_relationships" : "http://localhost:7474/db/data/node/4/relationships/in",
   "extensions" : {
   },
-  "create_relationship" : "http://localhost:7474/db/data/node/5/relationships",
-  "paged_traverse" : "http://localhost:7474/db/data/node/5/paged/traverse/{returnType}{?pageSize,leaseTime}",
-  "all_relationships" : "http://localhost:7474/db/data/node/5/relationships/all",
-  "incoming_typed_relationships" : "http://localhost:7474/db/data/node/5/relationships/in/{-list|&amp;|types}"
+  "create_relationship" : "http://localhost:7474/db/data/node/4/relationships",
+  "paged_traverse" : "http://localhost:7474/db/data/node/4/paged/traverse/{returnType}{?pageSize,leaseTime}",
+  "all_relationships" : "http://localhost:7474/db/data/node/4/relationships/all",
+  "incoming_typed_relationships" : "http://localhost:7474/db/data/node/4/relationships/in/{-list|&amp;|types}"
 } ]</pre></div>
 </div>
 <div class="sect2">
@@ -1323,7 +1316,7 @@ that make up the path from the starting pipes. The server is returning
 JSON representations of their content as a nested list.</p></div>
 <div class="paragraph"><p><em>Raw script source</em></p></div>
 <div class="listingblock">
-<pre class="programlisting brush: groovy">g.v(20).out.name.path</pre></div>
+<pre class="programlisting brush: groovy">g.v(19).out.name.path</pre></div>
 <div class="imageblock dot">
 <div class="content">
 <img src="images/Final-Graph-Return-paths-from-a-Gremlin-script.svg" alt="Final-Graph-Return-paths-from-a-Gremlin-script.svg">
@@ -1339,7 +1332,7 @@ JSON representations of their content as a nested list.</p></div>
 </li>
 <li>
 <p>
-<strong><span class="monospaced">Accept:</span></strong> <span class="monospaced">application/json</span>
+<strong><span class="monospaced">Accept:</span></strong> <span class="monospaced">application/json; charset=UTF-8</span>
 </p>
 </li>
 <li>
@@ -1350,9 +1343,7 @@ JSON representations of their content as a nested list.</p></div>
 </ul></div>
 <div class="listingblock">
 <pre class="programlisting brush: javascript">{
-  "script" : "g.v(20).out.name.path",
-  "params" : {
-  }
+  "script" : "g.v(19).out.name.path"
 }</pre></div>
 <div class="paragraph"><p><em>Example response</em></p></div>
 <div class="ulist"><ul>
@@ -1363,80 +1354,23 @@ JSON representations of their content as a nested list.</p></div>
 </li>
 <li>
 <p>
-<strong><span class="monospaced">Content-Type:</span></strong> <span class="monospaced">application/json</span>
+<strong><span class="monospaced">Content-Type:</span></strong> <span class="monospaced">application/json; charset=UTF-8</span>
 </p>
 </li>
 </ul></div>
 <div class="listingblock">
 <pre class="programlisting brush: javascript">[ [ {
-  "outgoing_relationships" : "http://localhost:7474/db/data/node/20/relationships/out",
-  "labels" : "http://localhost:7474/db/data/node/20/labels",
-  "data" : {
-    "name" : "I"
-  },
-  "all_typed_relationships" : "http://localhost:7474/db/data/node/20/relationships/all/{-list|&amp;|types}",
-  "traverse" : "http://localhost:7474/db/data/node/20/traverse/{returnType}",
-  "self" : "http://localhost:7474/db/data/node/20",
-  "property" : "http://localhost:7474/db/data/node/20/properties/{key}",
-  "outgoing_typed_relationships" : "http://localhost:7474/db/data/node/20/relationships/out/{-list|&amp;|types}",
-  "properties" : "http://localhost:7474/db/data/node/20/properties",
-  "incoming_relationships" : "http://localhost:7474/db/data/node/20/relationships/in",
-  "extensions" : {
-  },
-  "create_relationship" : "http://localhost:7474/db/data/node/20/relationships",
-  "paged_traverse" : "http://localhost:7474/db/data/node/20/paged/traverse/{returnType}{?pageSize,leaseTime}",
-  "all_relationships" : "http://localhost:7474/db/data/node/20/relationships/all",
-  "incoming_typed_relationships" : "http://localhost:7474/db/data/node/20/relationships/in/{-list|&amp;|types}"
-}, {
-  "outgoing_relationships" : "http://localhost:7474/db/data/node/18/relationships/out",
-  "labels" : "http://localhost:7474/db/data/node/18/labels",
-  "data" : {
-    "name" : "you"
-  },
-  "all_typed_relationships" : "http://localhost:7474/db/data/node/18/relationships/all/{-list|&amp;|types}",
-  "traverse" : "http://localhost:7474/db/data/node/18/traverse/{returnType}",
-  "self" : "http://localhost:7474/db/data/node/18",
-  "property" : "http://localhost:7474/db/data/node/18/properties/{key}",
-  "outgoing_typed_relationships" : "http://localhost:7474/db/data/node/18/relationships/out/{-list|&amp;|types}",
-  "properties" : "http://localhost:7474/db/data/node/18/properties",
-  "incoming_relationships" : "http://localhost:7474/db/data/node/18/relationships/in",
-  "extensions" : {
-  },
-  "create_relationship" : "http://localhost:7474/db/data/node/18/relationships",
-  "paged_traverse" : "http://localhost:7474/db/data/node/18/paged/traverse/{returnType}{?pageSize,leaseTime}",
-  "all_relationships" : "http://localhost:7474/db/data/node/18/relationships/all",
-  "incoming_typed_relationships" : "http://localhost:7474/db/data/node/18/relationships/in/{-list|&amp;|types}"
-}, "you" ], [ {
-  "outgoing_relationships" : "http://localhost:7474/db/data/node/20/relationships/out",
-  "labels" : "http://localhost:7474/db/data/node/20/labels",
-  "data" : {
-    "name" : "I"
-  },
-  "all_typed_relationships" : "http://localhost:7474/db/data/node/20/relationships/all/{-list|&amp;|types}",
-  "traverse" : "http://localhost:7474/db/data/node/20/traverse/{returnType}",
-  "self" : "http://localhost:7474/db/data/node/20",
-  "property" : "http://localhost:7474/db/data/node/20/properties/{key}",
-  "outgoing_typed_relationships" : "http://localhost:7474/db/data/node/20/relationships/out/{-list|&amp;|types}",
-  "properties" : "http://localhost:7474/db/data/node/20/properties",
-  "incoming_relationships" : "http://localhost:7474/db/data/node/20/relationships/in",
-  "extensions" : {
-  },
-  "create_relationship" : "http://localhost:7474/db/data/node/20/relationships",
-  "paged_traverse" : "http://localhost:7474/db/data/node/20/paged/traverse/{returnType}{?pageSize,leaseTime}",
-  "all_relationships" : "http://localhost:7474/db/data/node/20/relationships/all",
-  "incoming_typed_relationships" : "http://localhost:7474/db/data/node/20/relationships/in/{-list|&amp;|types}"
-}, {
-  "outgoing_relationships" : "http://localhost:7474/db/data/node/19/relationships/out",
   "labels" : "http://localhost:7474/db/data/node/19/labels",
+  "outgoing_relationships" : "http://localhost:7474/db/data/node/19/relationships/out",
   "data" : {
-    "name" : "him"
+    "name" : "I"
   },
-  "all_typed_relationships" : "http://localhost:7474/db/data/node/19/relationships/all/{-list|&amp;|types}",
   "traverse" : "http://localhost:7474/db/data/node/19/traverse/{returnType}",
-  "self" : "http://localhost:7474/db/data/node/19",
+  "all_typed_relationships" : "http://localhost:7474/db/data/node/19/relationships/all/{-list|&amp;|types}",
   "property" : "http://localhost:7474/db/data/node/19/properties/{key}",
-  "outgoing_typed_relationships" : "http://localhost:7474/db/data/node/19/relationships/out/{-list|&amp;|types}",
+  "self" : "http://localhost:7474/db/data/node/19",
   "properties" : "http://localhost:7474/db/data/node/19/properties",
+  "outgoing_typed_relationships" : "http://localhost:7474/db/data/node/19/relationships/out/{-list|&amp;|types}",
   "incoming_relationships" : "http://localhost:7474/db/data/node/19/relationships/in",
   "extensions" : {
   },
@@ -1444,6 +1378,63 @@ JSON representations of their content as a nested list.</p></div>
   "paged_traverse" : "http://localhost:7474/db/data/node/19/paged/traverse/{returnType}{?pageSize,leaseTime}",
   "all_relationships" : "http://localhost:7474/db/data/node/19/relationships/all",
   "incoming_typed_relationships" : "http://localhost:7474/db/data/node/19/relationships/in/{-list|&amp;|types}"
+}, {
+  "labels" : "http://localhost:7474/db/data/node/17/labels",
+  "outgoing_relationships" : "http://localhost:7474/db/data/node/17/relationships/out",
+  "data" : {
+    "name" : "you"
+  },
+  "traverse" : "http://localhost:7474/db/data/node/17/traverse/{returnType}",
+  "all_typed_relationships" : "http://localhost:7474/db/data/node/17/relationships/all/{-list|&amp;|types}",
+  "property" : "http://localhost:7474/db/data/node/17/properties/{key}",
+  "self" : "http://localhost:7474/db/data/node/17",
+  "properties" : "http://localhost:7474/db/data/node/17/properties",
+  "outgoing_typed_relationships" : "http://localhost:7474/db/data/node/17/relationships/out/{-list|&amp;|types}",
+  "incoming_relationships" : "http://localhost:7474/db/data/node/17/relationships/in",
+  "extensions" : {
+  },
+  "create_relationship" : "http://localhost:7474/db/data/node/17/relationships",
+  "paged_traverse" : "http://localhost:7474/db/data/node/17/paged/traverse/{returnType}{?pageSize,leaseTime}",
+  "all_relationships" : "http://localhost:7474/db/data/node/17/relationships/all",
+  "incoming_typed_relationships" : "http://localhost:7474/db/data/node/17/relationships/in/{-list|&amp;|types}"
+}, "you" ], [ {
+  "labels" : "http://localhost:7474/db/data/node/19/labels",
+  "outgoing_relationships" : "http://localhost:7474/db/data/node/19/relationships/out",
+  "data" : {
+    "name" : "I"
+  },
+  "traverse" : "http://localhost:7474/db/data/node/19/traverse/{returnType}",
+  "all_typed_relationships" : "http://localhost:7474/db/data/node/19/relationships/all/{-list|&amp;|types}",
+  "property" : "http://localhost:7474/db/data/node/19/properties/{key}",
+  "self" : "http://localhost:7474/db/data/node/19",
+  "properties" : "http://localhost:7474/db/data/node/19/properties",
+  "outgoing_typed_relationships" : "http://localhost:7474/db/data/node/19/relationships/out/{-list|&amp;|types}",
+  "incoming_relationships" : "http://localhost:7474/db/data/node/19/relationships/in",
+  "extensions" : {
+  },
+  "create_relationship" : "http://localhost:7474/db/data/node/19/relationships",
+  "paged_traverse" : "http://localhost:7474/db/data/node/19/paged/traverse/{returnType}{?pageSize,leaseTime}",
+  "all_relationships" : "http://localhost:7474/db/data/node/19/relationships/all",
+  "incoming_typed_relationships" : "http://localhost:7474/db/data/node/19/relationships/in/{-list|&amp;|types}"
+}, {
+  "labels" : "http://localhost:7474/db/data/node/18/labels",
+  "outgoing_relationships" : "http://localhost:7474/db/data/node/18/relationships/out",
+  "data" : {
+    "name" : "him"
+  },
+  "traverse" : "http://localhost:7474/db/data/node/18/traverse/{returnType}",
+  "all_typed_relationships" : "http://localhost:7474/db/data/node/18/relationships/all/{-list|&amp;|types}",
+  "property" : "http://localhost:7474/db/data/node/18/properties/{key}",
+  "self" : "http://localhost:7474/db/data/node/18",
+  "properties" : "http://localhost:7474/db/data/node/18/properties",
+  "outgoing_typed_relationships" : "http://localhost:7474/db/data/node/18/relationships/out/{-list|&amp;|types}",
+  "incoming_relationships" : "http://localhost:7474/db/data/node/18/relationships/in",
+  "extensions" : {
+  },
+  "create_relationship" : "http://localhost:7474/db/data/node/18/relationships",
+  "paged_traverse" : "http://localhost:7474/db/data/node/18/paged/traverse/{returnType}{?pageSize,leaseTime}",
+  "all_relationships" : "http://localhost:7474/db/data/node/18/relationships/all",
+  "incoming_typed_relationships" : "http://localhost:7474/db/data/node/18/relationships/in/{-list|&amp;|types}"
 }, "him" ] ]</pre></div>
 </div>
 <div class="sect2">
@@ -1462,7 +1453,7 @@ import org.neo4j.graphdb.*
 import org.neo4j.index.lucene.*
 import org.apache.lucene.search.*
 
-'**** Blueprints API methods on the injected Neo4jGraph at variable g ****'
+'**** Blueprints API methods on the injected Neo4j2Graph at variable g ****'
 meVertex = g.addVertex([name:'me'])
 meNode = meVertex.getRawVertex()
 
@@ -1483,11 +1474,10 @@ tx = neo4j.beginTx()
  personIndex.add(youNode,'name',youNode.getProperty('name'))
 tx.success()
 tx.finish()
-g.stopTransaction(SUCCESS)
 
 '*** Prepare a custom Lucene query context with Neo4j API ***'
 query = new QueryContext( 'name:*' ).sort( new Sort(new SortField( 'name',SortField.STRING, true ) ) )
-results = personIndex.query( query )</pre></div>
+results = personIndex.query( query ).toList()</pre></div>
 <div class="imageblock dot">
 <div class="content">
 <img src="images/Final-Graph-Send-an-arbitrary-Groovy-script---Lucene-sorting.svg" alt="Final-Graph-Send-an-arbitrary-Groovy-script---Lucene-sorting.svg">
@@ -1503,7 +1493,7 @@ results = personIndex.query( query )</pre></div>
 </li>
 <li>
 <p>
-<strong><span class="monospaced">Accept:</span></strong> <span class="monospaced">application/json</span>
+<strong><span class="monospaced">Accept:</span></strong> <span class="monospaced">application/json; charset=UTF-8</span>
 </p>
 </li>
 <li>
@@ -1514,9 +1504,7 @@ results = personIndex.query( query )</pre></div>
 </ul></div>
 <div class="listingblock">
 <pre class="programlisting brush: javascript">{
-  "script" : "'******** Additional imports *********';import org.neo4j.graphdb.index.*;import org.neo4j.graphdb.*;import org.neo4j.index.lucene.*;import org.apache.lucene.search.*;;'**** Blueprints API methods on the injected Neo4jGraph at variable g ****';meVertex = g.addVertex([name:'me']);meNode = meVertex.getRawVertex();;'*** get the Neo4j raw instance ***';neo4j = g.getRawGraph();;;'******** Neo4j API methods: *********';tx = neo4j.beginTx(); youNode = neo4j.createNode(); youNode.setProperty('name','you'); youNode.createRelationshipTo(meNode,DynamicRelationshipType.withName('knows'));;'*** index using Neo4j APIs ***'; idxManager = neo4j.index(); personIndex = idxManager.forNodes('persons'); personIndex.add(meNode,'name',meNode.getProperty('name')); personIndex.add(youNode,'name',youNode.getProperty('name'));tx.success();tx.finish();g.stopTransaction(SUCCESS);;'*** Prepare a custom Lucene query context with Neo4j API ***';query = new QueryContext( 'name:*' ).sort( new Sort(new SortField( 'name',SortField.STRING, true ) ) );results = personIndex.query( query );",
-  "params" : {
-  }
+  "script" : "'******** Additional imports *********';import org.neo4j.graphdb.index.*;import org.neo4j.graphdb.*;import org.neo4j.index.lucene.*;import org.apache.lucene.search.*;;'**** Blueprints API methods on the injected Neo4j2Graph at variable g ****';meVertex = g.addVertex([name:'me']);meNode = meVertex.getRawVertex();;'*** get the Neo4j raw instance ***';neo4j = g.getRawGraph();;;'******** Neo4j API methods: *********';tx = neo4j.beginTx(); youNode = neo4j.createNode(); youNode.setProperty('name','you'); youNode.createRelationshipTo(meNode,DynamicRelationshipType.withName('knows'));;'*** index using Neo4j APIs ***'; idxManager = neo4j.index(); personIndex = idxManager.forNodes('persons'); personIndex.add(meNode,'name',meNode.getProperty('name')); personIndex.add(youNode,'name',youNode.getProperty('name'));tx.success();tx.finish();;'*** Prepare a custom Lucene query context with Neo4j API ***';query = new QueryContext( 'name:*' ).sort( new Sort(new SortField( 'name',SortField.STRING, true ) ) );results = personIndex.query( query ).toList();"
 }</pre></div>
 <div class="paragraph"><p><em>Example response</em></p></div>
 <div class="ulist"><ul>
@@ -1527,42 +1515,23 @@ results = personIndex.query( query )</pre></div>
 </li>
 <li>
 <p>
-<strong><span class="monospaced">Content-Type:</span></strong> <span class="monospaced">application/json</span>
+<strong><span class="monospaced">Content-Type:</span></strong> <span class="monospaced">application/json; charset=UTF-8</span>
 </p>
 </li>
 </ul></div>
 <div class="listingblock">
 <pre class="programlisting brush: javascript">[ {
-  "outgoing_relationships" : "http://localhost:7474/db/data/node/30/relationships/out",
-  "labels" : "http://localhost:7474/db/data/node/30/labels",
+  "labels" : "http://localhost:7474/db/data/node/29/labels",
+  "outgoing_relationships" : "http://localhost:7474/db/data/node/29/relationships/out",
   "data" : {
     "name" : "you"
   },
-  "all_typed_relationships" : "http://localhost:7474/db/data/node/30/relationships/all/{-list|&amp;|types}",
-  "traverse" : "http://localhost:7474/db/data/node/30/traverse/{returnType}",
-  "self" : "http://localhost:7474/db/data/node/30",
-  "property" : "http://localhost:7474/db/data/node/30/properties/{key}",
-  "outgoing_typed_relationships" : "http://localhost:7474/db/data/node/30/relationships/out/{-list|&amp;|types}",
-  "properties" : "http://localhost:7474/db/data/node/30/properties",
-  "incoming_relationships" : "http://localhost:7474/db/data/node/30/relationships/in",
-  "extensions" : {
-  },
-  "create_relationship" : "http://localhost:7474/db/data/node/30/relationships",
-  "paged_traverse" : "http://localhost:7474/db/data/node/30/paged/traverse/{returnType}{?pageSize,leaseTime}",
-  "all_relationships" : "http://localhost:7474/db/data/node/30/relationships/all",
-  "incoming_typed_relationships" : "http://localhost:7474/db/data/node/30/relationships/in/{-list|&amp;|types}"
-}, {
-  "outgoing_relationships" : "http://localhost:7474/db/data/node/29/relationships/out",
-  "labels" : "http://localhost:7474/db/data/node/29/labels",
-  "data" : {
-    "name" : "me"
-  },
-  "all_typed_relationships" : "http://localhost:7474/db/data/node/29/relationships/all/{-list|&amp;|types}",
   "traverse" : "http://localhost:7474/db/data/node/29/traverse/{returnType}",
-  "self" : "http://localhost:7474/db/data/node/29",
+  "all_typed_relationships" : "http://localhost:7474/db/data/node/29/relationships/all/{-list|&amp;|types}",
   "property" : "http://localhost:7474/db/data/node/29/properties/{key}",
-  "outgoing_typed_relationships" : "http://localhost:7474/db/data/node/29/relationships/out/{-list|&amp;|types}",
+  "self" : "http://localhost:7474/db/data/node/29",
   "properties" : "http://localhost:7474/db/data/node/29/properties",
+  "outgoing_typed_relationships" : "http://localhost:7474/db/data/node/29/relationships/out/{-list|&amp;|types}",
   "incoming_relationships" : "http://localhost:7474/db/data/node/29/relationships/in",
   "extensions" : {
   },
@@ -1570,6 +1539,25 @@ results = personIndex.query( query )</pre></div>
   "paged_traverse" : "http://localhost:7474/db/data/node/29/paged/traverse/{returnType}{?pageSize,leaseTime}",
   "all_relationships" : "http://localhost:7474/db/data/node/29/relationships/all",
   "incoming_typed_relationships" : "http://localhost:7474/db/data/node/29/relationships/in/{-list|&amp;|types}"
+}, {
+  "labels" : "http://localhost:7474/db/data/node/28/labels",
+  "outgoing_relationships" : "http://localhost:7474/db/data/node/28/relationships/out",
+  "data" : {
+    "name" : "me"
+  },
+  "traverse" : "http://localhost:7474/db/data/node/28/traverse/{returnType}",
+  "all_typed_relationships" : "http://localhost:7474/db/data/node/28/relationships/all/{-list|&amp;|types}",
+  "property" : "http://localhost:7474/db/data/node/28/properties/{key}",
+  "self" : "http://localhost:7474/db/data/node/28",
+  "properties" : "http://localhost:7474/db/data/node/28/properties",
+  "outgoing_typed_relationships" : "http://localhost:7474/db/data/node/28/relationships/out/{-list|&amp;|types}",
+  "incoming_relationships" : "http://localhost:7474/db/data/node/28/relationships/in",
+  "extensions" : {
+  },
+  "create_relationship" : "http://localhost:7474/db/data/node/28/relationships",
+  "paged_traverse" : "http://localhost:7474/db/data/node/28/paged/traverse/{returnType}{?pageSize,leaseTime}",
+  "all_relationships" : "http://localhost:7474/db/data/node/28/relationships/all",
+  "incoming_typed_relationships" : "http://localhost:7474/db/data/node/28/relationships/in/{-list|&amp;|types}"
 } ]</pre></div>
 </div>
 <div class="sect2">
@@ -1596,7 +1584,7 @@ result = out.toString()</pre></div>
 </li>
 <li>
 <p>
-<strong><span class="monospaced">Accept:</span></strong> <span class="monospaced">application/json</span>
+<strong><span class="monospaced">Accept:</span></strong> <span class="monospaced">application/json; charset=UTF-8</span>
 </p>
 </li>
 <li>
@@ -1607,9 +1595,7 @@ result = out.toString()</pre></div>
 </ul></div>
 <div class="listingblock">
 <pre class="programlisting brush: javascript">{
-  "script" : "writer = new GraphMLWriter(g);out = new java.io.ByteArrayOutputStream();writer.outputGraph(out);result = out.toString();",
-  "params" : {
-  }
+  "script" : "writer = new GraphMLWriter(g);out = new java.io.ByteArrayOutputStream();writer.outputGraph(out);result = out.toString();"
 }</pre></div>
 <div class="paragraph"><p><em>Example response</em></p></div>
 <div class="ulist"><ul>
@@ -1620,12 +1606,12 @@ result = out.toString()</pre></div>
 </li>
 <li>
 <p>
-<strong><span class="monospaced">Content-Type:</span></strong> <span class="monospaced">application/json</span>
+<strong><span class="monospaced">Content-Type:</span></strong> <span class="monospaced">application/json; charset=UTF-8</span>
 </p>
 </li>
 </ul></div>
 <div class="listingblock">
-<pre class="programlisting brush: javascript">"&lt;?xml version=\"1.0\" ?&gt;&lt;graphml xmlns=\"http://graphml.graphdrawing.org/xmlns\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.1/graphml.xsd\"&gt;&lt;key id=\"name\" for=\"node\" attr.name=\"name\" attr.type=\"string\"&gt;&lt;/key&gt;&lt;graph id=\"G\" edgedefault=\"directed\"&gt;&lt;node id=\"12\"&gt;&lt;data key=\"name\"&gt;you&lt;/data&gt;&lt;/node&gt;&lt;node id=\"13\"&gt;&lt;data key=\"name\"&gt;him&lt;/data&gt;&lt;/node&gt;&lt;node id=\"14\"&gt;&lt;data key=\"name\"&gt;I&lt;/data&gt;&lt;/node&gt;&lt;edge id=\"6\" source=\"14\" target=\"12\" label=\"know\"&gt;&lt;/edge&gt;&lt;edge id=\"7\" source=\"14\" target=\"13\" label=\"know\"&gt;&lt;/edge&gt;&lt;/graph&gt;&lt;/graphml&gt;"</pre></div>
+<pre class="programlisting brush: javascript">"&lt;?xml version=\"1.0\" ?&gt;&lt;graphml xmlns=\"http://graphml.graphdrawing.org/xmlns\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.1/graphml.xsd\"&gt;&lt;key id=\"name\" for=\"node\" attr.name=\"name\" attr.type=\"string\"&gt;&lt;/key&gt;&lt;graph id=\"G\" edgedefault=\"directed\"&gt;&lt;node id=\"11\"&gt;&lt;data key=\"name\"&gt;you&lt;/data&gt;&lt;/node&gt;&lt;node id=\"12\"&gt;&lt;data key=\"name\"&gt;him&lt;/data&gt;&lt;/node&gt;&lt;node id=\"13\"&gt;&lt;data key=\"name\"&gt;I&lt;/data&gt;&lt;/node&gt;&lt;edge id=\"6\" source=\"13\" target=\"11\" label=\"know\"&gt;&lt;/edge&gt;&lt;edge id=\"7\" source=\"13\" target=\"12\" label=\"know\"&gt;&lt;/edge&gt;&lt;/graph&gt;&lt;/graphml&gt;"</pre></div>
 </div>
 <div class="sect2">
 <h3 id="rest-api-hyperedges---find-user-roles-in-groups">HyperEdges - find user roles in groups</h3>
@@ -1641,7 +1627,7 @@ node that captures this n-ary relationship, as depicted below in the
 provide answers.</p></div>
 <div class="paragraph"><p><em>Raw script source</em></p></div>
 <div class="listingblock">
-<pre class="programlisting brush: groovy">g.v(37).out('hasRoleInGroup').as('hyperedge').out('hasGroup').filter{it.name=='Group2'}.back('hyperedge').out('hasRole').name</pre></div>
+<pre class="programlisting brush: groovy">g.v(36).out('hasRoleInGroup').as('hyperedge').out('hasGroup').filter{it.name=='Group2'}.back('hyperedge').out('hasRole').name</pre></div>
 <div class="imageblock dot">
 <div class="content">
 <img src="images/Final-Graph-HyperEdges---find-user-roles-in-groups.svg" alt="Final-Graph-HyperEdges---find-user-roles-in-groups.svg">
@@ -1657,7 +1643,7 @@ provide answers.</p></div>
 </li>
 <li>
 <p>
-<strong><span class="monospaced">Accept:</span></strong> <span class="monospaced">application/json</span>
+<strong><span class="monospaced">Accept:</span></strong> <span class="monospaced">application/json; charset=UTF-8</span>
 </p>
 </li>
 <li>
@@ -1668,9 +1654,7 @@ provide answers.</p></div>
 </ul></div>
 <div class="listingblock">
 <pre class="programlisting brush: javascript">{
-  "script" : "g.v(37).out('hasRoleInGroup').as('hyperedge').out('hasGroup').filter{it.name=='Group2'}.back('hyperedge').out('hasRole').name",
-  "params" : {
-  }
+  "script" : "g.v(36).out('hasRoleInGroup').as('hyperedge').out('hasGroup').filter{it.name=='Group2'}.back('hyperedge').out('hasRole').name"
 }</pre></div>
 <div class="paragraph"><p><em>Example response</em></p></div>
 <div class="ulist"><ul>
@@ -1681,7 +1665,7 @@ provide answers.</p></div>
 </li>
 <li>
 <p>
-<strong><span class="monospaced">Content-Type:</span></strong> <span class="monospaced">application/json</span>
+<strong><span class="monospaced">Content-Type:</span></strong> <span class="monospaced">application/json; charset=UTF-8</span>
 </p>
 </li>
 </ul></div>
@@ -1696,7 +1680,7 @@ node. The result is collected into a variable that then is returned.</p></div>
 <div class="paragraph"><p><em>Raw script source</em></p></div>
 <div class="listingblock">
 <pre class="programlisting brush: groovy">m = [:]
-g.v(41).bothE().label.groupCount(m).iterate()
+g.v(40).bothE().label.groupCount(m).iterate()
 m</pre></div>
 <div class="imageblock dot">
 <div class="content">
@@ -1713,7 +1697,7 @@ m</pre></div>
 </li>
 <li>
 <p>
-<strong><span class="monospaced">Accept:</span></strong> <span class="monospaced">application/json</span>
+<strong><span class="monospaced">Accept:</span></strong> <span class="monospaced">application/json; charset=UTF-8</span>
 </p>
 </li>
 <li>
@@ -1724,9 +1708,7 @@ m</pre></div>
 </ul></div>
 <div class="listingblock">
 <pre class="programlisting brush: javascript">{
-  "script" : "m = [:];g.v(41).bothE().label.groupCount(m).iterate();m",
-  "params" : {
-  }
+  "script" : "m = [:];g.v(40).bothE().label.groupCount(m).iterate();m"
 }</pre></div>
 <div class="paragraph"><p><em>Example response</em></p></div>
 <div class="ulist"><ul>
@@ -1737,7 +1719,7 @@ m</pre></div>
 </li>
 <li>
 <p>
-<strong><span class="monospaced">Content-Type:</span></strong> <span class="monospaced">application/json</span>
+<strong><span class="monospaced">Content-Type:</span></strong> <span class="monospaced">application/json; charset=UTF-8</span>
 </p>
 </li>
 </ul></div>
@@ -1769,7 +1751,7 @@ and merging pipes in a lazy fashion.</p></div>
 </li>
 <li>
 <p>
-<strong><span class="monospaced">Accept:</span></strong> <span class="monospaced">application/json</span>
+<strong><span class="monospaced">Accept:</span></strong> <span class="monospaced">application/json; charset=UTF-8</span>
 </p>
 </li>
 <li>
@@ -1780,9 +1762,7 @@ and merging pipes in a lazy fashion.</p></div>
 </ul></div>
 <div class="listingblock">
 <pre class="programlisting brush: javascript">{
-  "script" : "g.getIndex('node_auto_index', Vertex.class).get('name','Peter')._().copySplit(_().out('knows'), _().in('likes')).fairMerge.name",
-  "params" : {
-  }
+  "script" : "g.getIndex('node_auto_index', Vertex.class).get('name','Peter')._().copySplit(_().out('knows'), _().in('likes')).fairMerge.name"
 }</pre></div>
 <div class="paragraph"><p><em>Example response</em></p></div>
 <div class="ulist"><ul>
@@ -1793,7 +1773,7 @@ and merging pipes in a lazy fashion.</p></div>
 </li>
 <li>
 <p>
-<strong><span class="monospaced">Content-Type:</span></strong> <span class="monospaced">application/json</span>
+<strong><span class="monospaced">Content-Type:</span></strong> <span class="monospaced">application/json; charset=UTF-8</span>
 </p>
 </li>
 </ul></div>
@@ -1812,7 +1792,7 @@ and others.</p></div>
 <div class="listingblock">
 <pre class="programlisting brush: groovy">x=[]
 fof=[:]
-g.v(63).out('knows').aggregate(x).out('knows').except(x).groupCount(fof).iterate()
+g.v(62).out('knows').aggregate(x).out('knows').except(x).groupCount(fof).iterate()
 fof.sort{a,b -&gt; b.value &lt;=&gt; a.value}</pre></div>
 <div class="imageblock dot">
 <div class="content">
@@ -1829,7 +1809,7 @@ fof.sort{a,b -&gt; b.value &lt;=&gt; a.value}</pre></div>
 </li>
 <li>
 <p>
-<strong><span class="monospaced">Accept:</span></strong> <span class="monospaced">application/json</span>
+<strong><span class="monospaced">Accept:</span></strong> <span class="monospaced">application/json; charset=UTF-8</span>
 </p>
 </li>
 <li>
@@ -1840,9 +1820,7 @@ fof.sort{a,b -&gt; b.value &lt;=&gt; a.value}</pre></div>
 </ul></div>
 <div class="listingblock">
 <pre class="programlisting brush: javascript">{
-  "script" : "x=[];fof=[:];g.v(63).out('knows').aggregate(x).out('knows').except(x).groupCount(fof).iterate();fof.sort{a,b -&gt; b.value &lt;=&gt; a.value}",
-  "params" : {
-  }
+  "script" : "x=[];fof=[:];g.v(62).out('knows').aggregate(x).out('knows').except(x).groupCount(fof).iterate();fof.sort{a,b -&gt; b.value &lt;=&gt; a.value}"
 }</pre></div>
 <div class="paragraph"><p><em>Example response</em></p></div>
 <div class="ulist"><ul>
@@ -1853,22 +1831,22 @@ fof.sort{a,b -&gt; b.value &lt;=&gt; a.value}</pre></div>
 </li>
 <li>
 <p>
-<strong><span class="monospaced">Content-Type:</span></strong> <span class="monospaced">application/json</span>
+<strong><span class="monospaced">Content-Type:</span></strong> <span class="monospaced">application/json; charset=UTF-8</span>
 </p>
 </li>
 </ul></div>
 <div class="listingblock">
 <pre class="programlisting brush: javascript">{
-  "v[61]" : 2,
-  "v[60]" : 1,
-  "v[62]" : 1
+  "v[60]" : 2,
+  "v[59]" : 1,
+  "v[61]" : 1
 }</pre></div>
 </div>
 <div class="sect2">
 <h3 id="rest-api-chunking-and-offsetting-in-gremlin">Chunking and offsetting in Gremlin</h3>
 <div class="paragraph"><p><em>Raw script source</em></p></div>
 <div class="listingblock">
-<pre class="programlisting brush: groovy">g.v(51).out('knows').filter{it.name == 'Sara'}[0..100]</pre></div>
+<pre class="programlisting brush: groovy">g.v(50).out('knows').filter{it.name == 'Sara'}[0..100]</pre></div>
 <div class="imageblock dot">
 <div class="content">
 <img src="images/Final-Graph-chunking-and-offsetting-in-Gremlin.svg" alt="Final-Graph-chunking-and-offsetting-in-Gremlin.svg">
@@ -1884,7 +1862,7 @@ fof.sort{a,b -&gt; b.value &lt;=&gt; a.value}</pre></div>
 </li>
 <li>
 <p>
-<strong><span class="monospaced">Accept:</span></strong> <span class="monospaced">application/json</span>
+<strong><span class="monospaced">Accept:</span></strong> <span class="monospaced">application/json; charset=UTF-8</span>
 </p>
 </li>
 <li>
@@ -1895,9 +1873,7 @@ fof.sort{a,b -&gt; b.value &lt;=&gt; a.value}</pre></div>
 </ul></div>
 <div class="listingblock">
 <pre class="programlisting brush: javascript">{
-  "script" : "g.v(51).out('knows').filter{it.name == 'Sara'}[0..100]",
-  "params" : {
-  }
+  "script" : "g.v(50).out('knows').filter{it.name == 'Sara'}[0..100]"
 }</pre></div>
 <div class="paragraph"><p><em>Example response</em></p></div>
 <div class="ulist"><ul>
@@ -1908,30 +1884,30 @@ fof.sort{a,b -&gt; b.value &lt;=&gt; a.value}</pre></div>
 </li>
 <li>
 <p>
-<strong><span class="monospaced">Content-Type:</span></strong> <span class="monospaced">application/json</span>
+<strong><span class="monospaced">Content-Type:</span></strong> <span class="monospaced">application/json; charset=UTF-8</span>
 </p>
 </li>
 </ul></div>
 <div class="listingblock">
 <pre class="programlisting brush: javascript">[ {
-  "outgoing_relationships" : "http://localhost:7474/db/data/node/49/relationships/out",
-  "labels" : "http://localhost:7474/db/data/node/49/labels",
+  "labels" : "http://localhost:7474/db/data/node/48/labels",
+  "outgoing_relationships" : "http://localhost:7474/db/data/node/48/relationships/out",
   "data" : {
     "name" : "Sara"
   },
-  "all_typed_relationships" : "http://localhost:7474/db/data/node/49/relationships/all/{-list|&amp;|types}",
-  "traverse" : "http://localhost:7474/db/data/node/49/traverse/{returnType}",
-  "self" : "http://localhost:7474/db/data/node/49",
-  "property" : "http://localhost:7474/db/data/node/49/properties/{key}",
-  "outgoing_typed_relationships" : "http://localhost:7474/db/data/node/49/relationships/out/{-list|&amp;|types}",
-  "properties" : "http://localhost:7474/db/data/node/49/properties",
-  "incoming_relationships" : "http://localhost:7474/db/data/node/49/relationships/in",
+  "traverse" : "http://localhost:7474/db/data/node/48/traverse/{returnType}",
+  "all_typed_relationships" : "http://localhost:7474/db/data/node/48/relationships/all/{-list|&amp;|types}",
+  "property" : "http://localhost:7474/db/data/node/48/properties/{key}",
+  "self" : "http://localhost:7474/db/data/node/48",
+  "properties" : "http://localhost:7474/db/data/node/48/properties",
+  "outgoing_typed_relationships" : "http://localhost:7474/db/data/node/48/relationships/out/{-list|&amp;|types}",
+  "incoming_relationships" : "http://localhost:7474/db/data/node/48/relationships/in",
   "extensions" : {
   },
-  "create_relationship" : "http://localhost:7474/db/data/node/49/relationships",
-  "paged_traverse" : "http://localhost:7474/db/data/node/49/paged/traverse/{returnType}{?pageSize,leaseTime}",
-  "all_relationships" : "http://localhost:7474/db/data/node/49/relationships/all",
-  "incoming_typed_relationships" : "http://localhost:7474/db/data/node/49/relationships/in/{-list|&amp;|types}"
+  "create_relationship" : "http://localhost:7474/db/data/node/48/relationships",
+  "paged_traverse" : "http://localhost:7474/db/data/node/48/paged/traverse/{returnType}{?pageSize,leaseTime}",
+  "all_relationships" : "http://localhost:7474/db/data/node/48/relationships/all",
+  "incoming_typed_relationships" : "http://localhost:7474/db/data/node/48/relationships/in/{-list|&amp;|types}"
 } ]</pre></div>
 </div>
 <div class="sect2">
@@ -1947,8 +1923,7 @@ node. The result is collected into a variable that then is returned.</p></div>
 </div>
 <div class="paragraph"><p><em>Raw script source</em></p></div>
 <div class="listingblock">
-<pre class="programlisting brush: groovy">g.v(44).bothE.each{g.removeEdge(it)}
-g.stopTransaction(SUCCESS)</pre></div>
+<pre class="programlisting brush: groovy">g.v(43).bothE.each{g.removeEdge(it)}</pre></div>
 <div class="imageblock dot">
 <div class="content">
 <img src="images/Final-Graph-modify-the-graph-while-traversing.svg" alt="Final-Graph-modify-the-graph-while-traversing.svg">
@@ -1964,7 +1939,7 @@ g.stopTransaction(SUCCESS)</pre></div>
 </li>
 <li>
 <p>
-<strong><span class="monospaced">Accept:</span></strong> <span class="monospaced">application/json</span>
+<strong><span class="monospaced">Accept:</span></strong> <span class="monospaced">application/json; charset=UTF-8</span>
 </p>
 </li>
 <li>
@@ -1975,9 +1950,7 @@ g.stopTransaction(SUCCESS)</pre></div>
 </ul></div>
 <div class="listingblock">
 <pre class="programlisting brush: javascript">{
-  "script" : "g.v(44).bothE.each{g.removeEdge(it)};g.stopTransaction(SUCCESS);",
-  "params" : {
-  }
+  "script" : "g.v(43).bothE.each{g.removeEdge(it)};"
 }</pre></div>
 <div class="paragraph"><p><em>Example response</em></p></div>
 <div class="ulist"><ul>
@@ -1988,12 +1961,12 @@ g.stopTransaction(SUCCESS)</pre></div>
 </li>
 <li>
 <p>
-<strong><span class="monospaced">Content-Type:</span></strong> <span class="monospaced">application/json</span>
+<strong><span class="monospaced">Content-Type:</span></strong> <span class="monospaced">application/json; charset=UTF-8</span>
 </p>
 </li>
 </ul></div>
 <div class="listingblock">
-<pre class="programlisting brush: javascript">"null"</pre></div>
+<pre class="programlisting brush: javascript">[ ]</pre></div>
 </div>
 <div class="sect2">
 <h3 id="rest-api-flow-algorithms-with-gremlin">Flow algorithms with Gremlin</h3>
@@ -2010,13 +1983,12 @@ function and modifying the graph during calculation.</p></div>
 </div>
 <div class="paragraph"><p><em>Raw script source</em></p></div>
 <div class="listingblock">
-<pre class="programlisting brush: groovy">source=g.v(72)
-sink=g.v(73)
+<pre class="programlisting brush: groovy">source=g.v(71)
+sink=g.v(72)
 maxFlow = 0
 source.outE.inV.loop(2){!it.object.equals(sink)}.path.each{flow = it.capacity.min()
  maxFlow += flow
 it.findAll{it.capacity}.each{it.capacity -= flow}}
-g.stopTransaction(SUCCESS)
 maxFlow</pre></div>
 <div class="imageblock dot">
 <div class="content">
@@ -2033,7 +2005,7 @@ maxFlow</pre></div>
 </li>
 <li>
 <p>
-<strong><span class="monospaced">Accept:</span></strong> <span class="monospaced">application/json</span>
+<strong><span class="monospaced">Accept:</span></strong> <span class="monospaced">application/json; charset=UTF-8</span>
 </p>
 </li>
 <li>
@@ -2044,9 +2016,7 @@ maxFlow</pre></div>
 </ul></div>
 <div class="listingblock">
 <pre class="programlisting brush: javascript">{
-  "script" : "source=g.v(72);sink=g.v(73);maxFlow = 0;source.outE.inV.loop(2){!it.object.equals(sink)}.path.each{flow = it.capacity.min(); maxFlow += flow;it.findAll{it.capacity}.each{it.capacity -= flow}};g.stopTransaction(SUCCESS);maxFlow",
-  "params" : {
-  }
+  "script" : "source=g.v(71);sink=g.v(72);maxFlow = 0;source.outE.inV.loop(2){!it.object.equals(sink)}.path.each{flow = it.capacity.min(); maxFlow += flow;it.findAll{it.capacity}.each{it.capacity -= flow}};maxFlow"
 }</pre></div>
 <div class="paragraph"><p><em>Example response</em></p></div>
 <div class="ulist"><ul>
@@ -2057,7 +2027,7 @@ maxFlow</pre></div>
 </li>
 <li>
 <p>
-<strong><span class="monospaced">Content-Type:</span></strong> <span class="monospaced">application/json</span>
+<strong><span class="monospaced">Content-Type:</span></strong> <span class="monospaced">application/json; charset=UTF-8</span>
 </p>
 </li>
 </ul></div>
@@ -2083,7 +2053,7 @@ will result in an HTTP error response code.</p></div>
 </li>
 <li>
 <p>
-<strong><span class="monospaced">Accept:</span></strong> <span class="monospaced">application/json</span>
+<strong><span class="monospaced">Accept:</span></strong> <span class="monospaced">application/json; charset=UTF-8</span>
 </p>
 </li>
 <li>
@@ -2105,24 +2075,101 @@ will result in an HTTP error response code.</p></div>
 </li>
 <li>
 <p>
-<strong><span class="monospaced">Content-Type:</span></strong> <span class="monospaced">application/json</span>
+<strong><span class="monospaced">Content-Type:</span></strong> <span class="monospaced">application/json; charset=UTF-8</span>
 </p>
 </li>
 </ul></div>
 <div class="listingblock">
 <pre class="programlisting brush: javascript">{
-  "message": "javax.script.ScriptException: groovy.lang.MissingPropertyException: No such property: blah for class: com.tinkerpop.blueprints.impls.neo4j.Neo4jGraph\nPossible solutions: class",
+  "message": "javax.script.ScriptException: groovy.lang.MissingPropertyException: No such property: blah for class: com.tinkerpop.blueprints.impls.neo4j2.Neo4j2Graph\nPossible solutions: class",
   "exception": "BadInputException",
   "fullname": "org.neo4j.server.rest.repr.BadInputException",
   "stacktrace": [
-    "org.neo4j.server.plugin.gremlin.GremlinPlugin.executeScript(GremlinPlugin.java:84)",
-    "java.lang.reflect.Method.invoke(Method.java:597)",
-    "org.neo4j.server.plugins.PluginMethod.invoke(PluginMethod.java:57)",
+    "org.neo4j.server.plugin.gremlin.GremlinPlugin.executeScript(GremlinPlugin.java:93)",
+    "java.lang.reflect.Method.invoke(Method.java:601)",
+    "org.neo4j.server.plugins.PluginMethod.invoke(PluginMethod.java:61)",
     "org.neo4j.server.plugins.PluginManager.invoke(PluginManager.java:168)",
-    "org.neo4j.server.rest.web.ExtensionService.invokeGraphDatabaseExtension(ExtensionService.java:300)",
-    "org.neo4j.server.rest.web.ExtensionService.invokeGraphDatabaseExtension(ExtensionService.java:122)",
-    "java.lang.reflect.Method.invoke(Method.java:597)"
-  ]
+    "org.neo4j.server.rest.web.ExtensionService.invokeGraphDatabaseExtension(ExtensionService.java:312)",
+    "org.neo4j.server.rest.web.ExtensionService.invokeGraphDatabaseExtension(ExtensionService.java:134)",
+    "java.lang.reflect.Method.invoke(Method.java:601)",
+    "org.neo4j.server.rest.transactional.TransactionalRequestDispatcher.dispatch(TransactionalRequestDispatcher.java:139)",
+    "org.neo4j.server.rest.security.SecurityFilter.doFilter(SecurityFilter.java:112)",
+    "java.lang.Thread.run(Thread.java:722)"
+  ],
+  "cause": {
+    "message": "javax.script.ScriptException: groovy.lang.MissingPropertyException: No such property: blah for class: com.tinkerpop.blueprints.impls.neo4j2.Neo4j2Graph\nPossible solutions: class",
+    "cause": {
+      "message": "groovy.lang.MissingPropertyException: No such property: blah for class: com.tinkerpop.blueprints.impls.neo4j2.Neo4j2Graph\nPossible solutions: class",
+      "cause": {
+        "message": "No such property: blah for class: com.tinkerpop.blueprints.impls.neo4j2.Neo4j2Graph\nPossible solutions: class",
+        "exception": "MissingPropertyException",
+        "stacktrace": [
+          "java.lang.reflect.Constructor.newInstance(Constructor.java:525)",
+          "org.codehaus.groovy.reflection.CachedConstructor.invoke(CachedConstructor.java:77)",
+          "org.codehaus.groovy.runtime.callsite.ConstructorSite$ConstructorSiteNoUnwrapNoCoerce.callConstructor(ConstructorSite.java:102)",
+          "org.codehaus.groovy.runtime.callsite.CallSiteArray.defaultCallConstructor(CallSiteArray.java:54)",
+          "org.codehaus.groovy.runtime.callsite.AbstractCallSite.callConstructor(AbstractCallSite.java:182)",
+          "org.codehaus.groovy.runtime.callsite.AbstractCallSite.callConstructor(AbstractCallSite.java:194)",
+          "com.tinkerpop.gremlin.groovy.loaders.GraphLoader$_load_closure1.doCall(GraphLoader.groovy:32)",
+          "java.lang.reflect.Method.invoke(Method.java:601)",
+          "org.codehaus.groovy.reflection.CachedMethod.invoke(CachedMethod.java:90)",
+          "org.codehaus.groovy.runtime.metaclass.ClosureMetaMethod.invoke(ClosureMetaMethod.java:80)",
+          "groovy.lang.MetaClassImpl.invokeMissingProperty(MetaClassImpl.java:771)",
+          "groovy.lang.MetaClassImpl$12.getProperty(MetaClassImpl.java:1786)",
+          "org.codehaus.groovy.runtime.callsite.GetEffectivePojoPropertySite.getProperty(GetEffectivePojoPropertySite.java:61)",
+          "org.codehaus.groovy.runtime.callsite.AbstractCallSite.callGetProperty(AbstractCallSite.java:227)",
+          "Script24.run(Script24.groovy:1)",
+          "com.tinkerpop.gremlin.groovy.jsr223.GremlinGroovyScriptEngine.eval(GremlinGroovyScriptEngine.java:219)",
+          "com.tinkerpop.gremlin.groovy.jsr223.GremlinGroovyScriptEngine.eval(GremlinGroovyScriptEngine.java:90)",
+          "javax.script.AbstractScriptEngine.eval(AbstractScriptEngine.java:233)",
+          "org.neo4j.server.plugin.gremlin.GremlinPlugin.executeScript(GremlinPlugin.java:86)",
+          "java.lang.reflect.Method.invoke(Method.java:601)",
+          "org.neo4j.server.plugins.PluginMethod.invoke(PluginMethod.java:61)",
+          "org.neo4j.server.plugins.PluginManager.invoke(PluginManager.java:168)",
+          "org.neo4j.server.rest.web.ExtensionService.invokeGraphDatabaseExtension(ExtensionService.java:312)",
+          "org.neo4j.server.rest.web.ExtensionService.invokeGraphDatabaseExtension(ExtensionService.java:134)",
+          "java.lang.reflect.Method.invoke(Method.java:601)",
+          "org.neo4j.server.rest.transactional.TransactionalRequestDispatcher.dispatch(TransactionalRequestDispatcher.java:139)",
+          "org.neo4j.server.rest.security.SecurityFilter.doFilter(SecurityFilter.java:112)",
+          "java.lang.Thread.run(Thread.java:722)"
+        ],
+        "fullname": "groovy.lang.MissingPropertyException"
+      },
+      "exception": "ScriptException",
+      "stacktrace": [
+        "com.tinkerpop.gremlin.groovy.jsr223.GremlinGroovyScriptEngine.eval(GremlinGroovyScriptEngine.java:221)",
+        "com.tinkerpop.gremlin.groovy.jsr223.GremlinGroovyScriptEngine.eval(GremlinGroovyScriptEngine.java:90)",
+        "javax.script.AbstractScriptEngine.eval(AbstractScriptEngine.java:233)",
+        "org.neo4j.server.plugin.gremlin.GremlinPlugin.executeScript(GremlinPlugin.java:86)",
+        "java.lang.reflect.Method.invoke(Method.java:601)",
+        "org.neo4j.server.plugins.PluginMethod.invoke(PluginMethod.java:61)",
+        "org.neo4j.server.plugins.PluginManager.invoke(PluginManager.java:168)",
+        "org.neo4j.server.rest.web.ExtensionService.invokeGraphDatabaseExtension(ExtensionService.java:312)",
+        "org.neo4j.server.rest.web.ExtensionService.invokeGraphDatabaseExtension(ExtensionService.java:134)",
+        "java.lang.reflect.Method.invoke(Method.java:601)",
+        "org.neo4j.server.rest.transactional.TransactionalRequestDispatcher.dispatch(TransactionalRequestDispatcher.java:139)",
+        "org.neo4j.server.rest.security.SecurityFilter.doFilter(SecurityFilter.java:112)",
+        "java.lang.Thread.run(Thread.java:722)"
+      ],
+      "fullname": "javax.script.ScriptException"
+    },
+    "exception": "ScriptException",
+    "stacktrace": [
+      "com.tinkerpop.gremlin.groovy.jsr223.GremlinGroovyScriptEngine.eval(GremlinGroovyScriptEngine.java:94)",
+      "javax.script.AbstractScriptEngine.eval(AbstractScriptEngine.java:233)",
+      "org.neo4j.server.plugin.gremlin.GremlinPlugin.executeScript(GremlinPlugin.java:86)",
+      "java.lang.reflect.Method.invoke(Method.java:601)",
+      "org.neo4j.server.plugins.PluginMethod.invoke(PluginMethod.java:61)",
+      "org.neo4j.server.plugins.PluginManager.invoke(PluginManager.java:168)",
+      "org.neo4j.server.rest.web.ExtensionService.invokeGraphDatabaseExtension(ExtensionService.java:312)",
+      "org.neo4j.server.rest.web.ExtensionService.invokeGraphDatabaseExtension(ExtensionService.java:134)",
+      "java.lang.reflect.Method.invoke(Method.java:601)",
+      "org.neo4j.server.rest.transactional.TransactionalRequestDispatcher.dispatch(TransactionalRequestDispatcher.java:139)",
+      "org.neo4j.server.rest.security.SecurityFilter.doFilter(SecurityFilter.java:112)",
+      "java.lang.Thread.run(Thread.java:722)"
+    ],
+    "fullname": "javax.script.ScriptException"
+  }
 }</pre></div>
 </div>
 </div>
@@ -2131,7 +2178,7 @@ will result in an HTTP error response code.</p></div>
 <div id="footnotes"><hr></div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2013-05-28 12:20:39 CEST
+Last updated 2014-05-07 14:30:21 CEST
 </div>
 </div>
 </body>
