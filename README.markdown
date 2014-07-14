@@ -10,7 +10,7 @@ Ensure Maven knows where to find Java 1.7. **Note**: on Mac OSX (tested on 10.9)
 Also ensure you do not have neo4j currently running or the build tests will fail as it attempts to start up a neo4j instance on the same port as the defaults for neo4j. Otherwise the tests and the build will fail.
 
     mvn clean package
-    unzip target/neo4j-gremlin-plugin-2.0-SNAPSHOT-server-plugin.zip -d $NEO4J_HOME/plugins/gremlin-plugin
+    unzip target/neo4j-gremlin-plugin-2.1-SNAPSHOT-server-plugin.zip -d $NEO4J_HOME/plugins/gremlin-plugin
     cd $NEO4J_HOME
     bin/neo4j restart
 
