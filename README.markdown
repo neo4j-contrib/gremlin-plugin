@@ -17,12 +17,12 @@ Also ensure you do not have neo4j currently running or the build tests will fail
 Maven setup
 -----------
 
-In your `pom.xml`, add    
+In your `pom.xml`, add
 
     <repositories>
         <repository>
             <id>neo4j-contrib-snapshots</id>
-            <url>https://github.com/neo4j-contrib/m2/raw/master/snapshots/url>
+            <url>https://github.com/neo4j-contrib/m2/raw/master/snapshots</url>
             <snapshots>
                 <enabled>true</enabled>
             </snapshots>
@@ -40,7 +40,7 @@ and
     </dependency>
 
 
-    
+
 Eclipse setup
 -------------
 
@@ -48,8 +48,8 @@ Eclipse setup
 * clone this repo
 * do Eclipse->Import...->Maven->Existing_projects_into_workspace and point out your cloned code directory
 * wait until the process is finished and you should have a compiling setup in Eclipse.
-  
-    
+
+
 access the plugin
 
     curl localhost:7474/db/data/
