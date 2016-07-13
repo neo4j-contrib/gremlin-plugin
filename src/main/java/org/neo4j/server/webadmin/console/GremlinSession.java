@@ -75,7 +75,6 @@ public class GremlinSession implements ScriptSession {
      * Take some gremlin script, evaluate it in the context of this gremlin
      * session, and return the result.
      *
-     * @param script
      * @return the return string of the evaluation result, or the exception
      *         message.
      */
