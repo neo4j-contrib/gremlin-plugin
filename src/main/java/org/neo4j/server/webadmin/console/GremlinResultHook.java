@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2002-2015 "Neo Technology,"
+ * Copyright (c) 2002-2016 "Neo Technology,"
  * Network Engine for Objects in Lund AB [http://neotechnology.com]
  *
  * This file is part of Neo4j.
@@ -28,12 +28,11 @@ import groovy.lang.Closure;
 import org.codehaus.groovy.tools.shell.IO;
 
 /**
- * Version of ResultHookClosure that does not add ==> to the output. This is
+ * Version of ResultHookClosure that does not add an arrow to the output. This is
  * instead moved to the console or print stream to handle, so that all content
  * printed to the output stream gets the same prompt.
  *
- * @author Marko A. Rodriguez (http://markorodriguez.com), Jacob Hansson
- *         <jacob@voltvoodoo.com>
+ * @author Marko A. Rodriguez (http://markorodriguez.com), Jacob Hansson (jacob@voltvoodoo.com)
  */
 public class GremlinResultHook extends Closure
 {
